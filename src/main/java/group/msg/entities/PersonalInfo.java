@@ -1,15 +1,18 @@
 package group.msg.entities;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
+
 @Entity
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Personal_information")
 public class PersonalInfo {
 
@@ -18,7 +21,7 @@ public class PersonalInfo {
     private int personalId;
 
     @OneToOne
-    private int userId;
+    private User userId;
 
     private String firstName;
     private String lastName;

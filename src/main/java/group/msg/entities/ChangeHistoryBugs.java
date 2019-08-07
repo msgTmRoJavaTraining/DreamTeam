@@ -1,14 +1,20 @@
 package group.msg.entities;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
-@Data
+
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -26,5 +32,6 @@ public class ChangeHistoryBugs {
     private String oldStatus;
     private String newStatus;
     private LocalDateTime modifiedDate;
-    private User modifiedBy;
+    
+    private int modifiedBy;
 }

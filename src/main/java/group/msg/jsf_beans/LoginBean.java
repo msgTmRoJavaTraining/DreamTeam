@@ -25,7 +25,7 @@ public class LoginBean implements Serializable {
 
     public String validateCredentials() {
         String hashedPassword = getMd5(password);
-        if (username.equals("admin") && password.equals("admin")) {
+        if (databaseEJB.login(username,hashedPassword)) {
             return "homePage";
         } else {
             return "login";
@@ -36,13 +36,11 @@ public class LoginBean implements Serializable {
         return username;
     }
 
-    private static String getMd5(String input) {
+    static String getMd5(String input) {
         String hashtext = "";
         try {
-
             // Static getInstance method is called with hashing MD5
             MessageDigest md = MessageDigest.getInstance("MD5");
-
             // digest() method is called to calculate message digest
             //  of an input digest() return array of byte
             byte[] messageDigest = md.digest(input.getBytes());
