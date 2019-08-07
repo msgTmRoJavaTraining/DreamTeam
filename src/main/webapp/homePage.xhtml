@@ -71,16 +71,16 @@
 <!--                    <div class="userCreate">-->
                         <h:form id="userForm">
 
-                            <h:outputText styleClass="myFont" value="Name" style="display:block;"/>
-                            <p:inputText  />
+                            <h:outputText styleClass="myFont" value="First name" style="display:block;"/>
+                            <p:inputText value="#{userManagementBean.firstName}" />
                             <br/><br/>
 
                             <h:outputText styleClass="myFont" value="Last name" style="display:block;"/>
-                            <p:inputText  />
+                            <p:inputText value="#{userManagementBean.lastName}" />
                             <br/><br/>
 
                             <h:outputText styleClass="myFont" value="Email" style="display:block;"/>
-                            <p:inputText  />
+                            <p:inputText value="#{userManagementBean.email}" />
                             <br/><br/>
 
                             <h:outputText styleClass="myFont" value="Phone" style="display:block;"/>
@@ -88,17 +88,17 @@
                             <br/><br/>
 
                             <h:outputText styleClass="myFont" value="Password" style="display:block;"/>
-                            <p:password value="Password"/><br></br>
+                            <p:password value="#{userManagementBean.password}"/><br></br>
 
                             <h:outputText styleClass="myFont" value="Confirm password" style="display:block;"/>
-                            <p:password value="Password"/><br></br>
+                            <p:password value="#{userManagementBean.confirmPassword}"/><br></br>
 
                             <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
                             <p:selectOneMenu id="gender" effect="fold" editable="true" required="true"  appendTo="@this" >
                                 <f:selectItem itemLabel="Select One" itemValue=""  />
                                 <f:selectItems value="" />
                             </p:selectOneMenu><br></br><br></br>
-                            <p:commandButton value="Save user" class= "button" styleClass="button" onclick="PF('dlg_addUser').close();"/>
+                            <p:commandButton value="Save user" class= "button" styleClass="button"  action="#{userManagementBean.createUser}"/>
                             <br/><br/>
                         </h:form>
 <!--                    </div>-->
