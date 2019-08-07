@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:p="http://primefaces.org/ui"
+>
+<f:view>
+    <h:head>
+        <title>Login</title>
+      <h:outputStylesheet library="css" name="styleIndex.css"/>
+    </h:head>
+    <h:body>
+        <p:growl id="growl" sticky="false" showDetail="true" life="3000"/>
+        <div class="login">
+
+            <h1>Log into JBugger</h1>
+            <h:form>
+                <p:inputText styleClass="inputData" value="#{loginBean.username}" requiredMessage="Insert your username" required="true"  name="username" style="margin-bottom: 10px; outline: medium none;padding: 10px;font-weight: normal;"/>
+                <p:password styleClass = "inputData" value="#{loginBean.password}" requiredMessage="Insert your password"  type="password" name="password" required="true" style="margin-bottom: 10px;outline: medium none;padding: 10px;font-weight: normal;"/>
+                <p:commandButton value="Login"
+                                 action="#{loginBean.validateCredentials}"
+                                 type="Login"
+
+                                 ajax="false"
+                                 class="btn btn-primary btn-block btn-large"
+                                 style=" padding: 12px; text-anchor: middle"
+                />
+            </h:form>
+        </div>
+    </h:body>
+</f:view>
+</html>
