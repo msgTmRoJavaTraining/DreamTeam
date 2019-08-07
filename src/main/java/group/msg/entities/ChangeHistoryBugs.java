@@ -26,5 +26,6 @@ public class ChangeHistoryBugs {
     private String oldStatus;
     private String newStatus;
     private LocalDateTime modifiedDate;
-    private User modifiedBy;
+    
+    private int modifiedBy;
 }

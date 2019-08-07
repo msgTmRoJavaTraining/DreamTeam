@@ -18,7 +18,7 @@ public class PersonalInfo {
     private int personalId;
 
     @OneToOne
-    private int userId;
+    private User userId;
 
     private String firstName;
     private String lastName;
