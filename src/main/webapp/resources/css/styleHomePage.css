@@ -1,29 +1,43 @@
 
-* { border: 0; padding: 0; margin: 0;
-    -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -ms-box-sizing:border-box; -o-box-sizing:border-box; box-sizing:border-box; }
+* {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+}
 
-html { width: 100%; height:100%; overflow:hidden; }
+html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
 
 body {
     width: 100%;
-    height:100%;
+    height: 100%;
     font-family: 'Open Sans', sans-serif;
     background: #092756;
-    background: -moz-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%),-moz-linear-gradient(top,  rgba(57,173,219,.25) 0%, rgba(42,60,87,.4) 100%), -moz-linear-gradient(-45deg,  #670d10 0%, #092756 100%);
-    background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -webkit-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -webkit-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
-    background: -o-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -o-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -o-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
-    background: -ms-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -ms-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -ms-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
-    background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), linear-gradient(to bottom,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), linear-gradient(135deg,  #670d10 0%,#092756 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D', endColorstr='#092756',GradientType=1 );
+    background: -moz-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4) 10%, rgba(138, 114, 76, 0) 40%), -moz-linear-gradient(top, rgba(57, 173, 219, .25) 0%, rgba(42, 60, 87, .4) 100%), -moz-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+    background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4) 10%, rgba(138, 114, 76, 0) 40%), -webkit-linear-gradient(top, rgba(57, 173, 219, .25) 0%, rgba(42, 60, 87, .4) 100%), -webkit-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+    background: -o-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4) 10%, rgba(138, 114, 76, 0) 40%), -o-linear-gradient(top, rgba(57, 173, 219, .25) 0%, rgba(42, 60, 87, .4) 100%), -o-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+    background: -ms-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4) 10%, rgba(138, 114, 76, 0) 40%), -ms-linear-gradient(top, rgba(57, 173, 219, .25) 0%, rgba(42, 60, 87, .4) 100%), -ms-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+    background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104, 128, 138, .4) 10%, rgba(138, 114, 76, 0) 40%), linear-gradient(to bottom, rgba(57, 173, 219, .25) 0%, rgba(42, 60, 87, .4) 100%), linear-gradient(135deg, #670d10 0%, #092756 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3E1D6D', endColorstr='#092756', GradientType=1);
 }
+
 .homePage {
     position: relative;
     top: 50%;
     left: 50%;
     margin: -150px 0 0 -150px;
-    width:300px;
-    height:300px;
+    width: 300px;
+    height: 300px;
 }
+
 h2 {
     position: relative;
     font-size: 30px;
@@ -31,6 +45,7 @@ h2 {
     overflow: hidden;
     text-align: center;
 }
+
 h2:before, h2:after {
     position: absolute;
     top: 51%;
@@ -40,13 +55,16 @@ h2:before, h2:after {
     content: '\a0';
     background-color: red;
 }
+
 h2:before {
     margin-left: -50%;
     text-align: right;
 }
+
 .color {
     background-color: #ccc;
 }
+
 .btn {
     background-color: DodgerBlue; /* Blue background */
     border: none; /* Remove borders */
@@ -60,78 +78,89 @@ h2:before {
 .btn:hover {
     background-color: RoyalBlue;
 }
-.sideBar{
+
+.sideBar {
     justify-content: center;
 }
-.buttons{
+
+.buttons {
 
 }
-.addData{
+
+.addData {
+    margin-top: 20px;
     padding: 12px;
     margin-bottom: 10px;
     position: center;
     size: 600px;
-    margin-left:35%;
+    margin-left: 35%;
     line-break: normal;
 }
-.deleteData{
+
+.deleteData {
     padding: 12px;
     margin-bottom: 10px;
     position: center;
     size: 600px;
-    margin-left:35%;
+    margin-left: 35%;
     line-break: normal;
 }
-.exportData{
+
+.exportData {
     padding: 12px;
     margin-bottom: 10px;
     position: center;
     size: 600px;
-    margin-left:35%;
+    margin-left: 35%;
     line-break: normal;
 }
-.overView{
+
+.overView {
     padding: 12px;
     margin-bottom: 10px;
     position: center;
     size: 600px;
-    margin-left:35%;
+    margin-left: 35%;
     line-break: normal;
 }
-.statistics{
+
+.statistics {
     padding: 12px;
     margin-bottom: 10px;
     position: center;
     size: 600px;
-    margin-left:35%;
+    margin-left: 35%;
     line-break: normal;
 }
-.languageSwitch{
+
+.languageSwitch {
     padding: 12px;
     margin-bottom: 10px;
     position: center;
     size: 600px;
-    margin-left:35%;
+    margin-left: 35%;
     line-break: normal;
 }
-.log-out{
+
+.log-out {
     padding: 12px;
     margin-bottom: 10px;
     position: center;
     size: 600px;
-    margin-left:35%;
+    margin-left: 35%;
     line-break: normal;
 }
 
 .w3-teal, .w3-hover-teal:hover {
-    color: #fff!important;
+    color: #fff !important;
     stroke: #333333;
     border: 2px;
     border-left: 6px solid #ece5e5;
     padding: 8px;
-    background-color: rgba(48, 13, 84,31%);
+    background-color: rgba(48, 13, 84, 31%);
 
 }
+
 .w3-container, .w3-panel {
     padding: 0.01em 16px;
 }
@@ -139,9 +168,81 @@ h2:before {
 *, *:before, *:after {
     box-sizing: inherit;
 }
+
 div {
     display: block;
 }
+
 .someCssClassName {
     background-image: url("#{'/web/bugIcon.png'}")
+}
+
+customDialog {
+    background: green;
+}
+
+.ui-dialog.customDialog .ui-dialog-content {
+    padding: 0;
+    margin: 20px 10px;
+}
+
+.ui-dialog-titlebar.ui-widget-header.customDialog {
+    background: green;
+    color: black;
+    box-shadow: none;
+}
+
+.btn.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    float: left;
+}
+
+.btn .button:hover {
+    background-color: #3e8e41;
+}
+
+.userCreate {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+}
+.title{
+    color: black;
+    font-family: Calibri;
+    font-size: 30px;
+    position: center;
+}
+
+.content{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    grid-template-rows: 63px 200px;
+    grid-gap: 5px;
+    background-color: #2196F3;
+    padding: 5px;
+}
+.content> div {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 5px 0;
+    font-size: 30px;
+    width: auto;
+}
+.myFont{
+    font-family: Calibri;
+    color: darkred;
+    font-size: 20px;
+}
+.form {
+    text-align: center;
 }

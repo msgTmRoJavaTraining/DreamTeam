@@ -6,7 +6,34 @@
       xmlns:p="http://primefaces.org/ui"
 >
 
-<f:view>
+<script type="text/javascript">
+    PrimeFaces.locales['de'] = {
+        closeText: 'Schließen',
+        prevText: 'Zurück',
+        nextText: 'Weiter',
+        monthNames: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+        monthNamesShort: ['Jan', 'Feb', 'März', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+        dayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+        dayNamesShort: ['Son', 'Mon', 'Die', 'Mit', 'Don', 'Fre', 'Sam'],
+        dayNamesMin: ['S', 'M', 'D', 'M ', 'D', 'F ', 'S'],
+        weekHeader: 'Woche',
+        FirstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: '',
+        timeOnlyTitle: 'Nur Zeit',
+        timeText: 'Zeit',
+        hourText: 'Stunde',
+        minuteText: 'Minute',
+        secondText: 'Sekunde',
+        currentText: 'Aktuelles Datum',
+        ampm: false,
+        month: 'Monat',
+        week: 'Woche',
+        day: 'Tag',
+        allDayText: 'Ganzer Tag'
+    };
+</script><f:view>
     <h:head>
         <title>Home</title>
         <h:outputStylesheet library="css" name="styleHomePage.css"/>
@@ -14,15 +41,111 @@
     <h:body>
         <div class="w3-teal">
             <p:commandButton icon="bugIcon.png" oncomplete="PF('sidebar1').show()" style="background: none" />
-
             <span>JBugger </span>
         </div>
+        <div class="content" style=" background-color:lavenderblush; height: 100vh;">
+            <div>New</div>
+            <div>In progress</div>
+            <div>Fixed</div>
+            <div>Closed</div>
+            <div>Rejected</div>
+            <div>Info needed</div>
+            <div style=" height: 100vh;"></div>
+            <div style=" height: 100vh;"></div>
+            <div style=" height: 100vh;"></div>
+            <div style=" height: 100vh;"></div>
+            <div style=" height: 100vh;"></div>
+            <div style=" height: 100vh;"></div>
+        </div>
+
     <p:sidebar widgetVar="sidebar1" baseZIndex="10000" style="background:darkcyan; width:15em">
         <div class="sideBar">
         <h2 style="color: white">JBugger</h2>
             <div class="buttons">
         <div class="addData">
-            <p:commandButton href="login" icon="fa fa-plus"/>
+
+            <p:commandButton  icon="fa fa-plus" type="button" onclick="PF('dlg1').show();" />
+            <p:dialog header="Insert options" widgetVar="dlg1" minHeight="40"  width="295" height="30" styleClass="customDialog">
+                <p:commandButton value="User" class= "button" styleClass="button" onclick="PF('dlg_addUser').show(); PF('dlg1').close();"/><p:spacer></p:spacer>
+                <p:dialog header="Insert user" widgetVar="dlg_addUser" minHeight="40"  width="310" height="500" >
+<!--                    <div class="userCreate">-->
+                        <h:form id="userForm">
+
+                            <h:outputText styleClass="myFont" value="Name" style="display:block;"/>
+                            <p:inputText  />
+                            <br/><br/>
+
+                            <h:outputText styleClass="myFont" value="Last name" style="display:block;"/>
+                            <p:inputText  />
+                            <br/><br/>
+
+                            <h:outputText styleClass="myFont" value="Email" style="display:block;"/>
+                            <p:inputText  />
+                            <br/><br/>
+
+                            <h:outputText styleClass="myFont" value="Phone" style="display:block;"/>
+                            <p:inputText  />
+                            <br/><br/>
+
+                            <h:outputText styleClass="myFont" value="Password" style="display:block;"/>
+                            <p:password value="Password"/><br></br>
+
+                            <h:outputText styleClass="myFont" value="Confirm password" style="display:block;"/>
+                            <p:password value="Password"/><br></br>
+
+                            <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
+                            <p:selectOneMenu id="gender" effect="fold" editable="true" required="true"  appendTo="@this" >
+                                <f:selectItem itemLabel="Select One" itemValue=""  />
+                                <f:selectItems value="" />
+                            </p:selectOneMenu><br></br><br></br>
+                            <p:commandButton value="Save user" class= "button" styleClass="button" onclick="PF('dlg_addUser').close();"/>
+                            <br/><br/>
+                        </h:form>
+<!--                    </div>-->
+                </p:dialog>
+                <p:commandButton value="Bug" class= "button" styleClass="button" onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
+                <p:dialog header="Insert bug" widgetVar="dlg_addBug" minHeight="40"  width="370" height="500" >
+                    <!--                    <div class="userCreate">-->
+                    <h:form id="bugForm">
+
+                        <h:outputText styleClass="myFont" value="Title" style="display:block;"/>
+                        <p:inputText  />
+                        <br/><br/>
+
+                        <h:outputText styleClass="myFont" value="Version" style="display:block;"/>
+                        <p:inputText  />
+                        <br/><br/>
+
+                        <h:outputText styleClass="myFont" value="Severity" style="display:block;"/>
+                        <p:selectOneMenu id="severity" effect="fold" editable="true"  required="true"  appendTo="@this" >
+                            <f:selectItem itemLabel="Select One" itemValue=""  />
+                            <f:selectItems value="" />
+                        </p:selectOneMenu><br></br><br></br>
+
+                        <h:outputText styleClass="myFont" value="Assigned to" style="display:block;"/>
+                        <p:selectOneMenu id="assignedUser" effect="fold" editable="true" required="true"  appendTo="@this">
+                            <f:selectItem itemLabel="Select One" itemValue="" style="z-index: +1" />
+                            <f:selectItems value="" />
+                        </p:selectOneMenu><br></br><br></br>
+
+                        <h:outputText styleClass="myFont" value="Target Date" style="display:block;"/>
+                        <p:calendar id="button" mode="inline"/>
+                        <br/><br/>
+
+                        <h:outputText styleClass="myFont" value="Description" style="display:block;"/>
+                        <p:textEditor/>
+
+                        <h:outputText styleClass="myFont" value="Attachment" style="display:block;"/>
+                        <p:fileUpload value="#{fileUploadView.file}" mode="simple" skinSimple="true"/>
+
+                        <br></br><br></br>
+                        <p:commandButton value="Save bug" class= "button" styleClass="button" onclick="PF('dlg_addBug').close();"/>
+                        <br/><br/>
+                    </h:form>
+                    <!--                    </div>-->
+                </p:dialog>
+            </p:dialog>
+
         </div>
         <div class="deleteData">
             <p:commandButton  icon="fa fa-trash"/>
