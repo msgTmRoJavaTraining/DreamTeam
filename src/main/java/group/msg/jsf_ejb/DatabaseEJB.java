@@ -29,8 +29,23 @@ public class DatabaseEJB implements Serializable {
         }
        return true;
     }
-    public boolean findUserByUserName(String user){
 
+    public boolean existsUserWithId(String user){
+        String select="SELECT u FROM User u WHERE u.username=:username";
+        Query query =entityManager.createQuery(select);
+        query.setParameter("username",user);
+        try{
+            User searchedUser= (User) query.getSingleResult();
+        }catch (NoResultException e)
+        {
+            return false;
+        }
         return true;
+
+
+    }
+
+    public void createUser(User newUser){
+        entityManager.persist(newUser);
     }
 }
