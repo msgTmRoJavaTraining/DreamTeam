@@ -18,7 +18,7 @@ public class DatabaseEJB  {
     public void onStartUp()
     {
         User user=new User();
-        user.setPassword("pass");
+        user.setPassword("passs");
         entityManager.persist(user);
     }
 }
