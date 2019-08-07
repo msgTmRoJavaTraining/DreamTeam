@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+    <h:head>
+        <h:title>
+            IntroMovie
+        </h:title>
+        <h:outputStylesheet library="css" name="styles.css"/>
+    </h:head>
+ <h:body>
+     <h:form>
+         <p:commandButton class="logOut"
+                          value="LogOut"
+                          ajax="false"
+                          action="#{loginBackingBean.logOut}"/>
+         <p:commandButton class="logOut"
+                          value="MovieList"
+                          ajax="false"
+                          action="#{homepageBackingBean.navigateTo('moviesPage')}"/>
+         NUME <p:inputText id="numeMov" value="#{moviesBackingBean.movieName}"/>
+         CATEGORIE <p:selectOneMenu id="genre" value="#{moviesBackingBean.movieCate}" style="width:125px">
+                     <f:selectItem itemLabel="Genre" itemValue="" />
+                     <f:selectItem itemLabel="Comedy" itemValue="Comedy" />
+                     <f:selectItem itemLabel="Action" itemValue="Action" />
+                     <f:selectItem itemLabel="Adventure" itemValue="Adventure" />
+                 </p:selectOneMenu>
+
+         RATING <p:inputText id="ratiMov" value="#{moviesBackingBean.movieRati}" converterMessage="Please digits only"/>
+         Data <p:calendar id="inline" value="#{moviesBackingBean.data}" mode="popup" /><br></br>
+         Suitable  <p:selectManyCheckbox id="suitable" value="#{moviesBackingBean.suitable}">
+                     <f:selectItem itemLabel="Kids" itemValue="Kids" />
+                     <f:selectItem itemLabel="Teeneger" itemValue="Teeneger" />
+                     <f:selectItem itemLabel="Adults" itemValue="Adults" />
+                 </p:selectManyCheckbox>
+         <p:growl id="growl" showDetail="true" sticky="true" />
+         <p:commandButton value="AddMovie" action="#{moviesBackingBean.addToList}"
+                          ajax="true"
+                          styleClass="aButton"
+                          />
+     </h:form>
+ </h:body>
+
+</f:view>
+</html>

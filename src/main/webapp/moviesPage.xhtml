@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view>
+        <h:head>
+            <h:outputStylesheet library="css" name="styles.css"/>
+            <title>Movies</title>
+        </h:head>
+            <h:body>
+                <h:form id="form1">
+                    <p:commandButton class="logOut"
+                                     value="LogOut"
+                                     ajax="false"
+                                     action="#{loginBackingBean.logOut}"/>
+                    <p:commandButton class="logOut"
+                                     value="AddMovie"
+                                     ajax="false"
+                                     action="#{homepageBackingBean.navigateTo('addMoviePage')}"/>
+
+                    <p:dataTable id="testArea"
+                                 var="mov"
+                                 selection="#{moviesBackingBean.selectedMovie}"
+                                 selectionMode="single"
+                                 rowKey="#{mov.name}"
+                                 value="#{moviesBackingBean.movies}"
+                                 paginator="true" rows="10"
+                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink}
+                                                    {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <p:ajax event="rowSelect" listener="#{moviesBackingBean.rowSelected}" update=":form2:outputLabel1 testArea"/>
+
+                        <p:column headerText="Nume"
+                                  sortBy="#{mov.name}" filterBy="#{mov.name}"
+                                  filterMatchMode="contains">
+                            <h:outputText value="#{mov.name}" />
+                        </p:column>
+
+                        <p:column headerText="Categorie"
+                                  sortBy="#{mov.categ}" filterBy="#{mov.categ}"
+                                  filterMatchMode="contains">
+                            <h:outputText value="#{mov.categ}" />
+                        </p:column>
+
+                        <p:column headerText="Rating"
+                                  sortBy="#{mov.rating}" filterBy="#{mov.rating}"
+                                  filterMatchMode="contains">
+                            <h:outputText value="#{mov.rating}" />
+                        </p:column>
+                        <p:column headerText="Data"
+                                  sortBy="#{mov.data}" filterBy="#{mov.data}"
+                                  filterMatchMode="contains">
+                            <h:outputText value="#{mov.data}" />
+                        </p:column>
+                        <p:column headerText="Suitable"
+                                  sortBy="#{mov.suitable}" filterBy="#{mov.suitable}"
+                                  filterMatchMode="contains">
+                            <h:outputText value="#{mov.suitable}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                <h:form id="form2">
+                    <p:outputLabel
+                            id="outputLabel1"
+                            style="bottom: 0;
+                            position: relative"
+                            ajax="true"
+                            value="#{moviesBackingBean.outputMessage}"/>
+                </h:form>
+            </h:body>
+
+    </f:view>
+</html>

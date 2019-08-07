@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view>
+    <h:head>
+        <h:outputStylesheet library="css" name="styles.css"/>
+    </h:head>
+    <h:body>
+        <h:form id="topBar" style="position: relative;
+                                   left: 0;
+                                   top: 0; ">
+            <p:commandButton value="Download PDF" ajax="true" actionListener="#{employeesBackingBean.downloadPdf}" onclick="PrimeFaces.monitorDownload(start, stop)">
+                <p:fileDownload value="#{employeesBackingBean.DStream}" />
+            </p:commandButton>
+            <p:commandButton value="Download XCEL" ajax="true" actionListener="#{employeesBackingBean.downloadExcel}" onclick="PrimeFaces.monitorDownload(start, stop)">
+                <p:fileDownload value="#{employeesBackingBean.DStream}" />
+            </p:commandButton>
+        </h:form>
+        <h:form id="form2">
+            <p:dataTable id="table"
+                         var="empl"
+                         value="#{employeesBackingBean.employees}"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink}
+                                                    {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15">
+
+                <p:column headerText="Nume"
+                          sortBy="#{empl.name}" filterBy="#{empl.name}">
+                    <h:outputText value="#{empl.name}" />
+                </p:column>
+                <p:column headerText="CNP"
+                          sortBy="#{empl.cnp}" filterBy="#{empl.cnp}">
+                    <h:outputText value="#{empl.cnp}" />
+                </p:column>
+                <p:column headerText="Role"
+                          sortBy="#{empl.role}" filterBy="#{empl.role}">
+                    <h:outputText value="#{empl.role}" />
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+        <br></br>
+        <h:form class="arng">7
+            <div class="form-row">
+                 <span>Nume</span><p:inputText class="dMod"  name="Nume" value="#{employeesBackingBean.name}"/><br/>
+            </div>
+            <div class="form-row">
+                 <span>CNP </span><p:inputText class="dMod" name="CNP" value="#{employeesBackingBean.cnp}"/><br/>
+            </div>
+            <div class="form-row">
+                <span>Rol </span><p:inputText class="dMod" name="Role" value="#{employeesBackingBean.role}"/><br/>
+            </div>
+            <p:commandButton value="AddToList" update=":form2:table" action="#{employeesBackingBean.addToList}"/>
+        </h:form>
+    </h:body>
+
+</f:view>
+</html>
