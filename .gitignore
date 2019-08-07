@@ -3,6 +3,7 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/artifacts
 
 # Generated files
 .idea/**/contentModel.xml
@@ -15,6 +16,7 @@
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
+.idea/datasources.xml
 
 # Gradle
 .idea/**/gradle.xml
@@ -62,3 +64,5 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
+
+*.iml
