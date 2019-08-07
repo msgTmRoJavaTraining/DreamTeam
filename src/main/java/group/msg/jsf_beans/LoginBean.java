@@ -25,7 +25,7 @@ public class LoginBean implements Serializable {
 
     public String validateCredentials() {
         String hashedPassword = getMd5(password);
-        if (username.equals("admin") && password.equals("admin")) {
+        if (databaseEJB.login(username,hashedPassword)) {
             return "homePage";
         } else {
             return "login";
