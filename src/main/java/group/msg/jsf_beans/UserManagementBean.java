@@ -5,13 +5,16 @@ import group.msg.entities.User;
 import group.msg.exceptions.UserCreatorException;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
 @Named
 @SessionScoped
 public class UserManagementBean implements Serializable {
@@ -23,6 +26,7 @@ public class UserManagementBean implements Serializable {
     private String lastName;
     private String mobile;
     private String email;
+
 
     @Inject
     DatabaseEJB dataBaseEJB;
@@ -61,7 +65,7 @@ public class UserManagementBean implements Serializable {
                 userInfo.setMobile(mobile);
                 userInfo.setActive(true);
 
-                newUser.setUsername(generatedUserName.toString());
+                newUser.setUsername(generatedUserName.toString().toLowerCase());
                 newUser.setPassword(LoginBean.getMd5(this.password));
                 newUser.setPersonalInformations(userInfo);
 
@@ -69,6 +73,13 @@ public class UserManagementBean implements Serializable {
             }
 
         }
+        username="";
+        password="";
+        confirmPassword="";
+        firstName="";
+        lastName="";
+        mobile="";
+        email="";
     }
 
 

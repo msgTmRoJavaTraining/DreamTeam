@@ -16,15 +16,6 @@ public class StartupEJB {
 
     @PostConstruct
     public void init() {
-        User user = new User();
-        user.setUsername("razvan");
-        user.setPassword("c9e0b830ff18645849b8dbab57e477b5");
 
-        User user2 = new User();
-        user2.setUsername("admin");
-        user2.setPassword("21232f297a57a5a743894a0e4a801fc3");
-
-        entityManager.persist(user);
-        entityManager.persist(user2);
     }
 }

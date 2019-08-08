@@ -98,7 +98,7 @@
                                 <f:selectItem itemLabel="Select One" itemValue=""  />
                                 <f:selectItems value="" />
                             </p:selectOneMenu><br></br><br></br>
-                            <p:commandButton value="Save user" class= "button" styleClass="button"  action="#{userManagementBean.createUser}"/>
+                            <p:commandButton value="Save user" class= "button" styleClass="button" onclick="PF('dlg_addBug').close();"  action="#{userManagementBean.createUser}"/>
                             <br/><br/>
                         </h:form>
 <!--                    </div>-->
