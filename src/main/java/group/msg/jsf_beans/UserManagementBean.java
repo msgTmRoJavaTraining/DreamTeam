@@ -90,7 +90,7 @@ public class UserManagementBean implements Serializable {
                 userInfo.setMobile(mobile);
                 userInfo.setActive(true);
 
-                newUser.setUsername(generatedUserName.toString());
+                newUser.setUsername(generatedUserName.toString().toLowerCase());
                 newUser.setPassword(LoginBean.getMd5(this.password));
                 newUser.setPersonalInformations(userInfo);
 
