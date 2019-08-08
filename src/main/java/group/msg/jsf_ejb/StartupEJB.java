@@ -1,6 +1,5 @@
 package group.msg.jsf_ejb;
 
-import group.msg.entities.User;
 import group.msg.jsf_beans.RoleManagementBean;
 
 import javax.annotation.PostConstruct;
@@ -21,6 +20,6 @@ public class StartupEJB {
 
     @PostConstruct
     public void init() {
-    //roleManagementBean.init();
+        //roleManagementBean.init();
     }
 }

@@ -1,5 +1,6 @@
 package group.msg.jsf_ejb;
 
+import group.msg.entities.Bug;
 import group.msg.entities.User;
 import group.msg.entities.UserRole;
 
@@ -22,23 +23,21 @@ public class DatabaseEJB implements Serializable {
         query.setParameter("username", username);
         query.setParameter("password", password);
 
-        try{
+        try {
             User ua = (User) query.getSingleResult();
-        }catch (NoResultException e)
-        {
+        } catch (NoResultException e) {
             return false;
         }
-       return true;
+        return true;
     }
 
-    public boolean existsUserWithId(String user){
-        String select="SELECT u FROM User u WHERE u.username=:username";
-        Query query =entityManager.createQuery(select);
-        query.setParameter("username",user);
-        try{
-            User searchedUser= (User) query.getSingleResult();
-        }catch (NoResultException e)
-        {
+    public boolean existsUserWithId(String user) {
+        String select = "SELECT u FROM User u WHERE u.username=:username";
+        Query query = entityManager.createQuery(select);
+        query.setParameter("username", user);
+        try {
+            User searchedUser = (User) query.getSingleResult();
+        } catch (NoResultException e) {
             return false;
         }
         return true;
@@ -46,12 +45,17 @@ public class DatabaseEJB implements Serializable {
 
     }
 
-    public void createUser(User newUser){
+    public void createUser(User newUser) {
         entityManager.persist(newUser);
     }
 
-    public void createRole(UserRole newRole){
+    public void createRole(UserRole newRole) {
 
         entityManager.persist(newRole);
+    }
+
+    public void createBug(Bug newBug) {
+
+        entityManager.persist(newBug);
     }
 }
