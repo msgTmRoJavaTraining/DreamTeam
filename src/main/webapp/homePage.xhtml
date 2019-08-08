@@ -5,7 +5,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
 >
-
 <script type="text/javascript">
     PrimeFaces.locales['de'] = {
         closeText: 'Schließen',
@@ -96,20 +95,6 @@
                                     <h:outputText styleClass="myFont" value="Confirm password" style="display:block;"/>
                                     <p:password value="#{userManagementBean.confirmPassword}"/><br></br>
 
-                            <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
-                            <p:selectOneMenu id="gender" effect="fold" editable="true" required="true"  appendTo="@this" >
-                                <f:selectItem itemLabel="Select One" itemValue=""  />
-                                <f:selectItems value="" />
-                            </p:selectOneMenu><br></br><br></br>
-                            <p:commandButton value="Save user" class= "button" styleClass="button" onclick="PF('dlg_addBug').close();"  action="#{userManagementBean.createUser}"/>
-                            <br/><br/>
-                        </h:form>
-<!--                    </div>-->
-                </p:dialog>
-                <p:commandButton value="Bug" class= "button" styleClass="button" onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
-                <p:dialog header="Insert bug" widgetVar="dlg_addBug" minHeight="40"  width="370" height="500" >
-                    <!--                    <div class="userCreate">-->
-                    <h:form id="bugForm">
                                     <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
                                     <p:selectOneMenu id="gender" effect="fold" editable="true" required="true"
                                                      appendTo="@this">
@@ -196,7 +181,7 @@
                                     </p:selectCheckboxMenu>
 
                                     <br></br><br></br><br></br><br></br>
-                                    <p:commandButton value="Update roles" class="button" styleClass="button"
+                                    <p:commandButton value="Update role" class="button" styleClass="button"
                                                      onclick="PF('dlg_EditRole').close();"/>
                                     <br/><br/>
                                 </h:form>
