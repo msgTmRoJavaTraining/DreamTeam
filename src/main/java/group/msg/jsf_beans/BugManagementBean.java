@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -24,6 +25,7 @@ public class BugManagementBean implements Serializable {
     private String description;
     private String version;
     private String fixedInVersion;
+    private Date selectedDate;
     private LocalDateTime targetDate;
     private String severity;
     private String status;
@@ -49,7 +51,7 @@ public class BugManagementBean implements Serializable {
         bug.setVersion(version);
         bug.setFixedInVersion(fixedInVersion);
         bug.setTitle(title);
-        bug.setTargetDate(targetDate);
+        bug.setTargetDate(convertToLocalDateTimeViaSqlTimestamp(selectedDate));
 
         InputStream fileInputStream = fileUploadView.getFile().getInputstream();
         attachment = IOUtils.toByteArray(fileInputStream);
@@ -57,5 +59,10 @@ public class BugManagementBean implements Serializable {
         bug.setAttachment(attachment);
 
         databaseEJB.createBug(bug);
+    }
+
+    private LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {
+        return new java.sql.Timestamp(
+                dateToConvert.getTime()).toLocalDateTime();
     }
 }
