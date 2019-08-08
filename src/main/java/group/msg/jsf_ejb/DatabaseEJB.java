@@ -1,6 +1,7 @@
 package group.msg.jsf_ejb;
 
 import group.msg.entities.User;
+import group.msg.entities.UserRole;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -48,5 +49,10 @@ public class DatabaseEJB implements Serializable {
     public void createUser(User newUser){
 
         entityManager.persist(newUser);
+    }
+
+    public void createRole(UserRole newRole){
+
+        entityManager.persist(newRole);
     }
 }
