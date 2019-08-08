@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -19,7 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Named
-@SessionScoped
+@ViewScoped
 public class UserManagementBean implements Serializable {
     private String username;
     private String password;
@@ -35,9 +36,14 @@ public class UserManagementBean implements Serializable {
     private List<String> rightsTest;
     private String[] selectedRights;
 
+    private List<String> testUsers;
+
     @Inject
     DatabaseEJB dataBaseEJB;
 
+public void test() {
+    System.out.println("ceva");
+}
     @PostConstruct
     public void init() {
         rolesTest = new ArrayList<>();
@@ -53,6 +59,28 @@ public class UserManagementBean implements Serializable {
         rightsTest.add("right4");
         rightsTest.add("right5");
         rightsTest.add("right6");
+
+        testUsers= new ArrayList<>();
+        UserManagementBean user1 = new UserManagementBean();
+        UserManagementBean user2 = new UserManagementBean();
+        user1.setUsername("user1");
+        user1.setFirstName("uuu");
+        user1.setLastName("lll");
+        user1.setEmail("something@msg.group.com");
+        user1.setPassword("admin");
+        user1.setConfirmPassword("admin");
+        user1.setMobile("07239322");
+
+        user2.setUsername("user2");
+        user2.setFirstName("uuu");
+        user2.setLastName("lll");
+        user2.setEmail("something@msg.group.com");
+        user2.setPassword("admin");
+        user2.setConfirmPassword("admin");
+        user2.setMobile("07239322");
+        testUsers.add(user1.username);
+        testUsers.add(user2.username);
+
     }
 
 
