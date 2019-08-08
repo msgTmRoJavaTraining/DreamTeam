@@ -46,7 +46,6 @@ public class DatabaseEJB implements Serializable {
     }
 
     public void createUser(User newUser){
-
         entityManager.persist(newUser);
     }
 }

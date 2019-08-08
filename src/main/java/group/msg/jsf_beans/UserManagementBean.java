@@ -5,6 +5,8 @@ import group.msg.entities.User;
 import group.msg.exceptions.UserCreatorException;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -14,7 +16,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Named
 @SessionScoped
 public class UserManagementBean implements Serializable {
@@ -31,6 +34,7 @@ public class UserManagementBean implements Serializable {
     private List<String> rolesTest;
     private List<String> rightsTest;
     private String[] selectedRights;
+
     @Inject
     DatabaseEJB dataBaseEJB;
 
@@ -94,6 +98,13 @@ public class UserManagementBean implements Serializable {
             }
 
         }
+        username="";
+        password="";
+        confirmPassword="";
+        firstName="";
+        lastName="";
+        mobile="";
+        email="";
     }
 
 
