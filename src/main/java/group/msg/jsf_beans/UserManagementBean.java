@@ -4,7 +4,6 @@ import group.msg.entities.PersonalInfo;
 import group.msg.entities.User;
 import group.msg.exceptions.UserCreatorException;
 import group.msg.jsf_ejb.DatabaseEJB;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -60,19 +59,18 @@ public class UserManagementBean implements Serializable {
     }
 
 
-    public void createUser(){
-        int firstNameChars=1;
-        int lastNameChars=5;
-        StringBuilder generatedUserName=new StringBuilder();
+    public void createUser() {
+        int firstNameChars = 1;
+        int lastNameChars = 5;
+        StringBuilder generatedUserName = new StringBuilder();
 
-        if(this.password.equals(this.confirmPassword))
-        {
-            if(lastName.length()<5){
-                lastNameChars=lastName.length();
-                firstNameChars=6-lastNameChars;
+        if (this.password.equals(this.confirmPassword)) {
+            if (lastName.length() < 5) {
+                lastNameChars = lastName.length();
+                firstNameChars = 6 - lastNameChars;
             }
 
-            while(lastNameChars!=0) {
+            while (lastNameChars != 0) {
                 generatedUserName.append(lastName.substring(0, lastNameChars));
                 generatedUserName.append(firstName.substring(0, firstNameChars));
                 if (dataBaseEJB.existsUserWithId(generatedUserName.toString())) {
@@ -82,11 +80,11 @@ public class UserManagementBean implements Serializable {
                 } else break;
             }
 
-            if(generatedUserName.length()==0){
-                throw new UserCreatorException(lastName,firstName);
-            }else{
-                User newUser=new User();
-                PersonalInfo userInfo=new PersonalInfo();
+            if (generatedUserName.length() == 0) {
+                throw new UserCreatorException(lastName, firstName);
+            } else {
+                User newUser = new User();
+                PersonalInfo userInfo = new PersonalInfo();
 
                 userInfo.setFirstName(firstName);
                 userInfo.setLastName(lastName);
@@ -98,17 +96,17 @@ public class UserManagementBean implements Serializable {
                 newUser.setPassword(LoginBean.getMd5(this.password));
                 newUser.setPersonalInformations(userInfo);
 
-               dataBaseEJB.createUser(newUser);
+                dataBaseEJB.createUser(newUser);
             }
 
         }
-        username="";
-        password="";
-        confirmPassword="";
-        firstName="";
-        lastName="";
-        mobile="";
-        email="";
+        username = "";
+        password = "";
+        confirmPassword = "";
+        firstName = "";
+        lastName = "";
+        mobile = "";
+        email = "";
     }
 
     public void usersList(){

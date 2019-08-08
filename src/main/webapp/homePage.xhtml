@@ -101,7 +101,8 @@
                                         <f:selectItem itemLabel="Select One" itemValue=""/>
                                         <f:selectItems value=""/>
                                     </p:selectOneMenu><br></br><br></br>
-                                    <p:commandButton value="Save user" class="button" onclick="PF('dlg_addBug').close();" styleClass="button"
+                                    <p:commandButton value="Save user" class="button"
+                                                     onclick="PF('dlg_addBug').close();" styleClass="button"
                                                      action="#{userManagementBean.createUser}"/>
                                     <br/><br/>
                                 </h:form>
@@ -110,14 +111,14 @@
                                              onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
                             <p:dialog header="Insert bug" widgetVar="dlg_addBug" minHeight="40" width="370"
                                       height="500">
-                                <h:form id="bugForm">
+                                <h:form id="bugForm" enctype="multipart/form-data">
 
                                     <h:outputText styleClass="myFont" value="Title" style="display:block;"/>
-                                    <p:inputText/>
+                                    <p:inputText value="#{bugManagementBean.title}"/>
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Version" style="display:block;"/>
-                                    <p:inputText/>
+                                    <p:inputText value="#{bugManagementBean.version}"/>
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Severity" style="display:block;"/>
@@ -128,24 +129,25 @@
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Assigned to" style="display:block;"/>
-                                    <p:selectOneMenu id="assignedUser" effect="fold" editable="true" required="true"
+                                    <p:selectOneMenu id="assignedUser" effect="fold" editable="true" required="false"
                                                      appendTo="@this">
                                         <f:selectItem itemLabel="Select One" itemValue="" style="z-index: +1"/>
                                         <f:selectItems value=""/>
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Target Date" style="display:block;"/>
-                                    <p:calendar id="button" mode="inline"/>
+                                    <p:calendar id="button" value="#{bugManagementBean.selectedDate}" mode="inline"/>
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Description" style="display:block;"/>
-                                    <p:textEditor/>
+                                    <p:inputTextarea value="#{bugManagementBean.description}"/>
 
                                     <h:outputText styleClass="myFont" value="Attachment" style="display:block;"/>
                                     <p:fileUpload value="#{fileUploadView.file}" mode="simple" skinSimple="true"/>
 
                                     <br></br><br></br>
                                     <p:commandButton value="Save bug" class="button" styleClass="button"
+                                                     action="#{bugManagementBean.createBug}"
                                                      onclick="PF('dlg_addBug').close();"/>
                                     <br/><br/>
                                 </h:form>
@@ -157,7 +159,7 @@
                         <p:commandButton icon="fa fa-trash"/>
                     </div>
                     <div class="editData">
-                        <p:commandButton icon="fa fa-edit"  type="button" onclick="PF('dlg_edit').show();"/>
+                        <p:commandButton icon="fa fa-edit" type="button" onclick="PF('dlg_edit').show();"/>
                         <p:dialog header="Edit options" widgetVar="dlg_edit" minHeight="40" width="295" height="30"
                                   styleClass="customDialog">
 
@@ -167,17 +169,21 @@
                                       height="500">
                                 <h:form id="editRoleForm">
                                     <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
-                                    <p:selectOneMenu id="roles"  value="#{userManagementBean.selectedRole}" effect="fold" editable="true" required="true"
+                                    <p:selectOneMenu id="roles" value="#{userManagementBean.selectedRole}" effect="fold"
+                                                     editable="true" required="true"
                                                      appendTo="@this">
                                         <f:selectItem itemLabel="Select One" itemValue=""/>
                                         <f:selectItems value="#{userManagementBean.rolesTest}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputLabel styleClass="myFont" value="Rights: "/>
-                                    <p:selectCheckboxMenu id="rights" value="#{userManagementBean.selectedRights}" label="Rights"
-                                                          filter="true" filterMatchMode="startsWith" panelStyle="width:auto; margin-left: 0px; margin-right: 5px"  required="true"
+                                    <p:selectCheckboxMenu id="rights" value="#{userManagementBean.selectedRights}"
+                                                          label="Rights"
+                                                          filter="true" filterMatchMode="startsWith"
+                                                          panelStyle="width:auto; margin-left: 0px; margin-right: 5px"
+                                                          required="true"
                                                           appendTo="@this">
-                                        <f:selectItems value="#{userManagementBean.rightsTest}" />
+                                        <f:selectItems value="#{userManagementBean.rightsTest}"/>
                                     </p:selectCheckboxMenu>
 
                                     <br></br><br></br><br></br><br></br>

@@ -4,7 +4,6 @@ package group.msg.jsf_beans;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Data;
 
-
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -25,7 +24,7 @@ public class LoginBean implements Serializable {
 
     public String validateCredentials() {
         String hashedPassword = getMd5(password);
-        if (databaseEJB.login(username,hashedPassword)) {
+        if (databaseEJB.login(username, hashedPassword)) {
             return "homePage";
         } else {
             return "login";
