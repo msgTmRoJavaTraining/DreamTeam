@@ -14,6 +14,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,6 +29,9 @@ public class UserManagementBean implements Serializable {
     private String lastName;
     private String mobile;
     private String email;
+    private boolean active;
+
+    private List<String> allUsers;
 
     private String selectedRole;
     private List<String> rolesTest;
@@ -105,5 +109,25 @@ public class UserManagementBean implements Serializable {
         email = "";
     }
 
+    public void usersList(){
+        this.allUsers=dataBaseEJB.getAllUsers();
+    }
+    public void updateUser(){
+        User userToUpdate=dataBaseEJB.getUserByUserName(this.username);
+        PersonalInfo newPersonalInfo=new PersonalInfo();
+
+        if(this.password.equals(this.confirmPassword)){
+            newPersonalInfo.setFirstName(this.firstName);
+            newPersonalInfo.setLastName(this.lastName);
+            newPersonalInfo.setMobile(this.mobile);
+            newPersonalInfo.setEmail(this.email);
+            newPersonalInfo.setActive(this.active);
+            userToUpdate.setPersonalInformations(newPersonalInfo);
+            userToUpdate.setPassword(this.password);
+            dataBaseEJB.updateUser(userToUpdate);
+        }else{
+            throw new UserCreatorException(this.lastName,this.firstName);
+        }
+    }
 
 }
