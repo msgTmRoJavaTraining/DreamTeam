@@ -105,7 +105,14 @@ h2:before {
     margin-left: 35%;
     line-break: normal;
 }
-
+.editData{
+    padding: 12px;
+    margin-bottom: 10px;
+    position: center;
+    size: 600px;
+    margin-left: 35%;
+    line-break: normal;
+}
 .exportData {
     padding: 12px;
     margin-bottom: 10px;

@@ -8,10 +8,13 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,9 +30,31 @@ public class UserManagementBean implements Serializable {
     private String mobile;
     private String email;
 
+    private String selectedRole;
+    private List<String> rolesTest;
+    private List<String> rightsTest;
+    private String[] selectedRights;
 
     @Inject
     DatabaseEJB dataBaseEJB;
+
+    @PostConstruct
+    public void init() {
+        rolesTest = new ArrayList<>();
+        rolesTest.add("role1");
+        rolesTest.add("role2");
+        rolesTest.add("role3");
+        rolesTest.add("role4");
+        rolesTest.add("role5");
+        rightsTest = new ArrayList<>();
+        rightsTest.add("right1");
+        rightsTest.add("right2");
+        rightsTest.add("right3");
+        rightsTest.add("right4");
+        rightsTest.add("right5");
+        rightsTest.add("right6");
+    }
+
 
     public void createUser(){
         int firstNameChars=1;
@@ -65,7 +90,7 @@ public class UserManagementBean implements Serializable {
                 userInfo.setMobile(mobile);
                 userInfo.setActive(true);
 
-                newUser.setUsername(generatedUserName.toString().toLowerCase());
+                newUser.setUsername(generatedUserName.toString());
                 newUser.setPassword(LoginBean.getMd5(this.password));
                 newUser.setPersonalInformations(userInfo);
 
