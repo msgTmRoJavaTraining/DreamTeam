@@ -129,10 +129,10 @@
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Assigned to" style="display:block;"/>
-                                    <p:selectOneMenu id="assignedUser" effect="fold" editable="true" required="false"
+                                    <p:selectOneMenu id="assignedUser" value="#{userManagementBean.assignedUser}" effect="fold" editable="true" required="false"
                                                      appendTo="@this">
                                         <f:selectItem itemLabel="Select One" itemValue="" style="z-index: +1"/>
-                                        <f:selectItems value=""/>
+                                        <f:selectItems value="#{userManagementBean.usersList}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Target Date" style="display:block;"/>

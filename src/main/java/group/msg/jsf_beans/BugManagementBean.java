@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +23,8 @@ import java.util.Date;
 @SessionScoped
 public class BugManagementBean implements Serializable {
 
+
+//    public List<String> list = Arrays.asList(new String[]{"foo", "bar"});
     private String title;
     private String description;
     private String version;

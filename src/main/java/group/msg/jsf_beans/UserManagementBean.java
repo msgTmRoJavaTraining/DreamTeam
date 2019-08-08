@@ -30,6 +30,7 @@ public class UserManagementBean implements Serializable {
     private String mobile;
     private String email;
     private boolean active;
+    private User assignedUser;
 
     private List<String> allUsers;
 
