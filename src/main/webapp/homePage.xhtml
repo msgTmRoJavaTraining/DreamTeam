@@ -5,7 +5,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
 >
-
 <script type="text/javascript">
     PrimeFaces.locales['de'] = {
         closeText: 'Schließen',
@@ -33,14 +32,15 @@
         day: 'Tag',
         allDayText: 'Ganzer Tag'
     };
-</script><f:view>
+</script>
+<f:view>
     <h:head>
         <title>Home</title>
         <h:outputStylesheet library="css" name="styleHomePage.css"/>
     </h:head>
     <h:body>
         <div class="w3-teal">
-            <p:commandButton icon="bugIcon.png" oncomplete="PF('sidebar1').show()" style="background: none" />
+            <p:commandButton icon="bugIcon.png" oncomplete="PF('sidebar1').show()" style="background: none"/>
             <span>JBugger </span>
         </div>
         <div class="content" style=" background-color:lavenderblush; height: 100vh;">
@@ -58,119 +58,157 @@
             <div style=" height: 100vh;"></div>
         </div>
 
-    <p:sidebar widgetVar="sidebar1" baseZIndex="10000" style="background:darkcyan; width:15em">
-        <div class="sideBar">
-        <h2 style="color: white">JBugger</h2>
-            <div class="buttons">
-        <div class="addData">
+        <p:sidebar widgetVar="sidebar1" baseZIndex="10000" style="background:darkcyan; width:15em">
+            <div class="sideBar">
+                <h2 style="color: white">JBugger</h2>
+                <div class="buttons">
+                    <div class="addData">
 
-            <p:commandButton  icon="fa fa-plus" type="button" onclick="PF('dlg1').show();" />
-            <p:dialog header="Insert options" widgetVar="dlg1" minHeight="40"  width="295" height="30" styleClass="customDialog">
-                <p:commandButton value="User" class= "button" styleClass="button" onclick="PF('dlg_addUser').show(); PF('dlg1').close();"/><p:spacer></p:spacer>
-                <p:dialog header="Insert user" widgetVar="dlg_addUser" minHeight="40"  width="310" height="500" >
-<!--                    <div class="userCreate">-->
-                        <h:form id="userForm">
+                        <p:commandButton icon="fa fa-plus" type="button" onclick="PF('dlg1').show();"/>
+                        <p:dialog header="Insert options" widgetVar="dlg1" minHeight="40" width="295" height="30"
+                                  styleClass="customDialog">
+                            <p:commandButton value="User" class="button" styleClass="button"
+                                             onclick="PF('dlg_addUser').show(); PF('dlg1').close();"/><p:spacer></p:spacer>
+                            <p:dialog header="Insert user" widgetVar="dlg_addUser" minHeight="40" width="310"
+                                      height="500">
+                                <h:form id="userForm">
 
-                            <h:outputText styleClass="myFont" value="First name" style="display:block;"/>
-                            <p:inputText value="#{userManagementBean.firstName}" />
-                            <br/><br/>
+                                    <h:outputText styleClass="myFont" value="First name" style="display:block;"/>
+                                    <p:inputText value="#{userManagementBean.firstName}"/>
+                                    <br/><br/>
 
-                            <h:outputText styleClass="myFont" value="Last name" style="display:block;"/>
-                            <p:inputText value="#{userManagementBean.lastName}" />
-                            <br/><br/>
+                                    <h:outputText styleClass="myFont" value="Last name" style="display:block;"/>
+                                    <p:inputText value="#{userManagementBean.lastName}"/>
+                                    <br/><br/>
 
-                            <h:outputText styleClass="myFont" value="Email" style="display:block;"/>
-                            <p:inputText value="#{userManagementBean.email}" />
-                            <br/><br/>
+                                    <h:outputText styleClass="myFont" value="Email" style="display:block;"/>
+                                    <p:inputText value="#{userManagementBean.email}"/>
+                                    <br/><br/>
 
-                            <h:outputText styleClass="myFont" value="Phone" style="display:block;"/>
-                            <p:inputText  />
-                            <br/><br/>
+                                    <h:outputText styleClass="myFont" value="Phone" style="display:block;"/>
+                                    <p:inputText/>
+                                    <br/><br/>
 
-                            <h:outputText styleClass="myFont" value="Password" style="display:block;"/>
-                            <p:password value="#{userManagementBean.password}"/><br></br>
+                                    <h:outputText styleClass="myFont" value="Password" style="display:block;"/>
+                                    <p:password value="#{userManagementBean.password}"/><br></br>
 
-                            <h:outputText styleClass="myFont" value="Confirm password" style="display:block;"/>
-                            <p:password value="#{userManagementBean.confirmPassword}"/><br></br>
+                                    <h:outputText styleClass="myFont" value="Confirm password" style="display:block;"/>
+                                    <p:password value="#{userManagementBean.confirmPassword}"/><br></br>
 
-                            <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
-                            <p:selectOneMenu id="gender" effect="fold" editable="true" required="true"  appendTo="@this" >
-                                <f:selectItem itemLabel="Select One" itemValue=""  />
-                                <f:selectItems value="" />
-                            </p:selectOneMenu><br></br><br></br>
-                            <p:commandButton value="Save user" class= "button" styleClass="button" onclick="PF('dlg_addBug').close();"  action="#{userManagementBean.createUser}"/>
-                            <br/><br/>
-                        </h:form>
-<!--                    </div>-->
-                </p:dialog>
-                <p:commandButton value="Bug" class= "button" styleClass="button" onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
-                <p:dialog header="Insert bug" widgetVar="dlg_addBug" minHeight="40"  width="370" height="500" >
-                    <!--                    <div class="userCreate">-->
-                    <h:form id="bugForm">
+                                    <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
+                                    <p:selectOneMenu id="gender" effect="fold" editable="true" required="true"
+                                                     appendTo="@this">
+                                        <f:selectItem itemLabel="Select One" itemValue=""/>
+                                        <f:selectItems value=""/>
+                                    </p:selectOneMenu><br></br><br></br>
+                                    <p:commandButton value="Save user" class="button" onclick="PF('dlg_addBug').close();" styleClass="button"
+                                                     action="#{userManagementBean.createUser}"/>
+                                    <br/><br/>
+                                </h:form>
+                            </p:dialog>
+                            <p:commandButton value="Bug" class="button" styleClass="button"
+                                             onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
+                            <p:dialog header="Insert bug" widgetVar="dlg_addBug" minHeight="40" width="370"
+                                      height="500">
+                                <h:form id="bugForm">
 
-                        <h:outputText styleClass="myFont" value="Title" style="display:block;"/>
-                        <p:inputText  />
-                        <br/><br/>
+                                    <h:outputText styleClass="myFont" value="Title" style="display:block;"/>
+                                    <p:inputText/>
+                                    <br/><br/>
 
-                        <h:outputText styleClass="myFont" value="Version" style="display:block;"/>
-                        <p:inputText  />
-                        <br/><br/>
+                                    <h:outputText styleClass="myFont" value="Version" style="display:block;"/>
+                                    <p:inputText/>
+                                    <br/><br/>
 
-                        <h:outputText styleClass="myFont" value="Severity" style="display:block;"/>
-                        <p:selectOneMenu id="severity" effect="fold" editable="true"  required="true"  appendTo="@this" >
-                            <f:selectItem itemLabel="Select One" itemValue=""  />
-                            <f:selectItems value="" />
-                        </p:selectOneMenu><br></br><br></br>
+                                    <h:outputText styleClass="myFont" value="Severity" style="display:block;"/>
+                                    <p:selectOneMenu id="severity" effect="fold" editable="true" required="true"
+                                                     appendTo="@this">
+                                        <f:selectItem itemLabel="Select One" itemValue=""/>
+                                        <f:selectItems value=""/>
+                                    </p:selectOneMenu><br></br><br></br>
 
-                        <h:outputText styleClass="myFont" value="Assigned to" style="display:block;"/>
-                        <p:selectOneMenu id="assignedUser" effect="fold" editable="true" required="true"  appendTo="@this">
-                            <f:selectItem itemLabel="Select One" itemValue="" style="z-index: +1" />
-                            <f:selectItems value="" />
-                        </p:selectOneMenu><br></br><br></br>
+                                    <h:outputText styleClass="myFont" value="Assigned to" style="display:block;"/>
+                                    <p:selectOneMenu id="assignedUser" effect="fold" editable="true" required="true"
+                                                     appendTo="@this">
+                                        <f:selectItem itemLabel="Select One" itemValue="" style="z-index: +1"/>
+                                        <f:selectItems value=""/>
+                                    </p:selectOneMenu><br></br><br></br>
 
-                        <h:outputText styleClass="myFont" value="Target Date" style="display:block;"/>
-                        <p:calendar id="button" mode="inline"/>
-                        <br/><br/>
+                                    <h:outputText styleClass="myFont" value="Target Date" style="display:block;"/>
+                                    <p:calendar id="button" mode="inline"/>
+                                    <br/><br/>
 
-                        <h:outputText styleClass="myFont" value="Description" style="display:block;"/>
-                        <p:textEditor/>
+                                    <h:outputText styleClass="myFont" value="Description" style="display:block;"/>
+                                    <p:textEditor/>
 
-                        <h:outputText styleClass="myFont" value="Attachment" style="display:block;"/>
-                        <p:fileUpload value="#{fileUploadView.file}" mode="simple" skinSimple="true"/>
+                                    <h:outputText styleClass="myFont" value="Attachment" style="display:block;"/>
+                                    <p:fileUpload value="#{fileUploadView.file}" mode="simple" skinSimple="true"/>
 
-                        <br></br><br></br>
-                        <p:commandButton value="Save bug" class= "button" styleClass="button" onclick="PF('dlg_addBug').close();"/>
-                        <br/><br/>
-                    </h:form>
-                    <!--                    </div>-->
-                </p:dialog>
-            </p:dialog>
+                                    <br></br><br></br>
+                                    <p:commandButton value="Save bug" class="button" styleClass="button"
+                                                     onclick="PF('dlg_addBug').close();"/>
+                                    <br/><br/>
+                                </h:form>
+                            </p:dialog>
+                        </p:dialog>
 
-        </div>
-        <div class="deleteData">
-            <p:commandButton  icon="fa fa-trash"/>
-        </div>
-        <div class="exportData">
-            <p:commandButton  icon="fa fa-files-o"/>
-        </div>
-        <div class="overView">
-            <p:commandButton  icon="fa fa-search"/>
-        </div>
-        <div class="statistics">
-            <p:commandButton icon="fa fa-pie-chart"/>
-        </div>
-                <br></br>
-                <br></br>
-        <div class="languageSwitch">
-            <p:commandButton icon="fa fa-language"/>
-        </div>
-        <div class="log-out">
-            <p:commandButton   icon="fa fa-sign-out"/>
-        </div>
+                    </div>
+                    <div class="deleteData">
+                        <p:commandButton icon="fa fa-trash"/>
+                    </div>
+                    <div class="editData">
+                        <p:commandButton icon="fa fa-edit"  type="button" onclick="PF('dlg_edit').show();"/>
+                        <p:dialog header="Edit options" widgetVar="dlg_edit" minHeight="40" width="295" height="30"
+                                  styleClass="customDialog">
+
+                            <p:commandButton value="Role" class="button" styleClass="button"
+                                             onclick="PF('dlg_EditRole').show();PF('dlg_edit').close();"/>
+                            <p:dialog header="Edit role" widgetVar="dlg_EditRole" minHeight="40" width="370"
+                                      height="500">
+                                <h:form id="editRoleForm">
+                                    <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
+                                    <p:selectOneMenu id="roles"  value="#{userManagementBean.selectedRole}" effect="fold" editable="true" required="true"
+                                                     appendTo="@this">
+                                        <f:selectItem itemLabel="Select One" itemValue=""/>
+                                        <f:selectItems value="#{userManagementBean.rolesTest}"/>
+                                    </p:selectOneMenu><br></br><br></br>
+
+                                    <h:outputLabel styleClass="myFont" value="Rights: "/>
+                                    <p:selectCheckboxMenu id="rights" value="#{userManagementBean.selectedRights}" label="Rights"
+                                                          filter="true" filterMatchMode="startsWith" panelStyle="width:auto; margin-left: 0px; margin-right: 5px"  required="true"
+                                                          appendTo="@this">
+                                        <f:selectItems value="#{userManagementBean.rightsTest}" />
+                                    </p:selectCheckboxMenu>
+
+                                    <br></br><br></br><br></br><br></br>
+                                    <p:commandButton value="Update role" class="button" styleClass="button"
+                                                     onclick="PF('dlg_EditRole').close();"/>
+                                    <br/><br/>
+                                </h:form>
+                            </p:dialog>
+                        </p:dialog>
+
+                    </div>
+                    <div class="exportData">
+                        <p:commandButton icon="fa fa-files-o"/>
+                    </div>
+                    <div class="overView">
+                        <p:commandButton icon="fa fa-search"/>
+                    </div>
+                    <div class="statistics">
+                        <p:commandButton icon="fa fa-pie-chart"/>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div class="languageSwitch">
+                        <p:commandButton icon="fa fa-language"/>
+                    </div>
+                    <div class="log-out">
+                        <p:commandButton icon="fa fa-sign-out"/>
+                    </div>
+                </div>
             </div>
-        </div>
-    </p:sidebar>
-
+        </p:sidebar>
 
 
     </h:body>
