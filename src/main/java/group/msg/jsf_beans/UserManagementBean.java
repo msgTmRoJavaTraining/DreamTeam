@@ -6,10 +6,13 @@ import group.msg.exceptions.UserCreatorException;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Data;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Named
@@ -24,8 +27,30 @@ public class UserManagementBean implements Serializable {
     private String mobile;
     private String email;
 
+    private String selectedRole;
+    private List<String> rolesTest;
+    private List<String> rightsTest;
+    private String[] selectedRights;
     @Inject
     DatabaseEJB dataBaseEJB;
+
+    @PostConstruct
+    public void init() {
+        rolesTest = new ArrayList<>();
+        rolesTest.add("role1");
+        rolesTest.add("role2");
+        rolesTest.add("role3");
+        rolesTest.add("role4");
+        rolesTest.add("role5");
+        rightsTest = new ArrayList<>();
+        rightsTest.add("right1");
+        rightsTest.add("right2");
+        rightsTest.add("right3");
+        rightsTest.add("right4");
+        rightsTest.add("right5");
+        rightsTest.add("right6");
+    }
+
 
     public void createUser(){
         int firstNameChars=1;
