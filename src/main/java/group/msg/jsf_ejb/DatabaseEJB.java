@@ -25,62 +25,59 @@ public class DatabaseEJB implements Serializable {
         query.setParameter("username", username);
         query.setParameter("password", password);
 
-        try {
+        try{
             User ua = (User) query.getSingleResult();
-        } catch (NoResultException e) {
+        }catch (NoResultException e)
+        {
+            return false;
+        }
+       return true;
+    }
+
+    public boolean existsUserWithId(String user){
+        String select="SELECT u FROM User u WHERE u.username=:username";
+        Query query =entityManager.createQuery(select);
+        query.setParameter("username",user);
+        try{
+            User searchedUser= (User) query.getSingleResult();
+        }catch (NoResultException e)
+        {
             return false;
         }
         return true;
+
+
     }
 
-    public boolean existsUserWithId(String user) {
-        String select = "SELECT u FROM User u WHERE u.username=:username";
-        Query query = entityManager.createQuery(select);
-        query.setParameter("username", user);
-        try {
-            User searchedUser = (User) query.getSingleResult();
-        } catch (NoResultException e) {
-            return false;
-        }
-        return true;
-    }
-
-    public void createUser(User newUser) {
+    public void createUser(User newUser){
         entityManager.persist(newUser);
     }
 
-    public void createBug(Bug newBug) {
-        entityManager.persist(newBug);
-    }
+    public void createRole(UserRole newRole){
 
-    public void createRole(UserRole newRole) {
         entityManager.persist(newRole);
     }
 
-    public List<String> getAllUsers() {
-        List<String> allUsers = new ArrayList<>();
-        Query query = entityManager.createQuery("SELECT users.username From User users");
-        allUsers = query.getResultList();
+    public List<String> getAllUsers(){
+        List<String> allUsers=new ArrayList<>();
+        Query query=entityManager.createQuery("SELECT users.username From User users");
+        allUsers=query.getResultList();
         return allUsers;
     }
-
-    public User getUserByUserName(String username) {
+    public User getUserByUserName(String username){
         User foundUser;
-        Query query = entityManager.createQuery("SELECT user FROM User user WHERE user.username=:username");
-        query.setParameter("username", username);
+        Query query=entityManager.createQuery("SELECT user FROM User user WHERE user.username=:username");
+        query.setParameter("username",username);
 
-        foundUser = (User) query.getSingleResult();
+        foundUser= (User) query.getSingleResult();
         return foundUser;
     }
 
-    public List<String> getAllRoleNames() {
-        List<String> allRoles;
-        Query query = entityManager.createQuery("SELECT roles.roleName From UserRole roles");
-        allRoles = query.getResultList();
-        return allRoles;
-    }
-
-    public void updateUser(User toUpdate) {
+    public void updateUser(User toUpdate){
         entityManager.merge(toUpdate);
+    }
+    public void createBug(Bug newBug) {
+
+        entityManager.persist(newBug);
     }
 }
