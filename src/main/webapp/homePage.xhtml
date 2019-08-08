@@ -86,7 +86,7 @@
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Phone" style="display:block;"/>
-                                    <p:inputText/>
+                                    <p:inputText value="#{userManagementBean.mobile}"/>
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Password" style="display:block;"/>
@@ -115,14 +115,14 @@
                                              onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
                             <p:dialog header="Insert bug" widgetVar="dlg_addBug" minHeight="40" width="370"
                                       height="500">
-                                <h:form id="bugForm">
+                                <h:form id="bugForm" enctype="multipart/form-data">
 
                                     <h:outputText styleClass="myFont" value="Title" style="display:block;"/>
-                                    <p:inputText/>
+                                    <p:inputText value="#{bugManagementBean.title}"/>
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Version" style="display:block;"/>
-                                    <p:inputText/>
+                                    <p:inputText value="#{bugManagementBean.version}"/>
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Severity" style="display:block;"/>
@@ -140,17 +140,18 @@
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Target Date" style="display:block;"/>
-                                    <p:calendar id="button" mode="inline"/>
+                                    <p:calendar id="button" value="#{bugManagementBean.selectedDate}" mode="inline"/>
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Description" style="display:block;"/>
-                                    <p:textEditor/>
+                                    <p:inputTextarea value="#{bugManagementBean.description}"/>
 
                                     <h:outputText styleClass="myFont" value="Attachment" style="display:block;"/>
                                     <p:fileUpload value="#{fileUploadView.file}" mode="simple" skinSimple="true"/>
 
                                     <br></br><br></br>
                                     <p:commandButton value="Save bug" class="button" styleClass="button"
+                                                     action="#{bugManagementBean.createBug}"
                                                      onclick="PF('dlg_addBug').close();"/>
                                     <br/><br/>
                                 </h:form>

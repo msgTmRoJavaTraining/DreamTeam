@@ -30,6 +30,9 @@ public class UserManagementBean implements Serializable {
     private String lastName;
     private String mobile;
     private String email;
+    private boolean active;
+
+    private List<String>allUsers;
 
     private String selectedRole;
     private List<String> rolesTest;
@@ -89,7 +92,7 @@ public void test() {
         int lastNameChars=5;
         StringBuilder generatedUserName=new StringBuilder();
 
-        if(this.password.equals(this.confirmPassword))
+        if(this.password.equals(this.confirmPassword)&& isEmailValid(email)&& isValidPhoneNumber(mobile))
         {
             if(lastName.length()<5){
                 lastNameChars=lastName.length();
@@ -134,6 +137,42 @@ public void test() {
         mobile="";
         email="";
     }
+    public static boolean isEmailValid(String email) {
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@msggroup.com";
+        return email.matches(regex);
+    }
 
+    public static boolean isValidPhoneNumber(String mobile) {
+        String regex = "\\+407\\d{8}";
+        String regex1 = "07\\d{8}";
+        String regex7 = "00407\\d{8}";
+        String regex2 = "\\+4915\\d{9}";
+        String regex3 = "\\+4916\\d{8}\\(\\d\\)";
+        String regex4 = "\\+4917\\d{8}\\(\\d\\)";
+        String regex5 = "004915\\d{9}";
+        String regex6 = "\\+4915\\d{7}";
 
+        return mobile.matches(regex) || mobile.matches(regex1) || mobile.matches(regex2) || mobile.matches(regex6)
+                || mobile.matches(regex3) || mobile.matches(regex4) || mobile.matches(regex5) || mobile.matches(regex7);
+    }
+    public void usersList(){
+        this.allUsers=dataBaseEJB.getAllUsers();
+    }
+    public void updateUser(){
+        User userToUpdate=dataBaseEJB.getUserByUserName(this.username);
+        PersonalInfo newPersonalInfo=new PersonalInfo();
+
+        if(this.password.equals(this.confirmPassword)){
+            newPersonalInfo.setFirstName(this.firstName);
+            newPersonalInfo.setLastName(this.lastName);
+            newPersonalInfo.setMobile(this.mobile);
+            newPersonalInfo.setEmail(this.email);
+            newPersonalInfo.setActive(this.active);
+            userToUpdate.setPersonalInformations(newPersonalInfo);
+            userToUpdate.setPassword(this.password);
+            dataBaseEJB.updateUser(userToUpdate);
+        }else{
+            throw new UserCreatorException(this.lastName,this.firstName);
+        }
+    }
 }
