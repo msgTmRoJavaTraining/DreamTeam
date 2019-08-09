@@ -5,6 +5,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
 >
+
 <script type="text/javascript">
     PrimeFaces.locales['de'] = {
         closeText: 'Schließen',
@@ -125,11 +126,11 @@
                                     <p:inputText value="#{bugManagementBean.version}"/>
                                     <br/><br/>
 
+
                                     <h:outputText styleClass="myFont" value="Severity" style="display:block;"/>
-                                    <p:selectOneMenu id="severity" effect="fold" editable="true" required="true"
+                                    <p:selectOneMenu id="severity" value="#{bugManagementBean.severity}" effect="fold" required="true"
                                                      appendTo="@this">
-                                        <f:selectItem itemLabel="Select One" itemValue=""/>
-                                        <f:selectItems value=""/>
+                                        <f:selectItems value="#{constantsBean.severities}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Assigned to" style="display:block;"/>
