@@ -1,10 +1,12 @@
 package group.msg.jsf_ejb;
 
 import group.msg.entities.Bug;
+import group.msg.entities.Rights;
 import group.msg.entities.User;
 import group.msg.entities.UserRole;
 
 import javax.ejb.Stateless;
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -80,4 +82,36 @@ public class DatabaseEJB implements Serializable {
 
         entityManager.persist(newBug);
     }
+    public List<String> getRoles(){
+        List<String> roleList;
+        Query query= entityManager.createQuery("SELECT role.roleName FROM UserRole role ");
+
+        roleList= (List<String>) query.getResultList();
+        return roleList;
+    }
+    public List<String> getRigts(){
+        List<String> rightsList;
+        Query query= entityManager.createQuery("SELECT right.name FROM Rights right");
+
+        rightsList= (List<String>) query.getResultList();
+        return rightsList;
+    }
+    public int getRoleIdByName(String selectedRole){
+        int result;
+        Query query= entityManager.createQuery("SELECT role.roleId FROM UserRole role WHERE role.roleName=:selectedRole");
+        query.setParameter("selectedRole",selectedRole);
+        result= (int)query.getSingleResult();
+        return result;
+    }
+    public int getRightIdByName(String rightName){
+        int result;
+        Query query= entityManager.createQuery("SELECT right.rightId FROM Rights right WHERE right.name=:rightName");
+        query.setParameter("rightName",rightName);
+        result= (int)query.getSingleResult();
+        return result;
+    }
+    public void updateRole( UserRole resultRole){
+
+    }
+
 }

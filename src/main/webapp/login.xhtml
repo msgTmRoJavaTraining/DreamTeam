@@ -16,13 +16,13 @@
 
             <h1>Log into JBugger</h1>
             <h:form>
-                <p:inputText styleClass="inputData" value="#{loginBean.username}" requiredMessage="Insert your username" required="true"  name="username" style="margin-bottom: 10px; outline: medium none;padding: 10px;font-weight: normal;"/>
-                <p:password styleClass = "inputData" value="#{loginBean.password}" requiredMessage="Insert your password"  type="password" name="password" required="true" style="margin-bottom: 10px;outline: medium none;padding: 10px;font-weight: normal;"/>
+                <p:inputText styleClass="inputData" value="#{loginBean.username}" name="username" style="margin-bottom: 10px; outline: medium none;padding: 10px;font-weight: normal;"/>
+                <p:password styleClass = "inputData" value="#{loginBean.password}"  type="password" name="password"  style="margin-bottom: 10px;outline: medium none;padding: 10px;font-weight: normal;"/>
                 <p:commandButton value="Login"
                                  action="#{loginBean.validateCredentials}"
                                  type="Login"
 
-                                 ajax="true"
+                                 ajax="false"
                                  class="btn btn-primary btn-block btn-large"
                                  style="padding: 12px; text-anchor: middle"
                 />

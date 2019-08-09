@@ -1,37 +1,53 @@
 package group.msg.jsf_beans;
 
+import group.msg.entities.Rights;
 import group.msg.entities.UserRole;
 import group.msg.jsf_ejb.DatabaseEJB;
+import lombok.Getter;
+import lombok.Setter;
 
+
+import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+@Getter
+@Setter
 @Named
-public class RoleManagementBean {
+@ViewScoped
+public class RoleManagementBean implements Serializable {
+
+    private List<String>roleList;
+    private List<String>rightsList;
+    private String selectedRole;
+    private List<String>selectedRights;
 
     @Inject
     private DatabaseEJB databaseEJB;
 
+    @PostConstruct
     public void init() {
-        UserRole administrator = new UserRole();
-        administrator.setRoleName("Administrator");
-
-        UserRole projectManager = new UserRole();
-        projectManager.setRoleName("Project manager");
-
-        UserRole testManager = new UserRole();
-        testManager.setRoleName("Test Manager");
-
-        UserRole developer = new UserRole();
-        developer.setRoleName("Developer");
-
-        UserRole tester = new UserRole();
-        tester.setRoleName("Tester");
-
-        databaseEJB.createRole(administrator);
-        databaseEJB.createRole(projectManager);
-        databaseEJB.createRole(testManager);
-        databaseEJB.createRole(developer);
-        databaseEJB.createRole(tester);
+        roleList= databaseEJB.getRoles();
+        rightsList= databaseEJB.getRigts();
     }
+    public void updateRoles(){
+        List<Rights>resultRights= new ArrayList<>();
+        UserRole resultRole = new UserRole();
+        resultRole.setRoleName(selectedRole);
+        resultRole.setRoleId(databaseEJB.getRoleIdByName(selectedRole));
+        Rights crtRight= new Rights();
+        for(String rightName: selectedRights){
+            crtRight.setName(rightName);
+            crtRight.setRightId(databaseEJB.getRightIdByName(rightName));
+            resultRights.add(crtRight);
+        }
+        resultRole.setRights(resultRights);
+        databaseEJB.updateRole(resultRole);
+    }
+
+
 }

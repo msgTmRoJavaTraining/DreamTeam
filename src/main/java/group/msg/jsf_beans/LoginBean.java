@@ -6,6 +6,8 @@ import lombok.Data;
 
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -24,6 +26,7 @@ public class LoginBean implements Serializable {
     private DatabaseEJB databaseEJB;
 
     public String validateCredentials() {
+        checkEmptyUserPass();
         String hashedPassword = getMd5(password);
         if (databaseEJB.login(username,hashedPassword)) {
             return "homePage";
@@ -58,5 +61,14 @@ public class LoginBean implements Serializable {
             e.printStackTrace();
         }
         return hashtext;
+    }
+    public void checkEmptyUserPass()
+    {
+        if (username.isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "Enter an username"));
+        }
+        if (password.isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Enter a password"));
+        }
     }
 }
