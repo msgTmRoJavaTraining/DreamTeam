@@ -1,6 +1,7 @@
 package group.msg.jsf_beans;
 
 import group.msg.entities.Bug;
+import group.msg.entities.User;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,17 +26,21 @@ public class BugManagementBean implements Serializable {
     private String description;
     private String version;
     private String fixedInVersion;
-    private Date selectedDate;
+    private Date selectedDate=new Date();
     private LocalDateTime targetDate;
     private String severity;
     private String status;
     private byte[] attachment;
+    private String StringUserAssignedToFixIt;
 
     @Inject
     DatabaseEJB databaseEJB;
 
     @Inject
     FileUploadView fileUploadView;
+
+    @Inject
+    LoginBean loginBean;
 
     public void createBug() throws IOException {
         fileUploadView.upload();
@@ -44,11 +49,18 @@ public class BugManagementBean implements Serializable {
 
     public void setBugData() throws IOException {
 
+
         Bug bug = new Bug();
         bug.setDescription(description);
         bug.setSeverity(severity);
         bug.setStatus(status);
         bug.setVersion(version);
+
+        User UserAssignedToFixIt = databaseEJB.getUserByUserName(StringUserAssignedToFixIt);
+        bug.setAssignedId(UserAssignedToFixIt);
+
+        User createdByUser = databaseEJB.getUserByUserName(loginBean.getUsername());
+        bug.setCreatedId(createdByUser);
         bug.setFixedInVersion(fixedInVersion);
         bug.setTitle(title);
         bug.setTargetDate(convertToLocalDateTimeViaSqlTimestamp(selectedDate));

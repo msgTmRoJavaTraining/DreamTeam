@@ -17,7 +17,7 @@ public class FileUploadView implements Serializable {
     private UploadedFile file;
 
     public void upload() {
-        if (file != null) {
+        if (!file.getFileName().equals("")) {
             FacesMessage message = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }

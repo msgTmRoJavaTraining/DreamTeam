@@ -109,7 +109,7 @@
                                     </p:selectCheckboxMenu>
                                     <br></br><br></br>
                                     <p:commandButton value="Save user" class="button"
-                                                      styleClass="button" ajax="true" update="growl"
+                                                     styleClass="button" ajax="true" update="growl"
                                                      action="#{userManagementBean.createUser}"/>
                                     <br/><br/>
                                 </h:form>
@@ -130,15 +130,17 @@
 
 
                                     <h:outputText styleClass="myFont" value="Severity" style="display:block;"/>
-                                    <p:selectOneMenu id="severity" value="#{bugManagementBean.severity}" effect="fold" required="true"
+                                    <p:selectOneMenu id="severity" value="#{bugManagementBean.severity}" effect="fold"
+                                                     required="true"
                                                      appendTo="@this">
                                         <f:selectItems value="#{constantsBean.severities}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Assigned to" style="display:block;"/>
-                                    <p:selectOneMenu id="assignedUser" effect="fold" editable="true" required="true"
+                                    <p:selectOneMenu id="assignedUser"
+                                                     value="#{bugManagementBean.stringUserAssignedToFixIt}"
+                                                     effect="fold" editable="true" required="true"
                                                      appendTo="@this">
-                                        <f:selectItem itemLabel="Select One" itemValue="" style="z-index: +1"/>
                                         <f:selectItems value="#{userManagementBean.userNamesList()}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
@@ -215,7 +217,8 @@
                                         <f:selectItems value="#{userManagementBean.userNamesList()}"/>
                                         <p:ajax event="change"
                                                 update="firstName,lastName,email,mobile,pass,confirm,rolesSelect"
-                                                process="@this" listener="${userManagementBean.prepareForUserUpdate()}"/>
+                                                process="@this"
+                                                listener="${userManagementBean.prepareForUserUpdate()}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
 
@@ -227,7 +230,7 @@
                                                  disabled="#{userManagementBean.username==null}"/>
 
                                     <h:outputText styleClass="myFont" value="Last name" style="display:block;"
-                                                    escape="true"/>
+                                                  escape="true"/>
                                     <p:inputText id="lastName" value="#{userManagementBean.lastName}"
                                                  disabled="#{userManagementBean.username==null}"/>
                                     <br/><br/>
@@ -287,7 +290,8 @@
                         <p:commandButton icon="fa fa-language"/>
                     </div>
                     <div class="log-out">
-                        <p:commandButton icon="fa fa-sign-out"/>
+                        <h:form><p:commandButton ajax="false" action="#{navigationBean.navigateTo('login')}"
+                                                 icon="fa fa-sign-out"/></h:form>
                     </div>
                 </div>
             </div>

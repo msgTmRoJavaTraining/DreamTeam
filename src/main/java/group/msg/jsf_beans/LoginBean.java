@@ -31,11 +31,11 @@ public class LoginBean implements Serializable {
 
         String hashedPassword = getMd5(password);
         if (databaseEJB.login(username, hashedPassword)) {
-            return "homePage";
+            return NavigationBean.navigateTo("homePage");
         } else {
             if(!password.isEmpty() && !username.isEmpty())
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Invalid", "Invalid username/password"));
-            return "login";
+            return NavigationBean.navigateTo("login");
         }
     }
 
