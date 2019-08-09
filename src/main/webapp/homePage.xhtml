@@ -40,6 +40,8 @@
         <h:outputStylesheet library="css" name="styleHomePage.css"/>
     </h:head>
     <h:body>
+        <p:growl id="growl" sticky="false" showDetail="true" life="5000"/>
+
         <div class="w3-teal">
             <p:commandButton icon="bugIcon.png" oncomplete="PF('sidebar1').show()" style="background: none"/>
             <span>JBugger </span>
@@ -107,7 +109,7 @@
                                     </p:selectCheckboxMenu>
                                     <br></br><br></br>
                                     <p:commandButton value="Save user" class="button"
-                                                     onclick="PF('dlg_addBug').close();" styleClass="button"
+                                                      styleClass="button" ajax="true" update="growl"
                                                      action="#{userManagementBean.createUser}"/>
                                     <br/><br/>
                                 </h:form>
