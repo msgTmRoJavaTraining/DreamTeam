@@ -128,6 +128,7 @@ public void test() {
                 newUser.setUsername(generatedUserName.toString().toLowerCase());
                 newUser.setPassword(LoginBean.getMd5(this.password));
                 newUser.setPersonalInformations(userInfo);
+               
 
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User added successfully"));
 
@@ -189,7 +190,7 @@ public void test() {
             newPersonalInfo.setEmail(this.email);
             newPersonalInfo.setActive(this.active);
             userToUpdate.setPersonalInformations(newPersonalInfo);
-            userToUpdate.setPassword(this.password);
+            userToUpdate.setPassword(LoginBean.getMd5(this.password));
             dataBaseEJB.updateUser(userToUpdate);
         }else{
             throw new UserCreatorException(this.lastName,this.firstName);
