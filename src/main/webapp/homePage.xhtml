@@ -99,13 +99,13 @@
                                     <p:password value="#{userManagementBean.confirmPassword}"/><br></br>
 
                                     <h:outputLabel styleClass="myFont" value="Roles "/><br></br>
-                                    <p:selectCheckboxMenu id="rolesUser" value="#{userManagementBean.selectedRights}"
+                                    <p:selectCheckboxMenu id="rolesUser" value="#{userManagementBean.userRoleList}"
                                                           label="Roles"
                                                           filter="true" filterMatchMode="startsWith"
                                                           panelStyle="width:auto; margin-left: 0px; margin-right: 5px"
                                                           required="true"
                                                           appendTo="@this">
-                                        <f:selectItems value="#{userManagementBean.rightsTest}"/>
+                                        <f:selectItems value="#{roleManagementBean.roleList}"/>
                                     </p:selectCheckboxMenu>
                                     <br></br><br></br>
                                     <p:commandButton value="Save user" class="button"

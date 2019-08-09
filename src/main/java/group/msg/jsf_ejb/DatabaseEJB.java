@@ -124,4 +124,13 @@ public class DatabaseEJB implements Serializable {
 
     }
 
+    public List<UserRole> getRolesByName(List<String> userRoleList) {
+       List<UserRole>roles=new ArrayList<>();
+       Query query=entityManager.createQuery("SELECT role FROM UserRole role WHERE role.roleName=:roleName");
+        for (String roleName:userRoleList) {
+            query.setParameter("roleName",roleName);
+            roles.add((UserRole) query.getSingleResult());
+        }
+        return roles;
+    }
 }

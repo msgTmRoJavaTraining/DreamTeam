@@ -2,6 +2,7 @@ package group.msg.jsf_beans;
 
 import group.msg.entities.PersonalInfo;
 import group.msg.entities.User;
+import group.msg.entities.UserRole;
 import group.msg.exceptions.UserCreatorException;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Data;
@@ -36,60 +37,19 @@ public class UserManagementBean implements Serializable {
     private String mobile;
     private String email;
     private boolean active;
+    private List<String> userRoleList;
 
-    private String selectedRole;
-    private List<String> rolesTest;
-    private List<String> rightsTest;
-    private String[] selectedRights;
 
     private List<String> testUsers;
 
     @Inject
     DatabaseEJB dataBaseEJB;
 
-public void test() {
-    System.out.println("ceva");
-}
+
     @PostConstruct
     public void init() {
-        rolesTest = new ArrayList<>();
-        rolesTest.add("role1");
-        rolesTest.add("role2");
-        rolesTest.add("role3");
-        rolesTest.add("role4");
-        rolesTest.add("role5");
-        rightsTest = new ArrayList<>();
-        rightsTest.add("right1");
-        rightsTest.add("right2");
-        rightsTest.add("right3");
-        rightsTest.add("right4");
-        rightsTest.add("right5");
-        rightsTest.add("right6");
-
-        testUsers= new ArrayList<>();
-        UserManagementBean user1 = new UserManagementBean();
-        UserManagementBean user2 = new UserManagementBean();
-        user1.setUsername("user1");
-        user1.setFirstName("uuu");
-        user1.setLastName("lll");
-        user1.setEmail("something@msg.group.com");
-        user1.setPassword("admin");
-        user1.setConfirmPassword("admin");
-        user1.setMobile("07239322");
-
-        user2.setUsername("user2");
-        user2.setFirstName("uuu");
-        user2.setLastName("lll");
-        user2.setEmail("something@msg.group.com");
-        user2.setPassword("admin");
-        user2.setConfirmPassword("admin");
-        user2.setMobile("07239322");
-        testUsers.add(user1.username);
-        testUsers.add(user2.username);
 
     }
-
-
     public void createUser(){
         int firstNameChars=1;
         int lastNameChars=5;
@@ -118,7 +78,10 @@ public void test() {
             }else{
                 User newUser=new User();
                 PersonalInfo userInfo=new PersonalInfo();
-
+                ///
+                List<UserRole> userRoles;
+                userRoles=dataBaseEJB.getRolesByName(userRoleList);
+                ///
                 userInfo.setFirstName(firstName);
                 userInfo.setLastName(lastName);
                 userInfo.setEmail(email);
@@ -127,6 +90,9 @@ public void test() {
 
                 newUser.setUsername(generatedUserName.toString().toLowerCase());
                 newUser.setPassword(LoginBean.getMd5(this.password));
+               ////
+                newUser.setRoles(userRoles);
+               ///
                 newUser.setPersonalInformations(userInfo);
                
 
