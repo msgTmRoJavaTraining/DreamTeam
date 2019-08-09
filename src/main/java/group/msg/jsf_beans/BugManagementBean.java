@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.apache.poi.util.IOUtils;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
@@ -49,32 +51,64 @@ public class BugManagementBean implements Serializable {
 
     public void setBugData() throws IOException {
 
+        if (invalidCredentials())
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Bug not added"));
 
-        Bug bug = new Bug();
-        bug.setDescription(description);
-        bug.setSeverity(severity);
-        bug.setStatus(status);
-        bug.setVersion(version);
+        if (isDescriptionValid(description) && isValidVersion(version))
+        {
+            Bug bug = new Bug();
+            bug.setDescription(description);
+            bug.setSeverity(severity);
+            bug.setStatus(status);
+            bug.setVersion(version);
+            bug.setFixedInVersion(fixedInVersion);
+            bug.setTitle(title);
+            bug.setTargetDate(convertToLocalDateTimeViaSqlTimestamp(selectedDate));
 
-        User UserAssignedToFixIt = databaseEJB.getUserByUserName(StringUserAssignedToFixIt);
-        bug.setAssignedId(UserAssignedToFixIt);
+            InputStream fileInputStream = fileUploadView.getFile().getInputstream();
+            attachment = IOUtils.toByteArray(fileInputStream);
 
-        User createdByUser = databaseEJB.getUserByUserName(loginBean.getUsername());
-        bug.setCreatedId(createdByUser);
-        bug.setFixedInVersion(fixedInVersion);
-        bug.setTitle(title);
-        bug.setTargetDate(convertToLocalDateTimeViaSqlTimestamp(selectedDate));
+            bug.setAttachment(attachment);
 
-        InputStream fileInputStream = fileUploadView.getFile().getInputstream();
-        attachment = IOUtils.toByteArray(fileInputStream);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug added successfully"));
 
-        bug.setAttachment(attachment);
-
-        databaseEJB.createBug(bug);
+            databaseEJB.createBug(bug);
+        }
     }
 
     private LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {
         return new java.sql.Timestamp(
                 dateToConvert.getTime()).toLocalDateTime();
     }
+
+    public static boolean isValidVersion(String version) {
+        String regex = "^[a-zA-Z0-9.]*$";
+        return version.matches(regex);
+    }
+
+    public boolean isDescriptionValid(String description)
+    {
+        return description.length()>=10;
+    }
+
+    public boolean invalidCredentials()
+    {
+        boolean ok=false;
+        if(!isDescriptionValid(description)) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Description must have", "at least 10 characters"));
+            ok=true;
+        }
+        if(!isValidVersion(version)) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid version format", "Enter only alphanumeric characters separated by . "));
+            ok=true;
+        }
+
+//        if(!isDateValid(targetDate))
+//        {
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid date", ""));
+//            ok=true;
+//        }
+        return ok;
+    }
+
 }
