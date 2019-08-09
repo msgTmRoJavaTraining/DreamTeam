@@ -99,19 +99,12 @@ public class DatabaseEJB implements Serializable {
         roleList= (List<String>) query.getResultList();
         return roleList;
     }
-    public List<String> getRigts(){
+    public List<String> getRights(){
         List<String> rightsList;
         Query query= entityManager.createQuery("SELECT right.name FROM Rights right");
 
         rightsList= (List<String>) query.getResultList();
         return rightsList;
-    }
-    public int getRoleIdByName(String selectedRole){
-        int result;
-        Query query= entityManager.createQuery("SELECT role.roleId FROM UserRole role WHERE role.roleName=:selectedRole");
-        query.setParameter("selectedRole",selectedRole);
-        result= (int)query.getSingleResult();
-        return result;
     }
     public int getRightIdByName(String rightName){
         int result;
@@ -120,8 +113,15 @@ public class DatabaseEJB implements Serializable {
         result= (int)query.getSingleResult();
         return result;
     }
+    public UserRole getRoleByName(String selectedRole){
+        UserRole result;
+        Query query= entityManager.createQuery("SELECT role FROM UserRole role WHERE role.roleName=:selectedRole");
+        query.setParameter("selectedRole",selectedRole);
+        result= (UserRole)query.getSingleResult();
+        return result;
+    }
     public void updateRole( UserRole resultRole){
-
+        entityManager.merge(resultRole);
     }
 
 }

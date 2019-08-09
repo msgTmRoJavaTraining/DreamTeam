@@ -32,15 +32,14 @@ public class RoleManagementBean implements Serializable {
     @PostConstruct
     public void init() {
         roleList= databaseEJB.getRoles();
-        rightsList= databaseEJB.getRigts();
+        rightsList= databaseEJB.getRights();
     }
     public void updateRoles(){
         List<Rights>resultRights= new ArrayList<>();
-        UserRole resultRole = new UserRole();
-        resultRole.setRoleName(selectedRole);
-        resultRole.setRoleId(databaseEJB.getRoleIdByName(selectedRole));
-        Rights crtRight= new Rights();
+        UserRole resultRole;
+        resultRole= databaseEJB.getRoleByName(selectedRole);
         for(String rightName: selectedRights){
+            Rights crtRight= new Rights();
             crtRight.setName(rightName);
             crtRight.setRightId(databaseEJB.getRightIdByName(rightName));
             resultRights.add(crtRight);
@@ -48,6 +47,4 @@ public class RoleManagementBean implements Serializable {
         resultRole.setRights(resultRights);
         databaseEJB.updateRole(resultRole);
     }
-
-
 }
