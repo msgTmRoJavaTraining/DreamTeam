@@ -58,11 +58,22 @@ public class DatabaseEJB implements Serializable {
         entityManager.persist(newRole);
     }
 
-    public List<String> getAllUsers(){
-        List<String> allUsers=new ArrayList<>();
+    public List<String> getAllUserNames(){
+        List<String> allUserNames;
         Query query=entityManager.createQuery("SELECT users.username From User users");
+        allUserNames=query.getResultList();
+        return allUserNames;
+    }
+    public List <User> getAllUsers(){
+        List<User> allUsers;
+        Query query=entityManager.createQuery("SELECT users From User users");
         allUsers=query.getResultList();
         return allUsers;
+    }
+    public User getUserById(int seachedId){
+        User searchedUser;
+        searchedUser=entityManager.find(User.class,seachedId);
+        return searchedUser;
     }
     public User getUserByUserName(String username){
         User foundUser;
@@ -77,7 +88,6 @@ public class DatabaseEJB implements Serializable {
         entityManager.merge(toUpdate);
     }
     public void createBug(Bug newBug) {
-
         entityManager.persist(newBug);
     }
 }

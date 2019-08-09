@@ -32,8 +32,6 @@ public class UserManagementBean implements Serializable {
     private String email;
     private boolean active;
 
-    private List<String>allUsers;
-
     private String selectedRole;
     private List<String> rolesTest;
     private List<String> rightsTest;
@@ -98,7 +96,6 @@ public void test() {
                 lastNameChars=lastName.length();
                 firstNameChars=6-lastNameChars;
             }
-
             while(lastNameChars!=0) {
                 generatedUserName.append(lastName.substring(0, lastNameChars));
                 generatedUserName.append(firstName.substring(0, firstNameChars));
@@ -108,7 +105,6 @@ public void test() {
                     generatedUserName.setLength(0);
                 } else break;
             }
-
             if(generatedUserName.length()==0){
                 throw new UserCreatorException(lastName,firstName);
             }else{
@@ -124,10 +120,8 @@ public void test() {
                 newUser.setUsername(generatedUserName.toString().toLowerCase());
                 newUser.setPassword(LoginBean.getMd5(this.password));
                 newUser.setPersonalInformations(userInfo);
-
-               dataBaseEJB.createUser(newUser);
+                dataBaseEJB.createUser(newUser);
             }
-
         }
         username="";
         password="";
@@ -155,10 +149,15 @@ public void test() {
         return mobile.matches(regex) || mobile.matches(regex1) || mobile.matches(regex2) || mobile.matches(regex6)
                 || mobile.matches(regex3) || mobile.matches(regex4) || mobile.matches(regex5) || mobile.matches(regex7);
     }
-    public void usersList(){
-        this.allUsers=dataBaseEJB.getAllUsers();
+
+    public List<User> usersList(){
+        return dataBaseEJB.getAllUsers();
     }
-    public void updateUser(){
+    public List<String> userNamesList(){
+        return dataBaseEJB.getAllUserNames();
+    }
+
+    public void userUpdate(){
         User userToUpdate=dataBaseEJB.getUserByUserName(this.username);
         PersonalInfo newPersonalInfo=new PersonalInfo();
 
