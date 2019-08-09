@@ -10,6 +10,8 @@ import lombok.Setter;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -93,6 +95,9 @@ public void test() {
         int lastNameChars=5;
         StringBuilder generatedUserName=new StringBuilder();
 
+        if(invalidCredentials())
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User not added"));
+
         if(this.password.equals(this.confirmPassword)&& isEmailValid(email)&& isValidPhoneNumber(mobile))
         {
             if(lastName.length()<5){
@@ -123,7 +128,11 @@ public void test() {
                 newUser.setUsername(generatedUserName.toString().toLowerCase());
                 newUser.setPassword(LoginBean.getMd5(this.password));
                 newUser.setPersonalInformations(userInfo);
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User added successfully"));
+
                 dataBaseEJB.createUser(newUser);
+
             }
         }
         username="";
@@ -134,6 +143,7 @@ public void test() {
         mobile="";
         email="";
     }
+
     public static boolean isEmailValid(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@msggroup.com";
         return email.matches(regex);
@@ -184,5 +194,20 @@ public void test() {
         }else{
             throw new UserCreatorException(this.lastName,this.firstName);
         }
+    }
+
+    public boolean invalidCredentials()
+    {
+        boolean ok=false;
+
+        if(!isEmailValid(email)) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Invalid email"));
+            ok=true;
+        }
+        if(!isValidPhoneNumber(mobile)) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Invalid phone number"));
+            ok=true;
+        }
+        return ok;
     }
 }
