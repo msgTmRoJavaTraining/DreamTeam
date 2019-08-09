@@ -176,25 +176,26 @@
                                       height="auto">
                                 <h:form id="editRoleForm">
                                     <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
-                                    <p:selectOneMenu id="roles" value="#{userManagementBean.selectedRole}" effect="fold"
+                                    <p:selectOneMenu id="roles" value="#{roleManagementBean.selectedRole}" effect="fold"
                                                      editable="true" required="true"
                                                      appendTo="@this">
                                         <f:selectItem itemLabel="Select One" itemValue=""/>
-                                        <f:selectItems value="#{userManagementBean.rolesTest}"/>
+                                        <f:selectItems value="#{roleManagementBean.roleList}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputLabel styleClass="myFont" value="Rights "/><br></br>
-                                    <p:selectCheckboxMenu id="rights" value="#{userManagementBean.selectedRights}"
+                                    <p:selectCheckboxMenu id="rights" value="#{roleManagementBean.selectedRights}"
                                                           label="Rights"
                                                           filter="true" filterMatchMode="startsWith"
                                                           panelStyle="width:auto; margin-left: 0px; margin-right: 5px"
                                                           required="true"
                                                           appendTo="@this">
-                                        <f:selectItems value="#{userManagementBean.rightsTest}"/>
+                                        <f:selectItems value="#{roleManagementBean.rightsList}"/>
                                     </p:selectCheckboxMenu>
 
                                     <br></br><br></br><br></br><br></br>
                                     <p:commandButton value="Update role" class="button" styleClass="button"
+                                                     action="#{roleManagementBean.updateRoles}"
                                                      onclick="PF('dlg_EditRole').close();" style="margin-top:50%"/>
                                     <br/><br/>
                                 </h:form>
@@ -225,7 +226,7 @@
                                                  autocomplete="off" id="firstName"
                                                  disabled="#{userManagementBean.username==null}"/>
 
-                                    ` <h:outputText styleClass="myFont" value="Last name" style="display:block;"
+                                    <h:outputText styleClass="myFont" value="Last name" style="display:block;"
                                                     escape="true"/>
                                     <p:inputText id="lastName" value="#{userManagementBean.lastName}"
                                                  disabled="#{userManagementBean.username==null}"/>

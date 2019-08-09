@@ -4,6 +4,7 @@ package group.msg.jsf_beans;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Data;
 
+
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
