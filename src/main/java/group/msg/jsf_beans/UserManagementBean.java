@@ -31,6 +31,7 @@ public class UserManagementBean implements Serializable {
     private String username;
     private String password;
     private String confirmPassword;
+    private String hashedPass;
 
     private String firstName;
     private String lastName;
@@ -141,6 +142,7 @@ public class UserManagementBean implements Serializable {
     {
         userToUpdate=dataBaseEJB.getUserByUserName(this.username);
         newPersonalInfo=userToUpdate.getPersonalInformations();
+        this.hashedPass=userToUpdate.getPassword();
         this.firstName=newPersonalInfo.getFirstName();
         this.lastName=newPersonalInfo.getLastName();
         this.mobile=newPersonalInfo.getMobile();
@@ -156,7 +158,14 @@ public class UserManagementBean implements Serializable {
             newPersonalInfo.setEmail(this.email);
             newPersonalInfo.setActive(this.active);
             userToUpdate.setPersonalInformations(newPersonalInfo);
-            userToUpdate.setPassword(LoginBean.getMd5(this.password));
+
+            if(this.password.equals("")) {
+                userToUpdate.setPassword(hashedPass);
+            } else {
+                userToUpdate.setPassword(LoginBean.getMd5(this.password));
+            }
+
+            userToUpdate.setRoles(dataBaseEJB.getRolesByName(userRoleList));
             dataBaseEJB.updateUser(userToUpdate);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User updated successfully"));
         }else{

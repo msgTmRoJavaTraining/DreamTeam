@@ -260,11 +260,16 @@
                                                 disabled="#{userManagementBean.username==null}"/><br></br>
 
                                     <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
-                                    <p:selectOneMenu id="rolesSelect" effect="fold" editable="true" required="true"
-                                                     appendTo="@this" disabled="#{userManagementBean.username==null}">
-                                        <f:selectItem itemLabel="Select One" itemValue=""/>
-                                        <f:selectItems value="#{'something,something2'}"/>
-                                    </p:selectOneMenu><br></br><br></br>
+
+
+                                    <p:selectCheckboxMenu id="rolesSelect" value="#{userManagementBean.userRoleList}"
+                                                          label="Roles"
+                                                          filter="true" filterMatchMode="startsWith"
+                                                          panelStyle="width:auto; margin-left: 0px; margin-right: 5px"
+                                                          appendTo="@this">
+                                        <f:selectItems value="#{roleManagementBean.roleList}"/>
+                                    </p:selectCheckboxMenu>
+                                    <br></br><br></br>
 
                                     <p:commandButton value="Update user" class="button" ajax="true"
                                                      styleClass="button" update="growl"
