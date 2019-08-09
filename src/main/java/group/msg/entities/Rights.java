@@ -25,7 +25,7 @@ public class Rights {
 
     private String name;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "role_rights",
             joinColumns = @JoinColumn(name = "rightId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
