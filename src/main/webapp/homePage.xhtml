@@ -137,7 +137,7 @@
                                     <p:selectOneMenu id="assignedUser" effect="fold" editable="true" required="true"
                                                      appendTo="@this">
                                         <f:selectItem itemLabel="Select One" itemValue="" style="z-index: +1"/>
-                                        <f:selectItems value=""/>
+                                        <f:selectItems value="#{userManagementBean.userNamesList()}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Target Date" style="display:block;"/>
@@ -209,22 +209,23 @@
                                     <p:selectOneMenu id="users" value="#{userManagementBean.username}" effect="fold"
                                                      editable="true" required="true"
                                                      appendTo="@this" action="">
-                                        <f:selectItems value="#{userManagementBean.testUsers}"/>
+                                        <f:selectItems value="#{userManagementBean.userNamesList()}"/>
                                         <p:ajax event="change"
                                                 update="firstName,lastName,email,mobile,pass,confirm,rolesSelect"
-                                                process="@this" listener="${userManagementBean.test}"/>
+                                                process="@this" listener="${userManagementBean.prepareForUserUpdate()}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
 
                                     <h:outputText styleClass="myFont" value="First name" style="display:block;"
                                                   escape="true"/>
                                     <p:inputText value="#{userManagementBean.firstName}"
+                                                 placeholder="#{userManagementBean.firstName}"
                                                  autocomplete="off" id="firstName"
                                                  disabled="#{userManagementBean.username==null}"/>
 
                                     ` <h:outputText styleClass="myFont" value="Last name" style="display:block;"
                                                     escape="true"/>
-                                    <p:inputText id="lastName" value="#{userManagementBean.lastName} "
+                                    <p:inputText id="lastName" value="#{userManagementBean.lastName}"
                                                  disabled="#{userManagementBean.username==null}"/>
                                     <br/><br/>
 
@@ -261,6 +262,7 @@
 
                                     <p:commandButton value="Update user" class="button"
                                                      onclick="PF('dlg_EditUser').close();" styleClass="button"
+                                                     action="#{userManagementBean.userUpdate}"
                                     />
                                     <br/><br/>
                                 </h:form>

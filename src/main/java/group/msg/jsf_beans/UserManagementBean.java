@@ -22,6 +22,9 @@ import java.util.List;
 @Named
 @ViewScoped
 public class UserManagementBean implements Serializable {
+    User userToUpdate;
+    PersonalInfo newPersonalInfo;
+
     private String username;
     private String password;
     private String confirmPassword;
@@ -157,10 +160,18 @@ public void test() {
         return dataBaseEJB.getAllUserNames();
     }
 
-    public void userUpdate(){
-        User userToUpdate=dataBaseEJB.getUserByUserName(this.username);
-        PersonalInfo newPersonalInfo=new PersonalInfo();
+    public void prepareForUserUpdate()
+    {
+        userToUpdate=dataBaseEJB.getUserByUserName(this.username);
+        newPersonalInfo=userToUpdate.getPersonalInformations();
+        this.firstName=newPersonalInfo.getFirstName();
+        this.lastName=newPersonalInfo.getLastName();
+        this.mobile=newPersonalInfo.getMobile();
+        this.email=newPersonalInfo.getEmail();
+        this.active=newPersonalInfo.isActive();
+    }
 
+    public void userUpdate(){
         if(this.password.equals(this.confirmPassword)){
             newPersonalInfo.setFirstName(this.firstName);
             newPersonalInfo.setLastName(this.lastName);
