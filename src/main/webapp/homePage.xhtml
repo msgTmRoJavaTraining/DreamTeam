@@ -177,9 +177,8 @@
                                 <h:form id="editRoleForm">
                                     <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
                                     <p:selectOneMenu id="roles" value="#{roleManagementBean.selectedRole}" effect="fold"
-                                                     editable="true" required="true"
+                                                     editable="false" required="true"
                                                      appendTo="@this">
-                                        <f:selectItem itemLabel="Select One" itemValue=""/>
                                         <f:selectItems value="#{roleManagementBean.roleList}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
@@ -214,9 +213,14 @@
                                                      appendTo="@this" action="">
                                         <f:selectItems value="#{userManagementBean.userNamesList()}"/>
                                         <p:ajax event="change"
-                                                update="firstName,lastName,email,mobile,pass,confirm,rolesSelect"
+                                                update="firstName,lastName,email,mobile,pass,confirm,rolesSelect,activeStatus"
                                                 process="@this" listener="${userManagementBean.prepareForUserUpdate()}"/>
                                     </p:selectOneMenu><br></br><br></br>
+
+                                    <h:outputText value="Active"  styleClass="myFont" style="display:block;"
+                                                  escape="true"/>
+                                    <p:selectBooleanButton id="activeStatus" disabled="#{userManagementBean.username==null}" placeholder="#{userManagementBean.active}" value="#{userManagementBean.active}" onLabel="Yes" offLabel="No" style="width:60px" />
+
 
 
                                     <h:outputText styleClass="myFont" value="First name" style="display:block;"
