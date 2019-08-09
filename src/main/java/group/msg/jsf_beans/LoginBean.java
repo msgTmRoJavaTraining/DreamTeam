@@ -32,6 +32,8 @@ public class LoginBean implements Serializable {
         if (databaseEJB.login(username, hashedPassword)) {
             return "homePage";
         } else {
+            if(!password.isEmpty() && !username.isEmpty())
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Invalid", "Invalid username/password"));
             return "login";
         }
     }
