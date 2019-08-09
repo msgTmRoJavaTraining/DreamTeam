@@ -45,14 +45,19 @@ public class DatabaseEJB implements Serializable {
             return false;
         }
         return true;
-}
+
+
+    }
+
     public void createUser(User newUser){
         entityManager.persist(newUser);
     }
 
     public void createRole(UserRole newRole){
+
         entityManager.persist(newRole);
     }
+
     public List<String> getAllUsers(){
         List<String> allUsers=new ArrayList<>();
         Query query=entityManager.createQuery("SELECT users.username From User users");
@@ -64,14 +69,13 @@ public class DatabaseEJB implements Serializable {
         Query query=entityManager.createQuery("SELECT user FROM User user WHERE user.username=:username");
         query.setParameter("username",username);
 
-            foundUser= (User) query.getSingleResult();
+        foundUser= (User) query.getSingleResult();
         return foundUser;
     }
 
     public void updateUser(User toUpdate){
         entityManager.merge(toUpdate);
     }
-
     public void createBug(Bug newBug) {
 
         entityManager.persist(newBug);

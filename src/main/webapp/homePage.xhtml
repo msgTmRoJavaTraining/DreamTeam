@@ -86,7 +86,7 @@
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Phone" style="display:block;"/>
-                                    <p:inputText/>
+                                    <p:inputText value="#{userManagementBean.mobile}"/>
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Password" style="display:block;"/>
@@ -95,12 +95,16 @@
                                     <h:outputText styleClass="myFont" value="Confirm password" style="display:block;"/>
                                     <p:password value="#{userManagementBean.confirmPassword}"/><br></br>
 
-                                    <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
-                                    <p:selectOneMenu id="gender" effect="fold" editable="true" required="true"
-                                                     appendTo="@this">
-                                        <f:selectItem itemLabel="Select One" itemValue=""/>
-                                        <f:selectItems value=""/>
-                                    </p:selectOneMenu><br></br><br></br>
+                                    <h:outputLabel styleClass="myFont" value="Roles "/><br></br>
+                                    <p:selectCheckboxMenu id="rolesUser" value="#{userManagementBean.selectedRights}"
+                                                          label="Roles"
+                                                          filter="true" filterMatchMode="startsWith"
+                                                          panelStyle="width:auto; margin-left: 0px; margin-right: 5px"
+                                                          required="true"
+                                                          appendTo="@this">
+                                        <f:selectItems value="#{userManagementBean.rightsTest}"/>
+                                    </p:selectCheckboxMenu>
+                                    <br></br><br></br>
                                     <p:commandButton value="Save user" class="button"
                                                      onclick="PF('dlg_addBug').close();" styleClass="button"
                                                      action="#{userManagementBean.createUser}"/>
@@ -129,7 +133,7 @@
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Assigned to" style="display:block;"/>
-                                    <p:selectOneMenu id="assignedUser" effect="fold" editable="true" required="false"
+                                    <p:selectOneMenu id="assignedUser" effect="fold" editable="true" required="true"
                                                      appendTo="@this">
                                         <f:selectItem itemLabel="Select One" itemValue="" style="z-index: +1"/>
                                         <f:selectItems value=""/>
@@ -166,7 +170,7 @@
                             <p:commandButton value="Role" class="button" styleClass="button"
                                              onclick="PF('dlg_EditRole').show();PF('dlg_edit').close();"/>
                             <p:dialog header="Edit role" widgetVar="dlg_EditRole" minHeight="40" width="370"
-                                      height="500">
+                                      height="auto">
                                 <h:form id="editRoleForm">
                                     <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
                                     <p:selectOneMenu id="roles" value="#{userManagementBean.selectedRole}" effect="fold"
@@ -176,7 +180,7 @@
                                         <f:selectItems value="#{userManagementBean.rolesTest}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
-                                    <h:outputLabel styleClass="myFont" value="Rights: "/>
+                                    <h:outputLabel styleClass="myFont" value="Rights "/><br></br>
                                     <p:selectCheckboxMenu id="rights" value="#{userManagementBean.selectedRights}"
                                                           label="Rights"
                                                           filter="true" filterMatchMode="startsWith"
@@ -188,12 +192,79 @@
 
                                     <br></br><br></br><br></br><br></br>
                                     <p:commandButton value="Update role" class="button" styleClass="button"
-                                                     onclick="PF('dlg_EditRole').close();"/>
+                                                     onclick="PF('dlg_EditRole').close();" style="margin-top:50%"/>
+                                    <br/><br/>
+                                </h:form>
+                            </p:dialog>
+
+                            <p:commandButton value="User" class="button" styleClass="button"
+                                             onclick="PF('dlg_EditUser').show();PF('dlg_edit').close();"/>
+                            <p:dialog header="Edit User" widgetVar="dlg_EditUser" minHeight="40" width="370"
+                                      height="auto">
+                                <h:form id="editUserForm">
+
+                                    <h:outputText styleClass="myFont" value="Username selection"
+                                                  style="display:block;"/>
+                                    <p:selectOneMenu id="users" value="#{userManagementBean.username}" effect="fold"
+                                                     editable="true" required="true"
+                                                     appendTo="@this" action="">
+                                        <f:selectItems value="#{userManagementBean.testUsers}"/>
+                                        <p:ajax event="change"
+                                                update="firstName,lastName,email,mobile,pass,confirm,rolesSelect"
+                                                process="@this" listener="${userManagementBean.test}"/>
+                                    </p:selectOneMenu><br></br><br></br>
+
+
+                                    <h:outputText styleClass="myFont" value="First name" style="display:block;"
+                                                  escape="true"/>
+                                    <p:inputText value="#{userManagementBean.firstName}"
+                                                 autocomplete="off" id="firstName"
+                                                 disabled="#{userManagementBean.username==null}"/>
+
+                                    ` <h:outputText styleClass="myFont" value="Last name" style="display:block;"
+                                                    escape="true"/>
+                                    <p:inputText id="lastName" value="#{userManagementBean.lastName} "
+                                                 disabled="#{userManagementBean.username==null}"/>
+                                    <br/><br/>
+
+                                    <h:outputText styleClass="myFont" value="Email" style="display:block;"
+                                                  escape="true"/>
+                                    <p:inputText id="email" placeholder="#{userManagementBean.email}"
+                                                 value="#{userManagementBean.email}"
+                                                 disabled="#{userManagementBean.username==null}"/>
+                                    <br/><br/>
+
+                                    <h:outputText styleClass="myFont" value="Phone" style="display:block;"
+                                                  escape="true"/>
+                                    <p:inputText id="mobile" placeholder="#{userManagementBean.mobile}"
+                                                 value="#{userManagementBean.mobile}"
+                                                 disabled="#{userManagementBean.username==null}"/>
+                                    <br/><br/>
+
+                                    <h:outputText styleClass="myFont" value="Password" style="display:block;"
+                                                  escape="true"/>
+                                    <p:password id="pass" value="#{userManagementBean.password}"
+                                                disabled="#{userManagementBean.username==null}"/><br></br>
+
+                                    <h:outputText styleClass="myFont" value="Confirm password" style="display:block;"
+                                                  escape="true"/>
+                                    <p:password id="confirm" value="#{userManagementBean.confirmPassword}"
+                                                disabled="#{userManagementBean.username==null}"/><br></br>
+
+                                    <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
+                                    <p:selectOneMenu id="rolesSelect" effect="fold" editable="true" required="true"
+                                                     appendTo="@this" disabled="#{userManagementBean.username==null}">
+                                        <f:selectItem itemLabel="Select One" itemValue=""/>
+                                        <f:selectItems value="#{'something,something2'}"/>
+                                    </p:selectOneMenu><br></br><br></br>
+
+                                    <p:commandButton value="Update user" class="button"
+                                                     onclick="PF('dlg_EditUser').close();" styleClass="button"
+                                    />
                                     <br/><br/>
                                 </h:form>
                             </p:dialog>
                         </p:dialog>
-
                     </div>
                     <div class="exportData">
                         <p:commandButton icon="fa fa-files-o"/>
@@ -215,8 +286,6 @@
                 </div>
             </div>
         </p:sidebar>
-
-
     </h:body>
 </f:view>
 </html>
