@@ -263,8 +263,8 @@
                                         <f:selectItems value="#{'something,something2'}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
-                                    <p:commandButton value="Update user" class="button"
-                                                     onclick="PF('dlg_EditUser').close();" styleClass="button"
+                                    <p:commandButton value="Update user" class="button" ajax="true"
+                                                     styleClass="button" update="growl"
                                                      action="#{userManagementBean.userUpdate}"
                                     />
                                     <br/><br/>

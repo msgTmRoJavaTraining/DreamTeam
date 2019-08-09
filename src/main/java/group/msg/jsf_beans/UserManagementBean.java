@@ -183,7 +183,7 @@ public void test() {
     }
 
     public void userUpdate(){
-        if(this.password.equals(this.confirmPassword)){
+        if(this.password.equals(this.confirmPassword) && isEmailValid(email)&& isValidPhoneNumber(mobile)){
             newPersonalInfo.setFirstName(this.firstName);
             newPersonalInfo.setLastName(this.lastName);
             newPersonalInfo.setMobile(this.mobile);
@@ -192,8 +192,10 @@ public void test() {
             userToUpdate.setPersonalInformations(newPersonalInfo);
             userToUpdate.setPassword(LoginBean.getMd5(this.password));
             dataBaseEJB.updateUser(userToUpdate);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User updated successfully"));
         }else{
-            throw new UserCreatorException(this.lastName,this.firstName);
+            if(invalidCredentials())
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User not updated"));
         }
     }
 
