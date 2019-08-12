@@ -1,6 +1,7 @@
 package group.msg.jsf_beans;
 
 import lombok.Data;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.SessionScoped;
@@ -16,10 +17,8 @@ public class FileUploadView implements Serializable {
 
     private UploadedFile file;
 
-    public void upload() {
-        if (!file.getFileName().equals("")) {
-//            FacesMessage message = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");
-//            FacesContext.getCurrentInstance().addMessage(null, message);
-        }
+
+    public void handleFileUpload(FileUploadEvent event) {
+        file = event.getFile();
     }
 }

@@ -45,11 +45,6 @@ public class BugManagementBean implements Serializable {
     LoginBean loginBean;
 
     public void createBug() throws IOException {
-        fileUploadView.upload();
-        setBugData();
-    }
-
-    public void setBugData() throws IOException {
 
         if (invalidCredentials())
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Bug not added"));
