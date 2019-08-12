@@ -106,13 +106,6 @@ public class DatabaseEJB implements Serializable {
         rightsList= (List<String>) query.getResultList();
         return rightsList;
     }
-    public int getRightIdByName(String rightName){
-        int result;
-        Query query= entityManager.createQuery("SELECT right.rightId FROM Rights right WHERE right.name=:rightName");
-        query.setParameter("rightName",rightName);
-        result= (int)query.getSingleResult();
-        return result;
-    }
     public UserRole getRoleByName(String selectedRole){
         UserRole result;
         Query query= entityManager.createQuery("SELECT role FROM UserRole role WHERE role.roleName=:selectedRole");
@@ -132,5 +125,13 @@ public class DatabaseEJB implements Serializable {
             roles.add((UserRole) query.getSingleResult());
         }
         return roles;
+    }
+
+    public Rights getRightByName(String rightName) {
+        Rights result;
+        Query query= entityManager.createQuery("SELECT right FROM Rights right WHERE right.name=:rightName");
+        query.setParameter("rightName",rightName);
+        result= (Rights) query.getSingleResult();
+        return result;
     }
 }

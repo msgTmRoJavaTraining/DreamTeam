@@ -39,9 +39,8 @@ public class RoleManagementBean implements Serializable {
         UserRole resultRole;
         resultRole= databaseEJB.getRoleByName(selectedRole);
         for(String rightName: selectedRights){
-            Rights crtRight= new Rights();
-            crtRight.setName(rightName);
-            crtRight.setRightId(databaseEJB.getRightIdByName(rightName));
+            Rights crtRight;
+            crtRight = databaseEJB.getRightByName(rightName);
             resultRights.add(crtRight);
         }
         resultRole.setRights(resultRights);
