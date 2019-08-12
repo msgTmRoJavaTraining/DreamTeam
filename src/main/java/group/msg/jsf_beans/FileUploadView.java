@@ -15,9 +15,8 @@ public class FileUploadView implements Serializable {
 
     private UploadedFile file;
 
-    public void clearFile()
-    {
-        file=null;
+    public void clearFile() {
+        file = null;
     }
 
     public void handleFileUpload(FileUploadEvent event) {

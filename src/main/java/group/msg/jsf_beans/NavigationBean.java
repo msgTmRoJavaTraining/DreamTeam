@@ -7,8 +7,7 @@ import java.io.Serializable;
 @Named
 @SessionScoped
 public class NavigationBean implements Serializable {
-    public static String navigateTo(String page)
-    {
+    public static String navigateTo(String page) {
         return page;
     }
 }

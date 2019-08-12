@@ -28,10 +28,10 @@ public class BugManagementBean implements Serializable {
     private String description;
     private String version;
     private String fixedInVersion;
-    private Date selectedDate=new Date();
+    private Date selectedDate = new Date();
     private LocalDateTime targetDate;
     private String severity;
-    private String status;
+    private String status="NEW";
     private byte[] attachment;
     private String StringUserAssignedToFixIt;
 
@@ -44,16 +44,23 @@ public class BugManagementBean implements Serializable {
     @Inject
     LoginBean loginBean;
 
-    public void clearBugFields()
+    public String getPresent()
     {
+        LocalDateTime present=LocalDateTime.now();
+        int day=present.getDayOfMonth();
+        int month=present.getMonthValue();
+        int year=present.getYear()-2000;
+        return month+"/"+day+"/"+year;
+    }
+
+    public void clearBugFields() {
         fileUploadView.clearFile();
-        String title="";
-        String description="";
-        String version="";
-        String fixedInVersion="";
-        String severity="";
-        String status="";
-        String StringUserAssignedToFixIt="";
+        title = "";
+        description = "";
+        version = "";
+        fixedInVersion = "";
+        severity = "";
+        StringUserAssignedToFixIt = "";
     }
 
     public void createBug() throws IOException {
@@ -61,8 +68,7 @@ public class BugManagementBean implements Serializable {
         if (invalidCredentials())
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Bug not added"));
 
-        if (isDescriptionValid(description) && isValidVersion(version))
-        {
+        if (isDescriptionValid(description) && isValidVersion(version)) {
             Bug bug = new Bug();
             bug.setDescription(description);
             bug.setSeverity(severity);
@@ -78,15 +84,16 @@ public class BugManagementBean implements Serializable {
             User createdByUser = databaseEJB.getUserByUserName(loginBean.getUsername());
             bug.setCreatedId(createdByUser);
 
-            InputStream fileInputStream = fileUploadView.getFile().getInputstream();
-            attachment = IOUtils.toByteArray(fileInputStream);
+            if (fileUploadView.getFile() != null) {
+                InputStream fileInputStream = fileUploadView.getFile().getInputstream();
+                attachment = IOUtils.toByteArray(fileInputStream);
+            }
 
             bug.setAttachment(attachment);
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug added successfully"));
 
             databaseEJB.createBug(bug);
-            clearBugFields();
         }
     }
 
@@ -100,21 +107,19 @@ public class BugManagementBean implements Serializable {
         return version.matches(regex);
     }
 
-    public boolean isDescriptionValid(String description)
-    {
-        return description.length()>=10;
+    public boolean isDescriptionValid(String description) {
+        return description.length() >= 10;
     }
 
-    public boolean invalidCredentials()
-    {
-        boolean ok=false;
-        if(!isDescriptionValid(description)) {
+    public boolean invalidCredentials() {
+        boolean ok = false;
+        if (!isDescriptionValid(description)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Description must have", "at least 10 characters"));
-            ok=true;
+            ok = true;
         }
-        if(!isValidVersion(version)) {
+        if (!isValidVersion(version)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid version format", "Enter only alphanumeric characters separated by . "));
-            ok=true;
+            ok = true;
         }
         return ok;
     }

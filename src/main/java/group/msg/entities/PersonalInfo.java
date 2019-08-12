@@ -20,13 +20,8 @@ public class PersonalInfo {
     @GeneratedValue
     private int personalId;
 
-    @OneToOne
-    private User userId;
-
     private String firstName;
     private String lastName;
     private String mobile;
     private String email;
-    private boolean isActive;
-
 }

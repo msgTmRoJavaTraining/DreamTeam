@@ -6,7 +6,6 @@ import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
 import lombok.Setter;
 
-
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -21,24 +20,25 @@ import java.util.List;
 @ViewScoped
 public class RoleManagementBean implements Serializable {
 
-    private List<String>roleList;
-    private List<String>rightsList;
+    private List<String> roleList;
+    private List<String> rightsList;
     private String selectedRole;
-    private List<String>selectedRights;
+    private List<String> selectedRights;
 
     @Inject
     private DatabaseEJB databaseEJB;
 
     @PostConstruct
     public void init() {
-        roleList= databaseEJB.getRoles();
-        rightsList= databaseEJB.getRights();
+        roleList = databaseEJB.getRoles();
+        rightsList = databaseEJB.getRights();
     }
-    public void updateRoles(){
-        List<Rights>resultRights= new ArrayList<>();
+
+    public void updateRoles() {
+        List<Rights> resultRights = new ArrayList<>();
         UserRole resultRole;
-        resultRole= databaseEJB.getRoleByName(selectedRole);
-        for(String rightName: selectedRights){
+        resultRole = databaseEJB.getRoleByName(selectedRole);
+        for (String rightName : selectedRights) {
             Rights crtRight;
             crtRight = databaseEJB.getRightByName(rightName);
             resultRights.add(crtRight);

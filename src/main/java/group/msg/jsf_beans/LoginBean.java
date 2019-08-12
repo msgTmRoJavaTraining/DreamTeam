@@ -7,7 +7,6 @@ import lombok.Data;
 import org.primefaces.PrimeFaces;
 
 import javax.ejb.EJBException;
-import javax.el.MethodExpression;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -34,7 +33,7 @@ public class LoginBean implements Serializable {
         checkEmptyUserPass();
 
         try {
-            if (!databaseEJB.getUserByUserName(username).getPersonalInformations().isActive()) {
+            if (!databaseEJB.getUserByUserName(username).isActive()) {
 
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "User: " + username, "Is no longer active");
                 PrimeFaces.current().dialog().showMessageDynamic(message);
@@ -57,7 +56,7 @@ public class LoginBean implements Serializable {
 
                         User currentLoggedIn = databaseEJB.getUserByUserName(username);
 
-                        currentLoggedIn.getPersonalInformations().setActive(false);
+                        currentLoggedIn.setActive(false);
 
                         databaseEJB.updateUser(currentLoggedIn);
                     } else {

@@ -34,8 +34,8 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "userId")
     private List<Notification> notifications;
-
-
+    
+    private boolean isActive;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "assignedId")
     private List<Bug> assignedBugs;

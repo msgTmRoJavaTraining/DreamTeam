@@ -1,23 +1,21 @@
 package group.msg.jsf_beans;
 
+import com.sun.jdo.spi.persistence.support.sqlstore.sco.ArrayList;
 import group.msg.entities.PersonalInfo;
 import group.msg.entities.User;
 import group.msg.entities.UserRole;
 import group.msg.exceptions.UserCreatorException;
 import group.msg.jsf_ejb.DatabaseEJB;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -51,21 +49,21 @@ public class UserManagementBean implements Serializable {
     public void init() {
 
     }
-    public void createUser(){
-        int firstNameChars=1;
-        int lastNameChars=5;
-        StringBuilder generatedUserName=new StringBuilder();
 
-        if(invalidCredentials())
+    public void createUser() {
+        int firstNameChars = 1;
+        int lastNameChars = 5;
+        StringBuilder generatedUserName = new StringBuilder();
+
+        if (invalidCredentials())
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User not added"));
 
-        if(this.password.equals(this.confirmPassword)&& isEmailValid(email)&& isValidPhoneNumber(mobile))
-        {
-            if(lastName.length()<5){
-                lastNameChars=lastName.length();
-                firstNameChars=6-lastNameChars;
+        if (this.password.equals(this.confirmPassword) && isEmailValid(email) && isValidPhoneNumber(mobile)) {
+            if (lastName.length() < 5) {
+                lastNameChars = lastName.length();
+                firstNameChars = 6 - lastNameChars;
             }
-            while(lastNameChars!=0) {
+            while (lastNameChars != 0) {
                 generatedUserName.append(lastName.substring(0, lastNameChars));
                 generatedUserName.append(firstName.substring(0, firstNameChars));
                 if (dataBaseEJB.existsUserWithId(generatedUserName.toString())) {
@@ -74,28 +72,28 @@ public class UserManagementBean implements Serializable {
                     generatedUserName.setLength(0);
                 } else break;
             }
-            if(generatedUserName.length()==0){
-                throw new UserCreatorException(lastName,firstName);
-            }else{
-                User newUser=new User();
-                PersonalInfo userInfo=new PersonalInfo();
+            if (generatedUserName.length() == 0) {
+                throw new UserCreatorException(lastName, firstName);
+            } else {
+                User newUser = new User();
+                PersonalInfo userInfo = new PersonalInfo();
                 ///
                 List<UserRole> userRoles;
-                userRoles=dataBaseEJB.getRolesByName(userRoleList);
+                userRoles = dataBaseEJB.getRolesByName(userRoleList);
                 ///
                 userInfo.setFirstName(firstName);
                 userInfo.setLastName(lastName);
                 userInfo.setEmail(email);
                 userInfo.setMobile(mobile);
-                userInfo.setActive(true);
+                newUser.setActive(true);
 
                 newUser.setUsername(generatedUserName.toString().toLowerCase());
                 newUser.setPassword(LoginBean.getMd5(this.password));
-               ////
+                ////
                 newUser.setRoles(userRoles);
-               ///
+                ///
                 newUser.setPersonalInformations(userInfo);
-               
+
 
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User added successfully"));
 
@@ -107,13 +105,13 @@ public class UserManagementBean implements Serializable {
     }
 
     public void clearUserFields() {
-        username="";
-        password="";
-        confirmPassword="";
-        firstName="";
-        lastName="";
-        mobile="";
-        email="";
+        username = "";
+        password = "";
+        confirmPassword = "";
+        firstName = "";
+        lastName = "";
+        mobile = "";
+        email = "";
     }
 
     public static boolean isEmailValid(String email) {
@@ -135,35 +133,39 @@ public class UserManagementBean implements Serializable {
                 || mobile.matches(regex3) || mobile.matches(regex4) || mobile.matches(regex5) || mobile.matches(regex7);
     }
 
-    public List<User> usersList(){
+    public List<User> usersList() {
         return dataBaseEJB.getAllUsers();
     }
-    public List<String> userNamesList(){
+
+    public List<String> userNamesList() {
         return dataBaseEJB.getAllUserNames();
     }
 
-    public void prepareForUserUpdate()
-    {
-        userToUpdate=dataBaseEJB.getUserByUserName(this.username);
-        newPersonalInfo=userToUpdate.getPersonalInformations();
-        this.hashedPass=userToUpdate.getPassword();
-        this.firstName=newPersonalInfo.getFirstName();
-        this.lastName=newPersonalInfo.getLastName();
-        this.mobile=newPersonalInfo.getMobile();
-        this.email=newPersonalInfo.getEmail();
-        this.active=newPersonalInfo.isActive();
+    public List<String> activeUserNamesList() {
+        return dataBaseEJB.getAllActiveUserNames();
     }
 
-    public void userUpdate(){
-        if(this.password.equals(this.confirmPassword) && isEmailValid(email)&& isValidPhoneNumber(mobile)){
+    public void prepareForUserUpdate() {
+        userToUpdate = dataBaseEJB.getUserByUserName(this.username);
+        newPersonalInfo = userToUpdate.getPersonalInformations();
+        this.hashedPass = userToUpdate.getPassword();
+        this.firstName = newPersonalInfo.getFirstName();
+        this.lastName = newPersonalInfo.getLastName();
+        this.mobile = newPersonalInfo.getMobile();
+        this.email = newPersonalInfo.getEmail();
+        this.active = userToUpdate.isActive();
+    }
+
+    public void userUpdate() {
+        if (this.password.equals(this.confirmPassword) && isEmailValid(email) && isValidPhoneNumber(mobile)) {
             newPersonalInfo.setFirstName(this.firstName);
             newPersonalInfo.setLastName(this.lastName);
             newPersonalInfo.setMobile(this.mobile);
             newPersonalInfo.setEmail(this.email);
-            newPersonalInfo.setActive(this.active);
+            userToUpdate.setActive(this.active);
             userToUpdate.setPersonalInformations(newPersonalInfo);
 
-            if(this.password.equals("")) {
+            if (this.password.equals("")) {
                 userToUpdate.setPassword(hashedPass);
             } else {
                 userToUpdate.setPassword(LoginBean.getMd5(this.password));
@@ -172,23 +174,22 @@ public class UserManagementBean implements Serializable {
             userToUpdate.setRoles(dataBaseEJB.getRolesByName(userRoleList));
             dataBaseEJB.updateUser(userToUpdate);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User updated successfully"));
-        }else{
-            if(invalidCredentials())
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User not updated"));
+        } else {
+            if (invalidCredentials())
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User not updated"));
         }
     }
 
-    public boolean invalidCredentials()
-    {
-        boolean ok=false;
+    public boolean invalidCredentials() {
+        boolean ok = false;
 
-        if(!isEmailValid(email)) {
+        if (!isEmailValid(email)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Invalid email"));
-            ok=true;
+            ok = true;
         }
-        if(!isValidPhoneNumber(mobile)) {
+        if (!isValidPhoneNumber(mobile)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Invalid phone number"));
-            ok=true;
+            ok = true;
         }
         return ok;
     }

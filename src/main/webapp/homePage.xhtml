@@ -132,7 +132,7 @@
                                              onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
                             <p:dialog id="bugInsertDialog" header="Insert bug" widgetVar="dlg_addBug" minHeight="40" width="370"
                                       height="500" onHide="#{bugManagementBean.clearBugFields()}">
-                                <p:ajax event="close" listener="#{bugManagementBean.clearBugFields()}" update="bugInsertDialog"/>
+                                <p:ajax update="bugInsertDialog"/>
                                 <h:form id="bugForm" enctype="multipart/form-data">
 
                                     <h:outputText styleClass="myFont" value="Title" style="display:block;"/>
@@ -156,11 +156,11 @@
                                                      value="#{bugManagementBean.stringUserAssignedToFixIt}"
                                                      effect="fold" editable="true" required="true"
                                                      appendTo="@this">
-                                        <f:selectItems value="#{userManagementBean.userNamesList()}"/>
+                                        <f:selectItems value="#{userManagementBean.activeUserNamesList()}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Target Date" style="display:block;"/>
-                                    <p:calendar id="button" value="#{bugManagementBean.selectedDate}" mode="inline"/>
+                                    <p:calendar id="button" value="#{bugManagementBean.selectedDate}" mode="inline" mindate="#{bugManagementBean.present}"/>
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Description" style="display:block;"/>
