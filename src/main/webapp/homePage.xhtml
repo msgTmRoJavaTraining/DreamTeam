@@ -85,8 +85,9 @@
                                   styleClass="customDialog">
                             <p:commandButton value="User" class="button" styleClass="button"
                                              onclick="PF('dlg_addUser').show(); PF('dlg1').close();"/><p:spacer></p:spacer>
-                            <p:dialog header="Insert user" widgetVar="dlg_addUser" minHeight="40" width="310"
+                            <p:dialog id="userInsertDialog" header="Insert user" widgetVar="dlg_addUser" minHeight="40" width="310"
                                       height="500">
+                                <p:ajax event="close" listener="#{userManagementBean.clearUserFields()}" update="userInsertDialog"/>
                                 <h:form id="userForm">
 
                                     <h:outputText styleClass="myFont" value="First name" style="display:block;"/>
@@ -129,8 +130,9 @@
                             </p:dialog>
                             <p:commandButton value="Bug" class="button" styleClass="button"
                                              onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
-                            <p:dialog header="Insert bug" widgetVar="dlg_addBug" minHeight="40" width="370"
-                                      height="500">
+                            <p:dialog id="bugInsertDialog" header="Insert bug" widgetVar="dlg_addBug" minHeight="40" width="370"
+                                      height="500" onHide="#{bugManagementBean.clearBugFields()}">
+                                <p:ajax event="close" listener="#{bugManagementBean.clearBugFields()}" update="bugInsertDialog"/>
                                 <h:form id="bugForm" enctype="multipart/form-data">
 
                                     <h:outputText styleClass="myFont" value="Title" style="display:block;"/>
@@ -167,7 +169,9 @@
                                     <h:outputText styleClass="myFont" value="Attachment" style="display:block;"/>
                                     <p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}"
                                                   allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|xls|xlsx|odf)$/"
-                                                  sizeLimit="25000001" invalidSizeMessage="Error! Max file size: 25 MB" mode="advanced" skinSimple="true"/>
+                                                  sizeLimit="25000001" invalidSizeMessage="Error! Max file size: 25 MB"
+                                                  fileLimit="1"
+                                                  mode="advanced" skinSimple="true"/>
 
                                     <br></br><br></br>
                                     <p:commandButton value="Save bug" class="button" styleClass="button"
@@ -231,12 +235,17 @@
                                         <f:selectItems value="#{userManagementBean.userNamesList()}"/>
                                         <p:ajax event="change"
                                                 update="firstName,lastName,email,mobile,pass,confirm,rolesSelect,activeStatus"
-                                                process="@this" listener="${userManagementBean.prepareForUserUpdate()}"/>
+                                                process="@this"
+                                                listener="${userManagementBean.prepareForUserUpdate()}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
-                                    <h:outputText value="Active"  styleClass="myFont" style="display:block;"
+                                    <h:outputText value="Active" styleClass="myFont" style="display:block;"
                                                   escape="true"/>
-                                    <p:selectBooleanButton id="activeStatus" disabled="#{userManagementBean.username==null}" placeholder="#{userManagementBean.active}" value="#{userManagementBean.active}" onLabel="Yes" offLabel="No" style="width:60px" />
+                                    <p:selectBooleanButton id="activeStatus"
+                                                           disabled="#{userManagementBean.username==null}"
+                                                           placeholder="#{userManagementBean.active}"
+                                                           value="#{userManagementBean.active}" onLabel="Yes"
+                                                           offLabel="No" style="width:60px"/>
                                     <h:outputText styleClass="myFont" value="First name" style="display:block;"
                                                   escape="true"/>
                                     <p:inputText value="#{userManagementBean.firstName}"

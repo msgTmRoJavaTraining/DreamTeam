@@ -103,6 +103,10 @@ public class UserManagementBean implements Serializable {
 
             }
         }
+        clearUserFields();
+    }
+
+    public void clearUserFields() {
         username="";
         password="";
         confirmPassword="";

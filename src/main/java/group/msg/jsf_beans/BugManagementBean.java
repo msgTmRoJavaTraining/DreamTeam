@@ -44,6 +44,18 @@ public class BugManagementBean implements Serializable {
     @Inject
     LoginBean loginBean;
 
+    public void clearBugFields()
+    {
+        fileUploadView.clearFile();
+        String title="";
+        String description="";
+        String version="";
+        String fixedInVersion="";
+        String severity="";
+        String status="";
+        String StringUserAssignedToFixIt="";
+    }
+
     public void createBug() throws IOException {
 
         if (invalidCredentials())
@@ -74,6 +86,7 @@ public class BugManagementBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug added successfully"));
 
             databaseEJB.createBug(bug);
+            clearBugFields();
         }
     }
 
