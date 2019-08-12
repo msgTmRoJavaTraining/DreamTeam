@@ -116,12 +116,6 @@ public class BugManagementBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid version format", "Enter only alphanumeric characters separated by . "));
             ok=true;
         }
-
-//        if(!isDateValid(targetDate))
-//        {
-//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid date", ""));
-//            ok=true;
-//        }
         return ok;
     }
 
