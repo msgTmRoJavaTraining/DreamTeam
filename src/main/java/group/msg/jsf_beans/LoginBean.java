@@ -1,10 +1,13 @@
 package group.msg.jsf_beans;
 
 
+import group.msg.entities.User;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Data;
+import org.primefaces.PrimeFaces;
 
-
+import javax.ejb.EJBException;
+import javax.el.MethodExpression;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -21,7 +24,8 @@ import java.security.NoSuchAlgorithmException;
 public class LoginBean implements Serializable {
     private String username;
     private String password;
-
+    private int remainingTries = 5;
+    private String lastTried;
     @Inject
     private DatabaseEJB databaseEJB;
 
@@ -29,20 +33,59 @@ public class LoginBean implements Serializable {
 
         checkEmptyUserPass();
 
-        String hashedPassword = getMd5(password);
-        if (databaseEJB.login(username, hashedPassword)) {
-            return NavigationBean.navigateTo("homePage");
-        } else {
-            if(!password.isEmpty() && !username.isEmpty())
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Invalid", "Invalid username/password"));
+        try {
+            if (!databaseEJB.getUserByUserName(username).getPersonalInformations().isActive()) {
+
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "User: " + username, "Is no longer active");
+                PrimeFaces.current().dialog().showMessageDynamic(message);
+
+            } else {
+                if (!username.equals(lastTried))
+                    remainingTries = 5;
+
+                String hashedPassword = getMd5(password);
+                if (databaseEJB.login(username, hashedPassword)) {
+
+                    remainingTries = 5;
+
+                    return NavigationBean.navigateTo("homePage");
+                } else {
+
+                    if (remainingTries == 1) {
+                        FacesContext.getCurrentInstance().addMessage
+                                (null, new FacesMessage(FacesMessage.SEVERITY_WARN, "User " + username + " deactivated", ""));
+
+                        User currentLoggedIn = databaseEJB.getUserByUserName(username);
+
+                        currentLoggedIn.getPersonalInformations().setActive(false);
+
+                        databaseEJB.updateUser(currentLoggedIn);
+                    } else {
+                        if (!password.isEmpty() && !username.isEmpty() && remainingTries <= 5 && remainingTries > 0) {
+                            lastTried = username;
+                            remainingTries--;
+                            FacesContext.getCurrentInstance().addMessage
+                                    (null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid username/password",
+                                            "Number of tries left: " + remainingTries));
+                        }
+                    }
+                }
+            }
+
+        } catch (EJBException e) {
+
+            if (!username.isEmpty())
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid username", ""));
             return NavigationBean.navigateTo("login");
         }
+
+        return NavigationBean.navigateTo("login");
     }
 
-    public void checkEmptyUserPass()
-    {
+
+    public void checkEmptyUserPass() {
         if (username.isEmpty()) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "Enter an username"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Enter an username"));
         }
         if (password.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Enter a password"));
@@ -76,4 +119,5 @@ public class LoginBean implements Serializable {
         }
         return hashtext;
     }
+
 }
