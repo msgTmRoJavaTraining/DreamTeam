@@ -152,7 +152,7 @@
                                     <p:inputTextarea value="#{bugManagementBean.description}"/>
 
                                     <h:outputText styleClass="myFont" value="Attachment" style="display:block;"/>
-                                    <p:fileUpload value="#{fileUploadView.file}" mode="simple" skinSimple="true"/>
+                                    <p:fileUpload value="#{fileUploadView.file}" sizeLimit="25000001" invalidSizeMessage="Error! Max file size: 25 MB" mode="simple" skinSimple="true"/>
 
                                     <br></br><br></br>
                                     <p:commandButton value="Save bug" class="button" styleClass="button"
