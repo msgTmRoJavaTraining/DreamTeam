@@ -281,4 +281,5 @@ customDialog {
 }
 .bugContent {
     grid-area: menu;
+    text-align: center;
 }
