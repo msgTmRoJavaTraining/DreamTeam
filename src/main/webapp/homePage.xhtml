@@ -47,31 +47,101 @@
             <span>JBugger </span>
         </div>
         <div class="content" style=" background-color:lavenderblush; height: 100vh;">
-            <div>
-                <h2 style="font-family:'Comic Sans MS'">New</h2>
-                <div class="bugDiv">
-                    <div class="bugTitleDiv">
-                        <h2>Cities</h2>
+            <h:form id="form1">
+                <p:dataTable id="bugsTable" var="bug" value="#{dataTableBean.bugList}" widgetVar="carsTable"
+                             selectionMode="single" rowKey="#{bug.title}"
+                             emptyMessage="No bugs found with given criteria" filteredValue="#{dataTableBean.filteredBugs}">
 
-                    </div>
-                    <div class="bugContent">
-                        <h2>Content</h2>
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Search all fields:" />
+                            <p:inputText id="globalFilter" onkeyup="PF('carsTable').filter()" style="width:150px" placeholder="Enter keyword" />
 
-                    </div>
-                </div>
-            </div>
+                            <div style="float:right;padding-top: 5px;">
+                                <h:commandLink>
+                                    <p:graphicImage styleClass="excelButton" width="24"/>
+                                    <p:dataExporter type="xls" target="bugsTable" fileName="bugs"/>
+                                </h:commandLink>
 
-            <div>In progress</div>
-            <div>Fixed</div>
-            <div>Closed</div>
-            <div>Rejected</div>
-            <div>Info needed</div>
-            <div style=" height: 100vh;"></div>
-            <div style=" height: 100vh;"></div>
-            <div style=" height: 100vh;"></div>
-            <div style=" height: 100vh;"></div>
-            <div style=" height: 100vh;"></div>
-            <div style=" height: 100vh;"></div>
+                                <h:commandLink>
+                                    <p:graphicImage styleClass="pdfButton" width="24"/>
+                                    <p:dataExporter type="pdf" target="bugsTable" fileName="bugsPDF"/>
+                                </h:commandLink>
+                            </div>
+
+                        </p:outputPanel>
+
+
+                    </f:facet>
+
+                    <p:column filterBy="#{bug.title}" headerText="Title"  filterMatchMode="contains" sortBy="#{bug.title}">
+                        <h:outputText value="#{bug.title}" />
+                    </p:column>
+
+                    <p:column filterBy="#{bug.description}" headerText="Description"  filterMatchMode="contains" sortBy="#{bug.description}">
+                        <h:outputText value="#{bug.description}" />
+                    </p:column>
+
+                    <p:column filterBy="#{bug.version}" headerText="Version"  filterMatchMode="exact">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('carsTable').filter()" styleClass="custom-filter">
+                            <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItems value="#{dataTableBean.versions}" />
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{bug.version}" />
+                </p:column>
+
+                    <p:column filterBy="#{bug.targetDate.toLocalDate}" headerText="Target date" filterMatchMode="exact">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('carsTable').filter()" styleClass="custom-filter">
+                                <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{dataTableBean.targetDates}" />
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <h:outputText value="#{bug.targetDate}" />
+                    </p:column>
+
+                    <p:column filterBy="#{bug.createdId.username}" headerText="Created by"  filterMatchMode="exact">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('carsTable').filter()" styleClass="custom-filter">
+                                <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{dataTableBean.createdByList}" />
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <h:outputText value="#{bug.createdId.username}" />
+                    </p:column>
+
+                    <p:column filterBy="#{bug.assignedId.username}" headerText="Assigned to"  filterMatchMode="exact">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('carsTable').filter()" styleClass="custom-filter">
+                                <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{dataTableBean.assignedToList}" />
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <h:outputText value="#{bug.assignedId.username}" />
+                    </p:column>
+
+                    <p:column filterBy="#{bug.severity}" headerText="Severity"  filterMatchMode="in">
+                        <f:facet name="filter">
+                            <p:selectCheckboxMenu label="Severity" onchange="PF('carsTable').filter()" scrollHeight="150" styleClass="custom-filter">
+                                <f:selectItems value="#{constantsBean.severities}" />
+                            </p:selectCheckboxMenu>
+                        </f:facet>
+                        <h:outputText value="#{bug.severity}" />
+                    </p:column>
+
+                    <p:column filterBy="#{bug.status}" headerText="Status"  filterMatchMode="in">
+                        <f:facet name="filter">
+                            <p:selectCheckboxMenu label="Status" onchange="PF('carsTable').filter()" scrollHeight="150" styleClass="custom-filter">
+                                <f:selectItems value="#{constantsBean.states}" />
+                            </p:selectCheckboxMenu>
+                        </f:facet>
+                        <h:outputText value="#{bug.status}" />
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
         </div>
 
         <p:sidebar widgetVar="sidebar1" baseZIndex="10000" style="background:darkcyan; width:15em">
