@@ -10,7 +10,6 @@ import java.util.Locale;
 @SessionScoped
 public class LanguageBean implements Serializable {
 
-
     private Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
 
     public Locale getLocale() {

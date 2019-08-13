@@ -5,9 +5,11 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
 >
+
+
 <f:view>
     <h:head>
-        <title>Home</title>
+        <title>#{i18n['homepage']}</title>
         <h:outputStylesheet library="css" name="styleHomePage.css"/>
     </h:head>
     <h:body>
@@ -26,7 +28,8 @@
 
             </span>
 
-                <i class='icon'/> <span class="icon1"> Welcome, #{loginBean.currentlyLoggedInUsername} </span>
+                <i class='icon'/> <span
+                            class="icon1"> #{i18n['welcomeMessage']}, #{loginBean.currentlyLoggedInUsername} !</span>
 
             </span>
             </div>
@@ -67,22 +70,26 @@
                     <div class="addData">
 
                         <p:commandButton icon="fa fa-plus" type="button" onclick="PF('dlg1').show();"/>
-                        <p:dialog header="Insert options" widgetVar="dlg1" minHeight="40" width="295" height="30"
+                        <p:dialog header="#{i18n['insertOptions']}" widgetVar="dlg1" minHeight="40" width="295"
+                                  height="30"
                                   styleClass="customDialog">
-                            <p:commandButton value="User" class="button" styleClass="button"
+                            <p:commandButton value="#{i18n['user']}" class="button" styleClass="button"
                                              onclick="PF('dlg_addUser').show(); PF('dlg1').close();"/><p:spacer></p:spacer>
-                            <p:dialog id="userInsertDialog" header="Insert user" widgetVar="dlg_addUser" minHeight="40"
+                            <p:dialog id="userInsertDialog" header="#{i18n['createUser']}" widgetVar="dlg_addUser"
+                                      minHeight="40"
                                       width="310"
                                       height="500">
                                 <p:ajax event="close" listener="#{userManagementBean.clearUserFields()}"
                                         update="userInsertDialog"/>
                                 <h:form id="userForm">
 
-                                    <h:outputText styleClass="myFont" value="First name" style="display:block;"/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['firstName']}"
+                                                  style="display:block;"/>
                                     <p:inputText value="#{userManagementBean.firstName}"/>
                                     <br/><br/>
 
-                                    <h:outputText styleClass="myFont" value="Last name" style="display:block;"/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['lastName']}"
+                                                  style="display:block;"/>
                                     <p:inputText value="#{userManagementBean.lastName}"/>
                                     <br/><br/>
 
@@ -90,19 +97,21 @@
                                     <p:inputText value="#{userManagementBean.email}"/>
                                     <br/><br/>
 
-                                    <h:outputText styleClass="myFont" value="Phone" style="display:block;"/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['phone']}" style="display:block;"/>
                                     <p:inputText value="#{userManagementBean.mobile}"/>
                                     <br/><br/>
 
-                                    <h:outputText styleClass="myFont" value="Password" style="display:block;"/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['password']}"
+                                                  style="display:block;"/>
                                     <p:password value="#{userManagementBean.password}"/><br></br>
 
-                                    <h:outputText styleClass="myFont" value="Confirm password" style="display:block;"/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['confirmPassword']}"
+                                                  style="display:block;"/>
                                     <p:password value="#{userManagementBean.confirmPassword}"/><br></br>
 
-                                    <h:outputLabel styleClass="myFont" value="Roles "/><br></br>
+                                    <br></br>
                                     <p:selectCheckboxMenu id="rolesUser" value="#{userManagementBean.userRoleList}"
-                                                          label="Roles"
+                                                          label="#{i18n['roles']}"
                                                           filter="true" filterMatchMode="startsWith"
                                                           panelStyle="width:auto; margin-left: 0px; margin-right: 5px"
                                                           required="true"
@@ -110,37 +119,41 @@
                                         <f:selectItems value="#{roleManagementBean.roleList}"/>
                                     </p:selectCheckboxMenu>
                                     <br></br><br></br>
-                                    <p:commandButton value="Save user" class="button"
+                                    <p:commandButton value="#{i18n['createUser']}" class="button"
                                                      styleClass="button" ajax="true" update="growl"
                                                      action="#{userManagementBean.createUser}"/>
                                     <br/><br/>
                                 </h:form>
                             </p:dialog>
-                            <p:commandButton value="Bug" class="button" styleClass="button"
+                            <p:commandButton value="#{i18n['bug']}" class="button" styleClass="button"
                                              onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
-                            <p:dialog id="bugInsertDialog" header="Insert bug" widgetVar="dlg_addBug" minHeight="40"
+                            <p:dialog id="bugInsertDialog" header="#{i18n['createBug']}" widgetVar="dlg_addBug"
+                                      minHeight="40"
                                       width="370"
                                       height="500" onHide="#{bugManagementBean.clearBugFields()}">
                                 <p:ajax update="bugInsertDialog"/>
                                 <h:form id="bugForm" enctype="multipart/form-data">
 
-                                    <h:outputText styleClass="myFont" value="Title" style="display:block;"/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['title']}" style="display:block;"/>
                                     <p:inputText value="#{bugManagementBean.title}"/>
                                     <br/><br/>
 
-                                    <h:outputText styleClass="myFont" value="Version" style="display:block;"/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['version']}"
+                                                  style="display:block;"/>
                                     <p:inputText value="#{bugManagementBean.version}"/>
                                     <br/><br/>
 
 
-                                    <h:outputText styleClass="myFont" value="Severity" style="display:block;"/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['severity']}"
+                                                  style="display:block;"/>
                                     <p:selectOneMenu id="severity" value="#{bugManagementBean.severity}" effect="fold"
                                                      required="true"
                                                      appendTo="@this">
                                         <f:selectItems value="#{constantsBean.severities}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
-                                    <h:outputText styleClass="myFont" value="Assigned to" style="display:block;"/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['assignedTo']}"
+                                                  style="display:block;"/>
                                     <p:selectOneMenu id="assignedUser"
                                                      value="#{bugManagementBean.stringUserAssignedToFixIt}"
                                                      effect="fold" editable="true" required="true"
@@ -148,23 +161,28 @@
                                         <f:selectItems value="#{userManagementBean.activeUserNamesList()}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
-                                    <h:outputText styleClass="myFont" value="Target Date" style="display:block;"/>
-                                    <p:calendar id="button" value="#{bugManagementBean.selectedDate}" mode="inline"
+                                    <h:outputText styleClass="myFont" value="#{i18n['targetDate']}"
+                                                  style="display:block;"/>
+                                    <h:outputScript name="javascripts/roCalendar.js"/>
+                                    <p:calendar id="targetDateCalendar" value="#{bugManagementBean.selectedDate}"
+                                                mode="inline" pattern="MM/dd/yy"
                                                 mindate="#{bugManagementBean.present}"/>
                                     <br/><br/>
 
-                                    <h:outputText styleClass="myFont" value="Description" style="display:block;"/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['description']}"
+                                                  style="display:block;"/>
                                     <p:inputTextarea value="#{bugManagementBean.description}"/>
-
-                                    <h:outputText styleClass="myFont" value="Attachment" style="display:block;"/>
+                                    <br/><br/>
+                                    <h:outputText styleClass="myFont" value="#{i18n['attachment']}"
+                                                  style="display:block;"/>
                                     <p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}"
                                                   allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|xls|xlsx|odf)$/"
-                                                  sizeLimit="25000001" invalidSizeMessage="Error! Max file size: 25 MB"
+                                                  sizeLimit="25000001" invalidSizeMessage="#{i18n['invalidFileSize']}"
                                                   fileLimit="1"
                                                   mode="advanced" skinSimple="true"/>
 
                                     <br></br><br></br>
-                                    <p:commandButton value="Save bug" class="button" styleClass="button"
+                                    <p:commandButton value="#{i18n['saveBug']}" class="button" styleClass="button"
                                                      action="#{bugManagementBean.createBug}"
                                                      onclick="PF('dlg_addBug').close();"/>
                                     <br/><br/>
@@ -173,29 +191,25 @@
                         </p:dialog>
 
                     </div>
-                    <div class="deleteData">
-                        <p:commandButton icon="fa fa-trash"/>
-                    </div>
                     <div class="editData">
                         <p:commandButton icon="fa fa-edit" type="button" onclick="PF('dlg_edit').show();"/>
-                        <p:dialog header="Edit options" widgetVar="dlg_edit" minHeight="40" width="295" height="30"
+                        <p:dialog header="#{i18n['editOptions']}" widgetVar="dlg_edit" minHeight="40" width="295"
+                                  height="30"
                                   styleClass="customDialog">
 
-                            <p:commandButton value="Role" class="button" styleClass="button"
+                            <p:commandButton value="#{i18n['role']}" class="button" styleClass="button"
                                              onclick="PF('dlg_EditRole').show();PF('dlg_edit').close();"/>
-                            <p:dialog header="Edit role" widgetVar="dlg_EditRole" minHeight="40" width="370"
+                            <p:dialog header="#{i18n['editRole']}" widgetVar="dlg_EditRole" minHeight="40" width="370"
                                       height="auto">
                                 <h:form id="editRoleForm">
-                                    <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
                                     <p:selectOneMenu id="roles" value="#{roleManagementBean.selectedRole}" effect="fold"
                                                      editable="false" required="true"
                                                      appendTo="@this">
                                         <f:selectItems value="#{roleManagementBean.roleList}"/>
                                     </p:selectOneMenu><br></br><br></br>
-
-                                    <h:outputLabel styleClass="myFont" value="Rights "/><br></br>
+                                    <br></br>
                                     <p:selectCheckboxMenu id="rights" value="#{roleManagementBean.selectedRights}"
-                                                          label="Rights"
+                                                          label="#{i18n['rights']}"
                                                           filter="true" filterMatchMode="startsWith"
                                                           panelStyle="width:auto; margin-left: 0px; margin-right: 5px"
                                                           required="true"
@@ -204,20 +218,20 @@
                                     </p:selectCheckboxMenu>
 
                                     <br></br><br></br><br></br><br></br>
-                                    <p:commandButton value="Update role" class="button" styleClass="button"
+                                    <p:commandButton value="#{i18n['updateRole']}" class="button" styleClass="button"
                                                      action="#{roleManagementBean.updateRoles}"
                                                      onclick="PF('dlg_EditRole').close();" style="margin-top:50%"/>
                                     <br/><br/>
                                 </h:form>
                             </p:dialog>
 
-                            <p:commandButton value="User" class="button" styleClass="button"
+                            <p:commandButton value="#{i18n['user']}" class="button" styleClass="button"
                                              onclick="PF('dlg_EditUser').show();PF('dlg_edit').close();"/>
-                            <p:dialog header="Edit User" widgetVar="dlg_EditUser" minHeight="40" width="370"
+                            <p:dialog header="#{i18n['updateUser']}" widgetVar="dlg_EditUser" minHeight="40" width="370"
                                       height="auto">
                                 <h:form id="editUserForm">
 
-                                    <h:outputText styleClass="myFont" value="Username selection"
+                                    <h:outputText styleClass="myFont" value="#{i18n['usernameSelection']}"
                                                   style="display:block;"/>
                                     <p:selectOneMenu id="users" value="#{userManagementBean.username}" effect="fold"
                                                      editable="true" required="true"
@@ -229,21 +243,22 @@
                                                 listener="${userManagementBean.prepareForUserUpdate()}"/>
                                     </p:selectOneMenu><br></br><br></br>
 
-                                    <h:outputText value="Active" styleClass="myFont" style="display:block;"
+                                    <h:outputText value="#{i18n['active']}" styleClass="myFont" style="display:block;"
                                                   escape="true"/>
                                     <p:selectBooleanButton id="activeStatus"
                                                            disabled="#{userManagementBean.username==null}"
                                                            placeholder="#{userManagementBean.active}"
                                                            value="#{userManagementBean.active}" onLabel="Yes"
                                                            offLabel="No" style="width:60px"/>
-                                    <h:outputText styleClass="myFont" value="First name" style="display:block;"
+                                    <h:outputText styleClass="myFont" value="#{i18n['firstName']}"
+                                                  style="display:block;"
                                                   escape="true"/>
                                     <p:inputText value="#{userManagementBean.firstName}"
                                                  placeholder="#{userManagementBean.firstName}"
                                                  autocomplete="off" id="firstName"
                                                  disabled="#{userManagementBean.username==null}"/>
 
-                                    <h:outputText styleClass="myFont" value="Last name" style="display:block;"
+                                    <h:outputText styleClass="myFont" value="#{i18n['lastName']}" style="display:block;"
                                                   escape="true"/>
                                     <p:inputText id="lastName" value="#{userManagementBean.lastName}"
                                                  disabled="#{userManagementBean.username==null}"/>
@@ -256,28 +271,29 @@
                                                  disabled="#{userManagementBean.username==null}"/>
                                     <br/><br/>
 
-                                    <h:outputText styleClass="myFont" value="Phone" style="display:block;"
+                                    <h:outputText styleClass="myFont" value="#{i18n['phone']}" style="display:block;"
                                                   escape="true"/>
                                     <p:inputText id="mobile" placeholder="#{userManagementBean.mobile}"
                                                  value="#{userManagementBean.mobile}"
                                                  disabled="#{userManagementBean.username==null}"/>
                                     <br/><br/>
 
-                                    <h:outputText styleClass="myFont" value="Password" style="display:block;"
+                                    <h:outputText styleClass="myFont" value="#{i18n['password']}" style="display:block;"
                                                   escape="true"/>
                                     <p:password id="pass" value="#{userManagementBean.password}"
                                                 disabled="#{userManagementBean.username==null}"/><br></br>
 
-                                    <h:outputText styleClass="myFont" value="Confirm password" style="display:block;"
+                                    <h:outputText styleClass="myFont" value="#{i18n['confirmPassword']}"
+                                                  style="display:block;"
                                                   escape="true"/>
                                     <p:password id="confirm" value="#{userManagementBean.confirmPassword}"
                                                 disabled="#{userManagementBean.username==null}"/><br></br>
 
-                                    <h:outputText styleClass="myFont" value="Role" style="display:block;"/>
+                                    <br></br>
 
 
                                     <p:selectCheckboxMenu id="rolesSelect" value="#{userManagementBean.userRoleList}"
-                                                          label="Roles"
+                                                          label="#{i18n['roles']}"
                                                           filter="true" filterMatchMode="startsWith"
                                                           panelStyle="width:auto; margin-left: 0px; margin-right: 5px"
                                                           appendTo="@this">
@@ -285,7 +301,7 @@
                                     </p:selectCheckboxMenu>
                                     <br></br><br></br>
 
-                                    <p:commandButton value="Update user" class="button" ajax="true"
+                                    <p:commandButton value="#{i18n['updateUser']}" class="button" ajax="true"
                                                      styleClass="button" update="growl"
                                                      action="#{userManagementBean.userUpdate}"
                                     />
@@ -294,20 +310,11 @@
                             </p:dialog>
                         </p:dialog>
                     </div>
-                    <div class="exportData">
-                        <p:commandButton icon="fa fa-files-o"/>
-                    </div>
-                    <div class="overView">
-                        <p:commandButton icon="fa fa-search"/>
-                    </div>
                     <div class="statistics">
                         <p:commandButton icon="fa fa-pie-chart"/>
                     </div>
                     <br></br>
                     <br></br>
-                    <div class="languageSwitch">
-                        <p:commandButton icon="fa fa-language"/>
-                    </div>
                     <div class="log-out">
                         <h:form><p:commandButton ajax="false" action="#{navigationBean.navigateTo('login')}"
                                                  icon="fa fa-sign-out"/></h:form>

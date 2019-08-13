@@ -7,14 +7,12 @@
     <application>
         <locale-config>
             <default-locale>en</default-locale>
-            <supported-locale>en</supported-locale>
             <supported-locale>ro</supported-locale>
         </locale-config>
         <resource-bundle>
-            <base-name>messages</base-name>
-            <var>msg</var>
+            <base-name>FrontEndInterfaceLanguage</base-name>
+            <var>i18n</var>
         </resource-bundle>
     </application>
-
 </faces-config>
 
