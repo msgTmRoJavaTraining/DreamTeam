@@ -283,3 +283,44 @@ customDialog {
     grid-area: menu;
     text-align: center;
 }
+
+.icon
+{
+    background: url("#{resource['images/man-user.png']}");
+    height: 24px;
+    width: 24px;
+    position: relative;
+    top: 7px;
+    left:75%;
+    display: inline-block;
+}
+
+.icon1 {
+    height: 24px;
+    width: 40px;
+    position: relative;
+    left: 76%;
+    display: inline;
+}
+
+.romaniaIconStyle
+{
+    background: url("#{resource['images/romania.png']}");
+    height: 24px;
+    width: 24px;
+    position: relative;
+    top: 7px;
+    left:73%;
+    display: inline-block;
+}
+
+.UKIconStyle
+{
+    background: url("#{resource['images/united-kingdom.png']}");
+    height: 24px;
+    width: 24px;
+    position: relative;
+    top: 7px;
+    left:68%;
+    display: inline-block;
+}

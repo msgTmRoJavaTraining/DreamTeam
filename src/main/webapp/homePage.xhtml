@@ -5,35 +5,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
 >
-
-<script type="text/javascript">
-    PrimeFaces.locales['de'] = {
-        closeText: 'Schließen',
-        prevText: 'Zurück',
-        nextText: 'Weiter',
-        monthNames: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-        monthNamesShort: ['Jan', 'Feb', 'März', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
-        dayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
-        dayNamesShort: ['Son', 'Mon', 'Die', 'Mit', 'Don', 'Fre', 'Sam'],
-        dayNamesMin: ['S', 'M', 'D', 'M ', 'D', 'F ', 'S'],
-        weekHeader: 'Woche',
-        FirstDay: 1,
-        isRTL: false,
-        showMonthAfterYear: false,
-        yearSuffix: '',
-        timeOnlyTitle: 'Nur Zeit',
-        timeText: 'Zeit',
-        hourText: 'Stunde',
-        minuteText: 'Minute',
-        secondText: 'Sekunde',
-        currentText: 'Aktuelles Datum',
-        ampm: false,
-        month: 'Monat',
-        week: 'Woche',
-        day: 'Tag',
-        allDayText: 'Ganzer Tag'
-    };
-</script>
 <f:view>
     <h:head>
         <title>Home</title>
@@ -42,10 +13,25 @@
     <h:body>
         <p:growl id="growl" sticky="false" showDetail="true" life="8000"/>
 
-        <div class="w3-teal">
-            <p:commandButton icon="bugIcon.png" oncomplete="PF('sidebar1').show()" style="background: none"/>
-            <span>JBugger </span>
-        </div>
+        <h:form>
+            <div class="w3-teal">
+                <p:commandButton icon="bugIcon.png" oncomplete="PF('sidebar1').show()" style="background: none"/>
+                <span>JBugger
+
+            <span>
+
+                <h:commandLink id="btnRomania" action="#{language.changeLanguage('ro')}" styleClass="romaniaIconStyle"/>
+
+                  <h:commandLink id="btnUK" action="#{language.changeLanguage('')}" styleClass="UKIconStyle"/>
+
+            </span>
+
+                <i class='icon'/> <span class="icon1"> Welcome, #{loginBean.currentlyLoggedInUsername} </span>
+
+            </span>
+            </div>
+        </h:form>
+
         <div class="content" style=" background-color:lavenderblush; height: 100vh;">
             <div>
                 <h2 style="font-family:'Comic Sans MS'">New</h2>
@@ -85,9 +71,11 @@
                                   styleClass="customDialog">
                             <p:commandButton value="User" class="button" styleClass="button"
                                              onclick="PF('dlg_addUser').show(); PF('dlg1').close();"/><p:spacer></p:spacer>
-                            <p:dialog id="userInsertDialog" header="Insert user" widgetVar="dlg_addUser" minHeight="40" width="310"
+                            <p:dialog id="userInsertDialog" header="Insert user" widgetVar="dlg_addUser" minHeight="40"
+                                      width="310"
                                       height="500">
-                                <p:ajax event="close" listener="#{userManagementBean.clearUserFields()}" update="userInsertDialog"/>
+                                <p:ajax event="close" listener="#{userManagementBean.clearUserFields()}"
+                                        update="userInsertDialog"/>
                                 <h:form id="userForm">
 
                                     <h:outputText styleClass="myFont" value="First name" style="display:block;"/>
@@ -130,7 +118,8 @@
                             </p:dialog>
                             <p:commandButton value="Bug" class="button" styleClass="button"
                                              onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
-                            <p:dialog id="bugInsertDialog" header="Insert bug" widgetVar="dlg_addBug" minHeight="40" width="370"
+                            <p:dialog id="bugInsertDialog" header="Insert bug" widgetVar="dlg_addBug" minHeight="40"
+                                      width="370"
                                       height="500" onHide="#{bugManagementBean.clearBugFields()}">
                                 <p:ajax update="bugInsertDialog"/>
                                 <h:form id="bugForm" enctype="multipart/form-data">
@@ -160,7 +149,8 @@
                                     </p:selectOneMenu><br></br><br></br>
 
                                     <h:outputText styleClass="myFont" value="Target Date" style="display:block;"/>
-                                    <p:calendar id="button" value="#{bugManagementBean.selectedDate}" mode="inline" mindate="#{bugManagementBean.present}"/>
+                                    <p:calendar id="button" value="#{bugManagementBean.selectedDate}" mode="inline"
+                                                mindate="#{bugManagementBean.present}"/>
                                     <br/><br/>
 
                                     <h:outputText styleClass="myFont" value="Description" style="display:block;"/>
@@ -326,8 +316,8 @@
             </div>
         </p:sidebar>
         <script type="text/javascript">
-            if ( window.history.replaceState ) {
-                window.history.replaceState( null, null, window.location.href );
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
             }
         </script>
     </h:body>
