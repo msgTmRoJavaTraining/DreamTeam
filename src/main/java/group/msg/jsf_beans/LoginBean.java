@@ -2,6 +2,7 @@ package group.msg.jsf_beans;
 
 
 import group.msg.entities.User;
+import group.msg.entities.UserRole;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Data;
 import org.primefaces.PrimeFaces;
@@ -16,6 +17,8 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @Named
@@ -25,6 +28,16 @@ public class LoginBean implements Serializable {
     private String password;
     private int remainingTries = 5;
     private String lastTried;
+    private User loggedUser;
+
+    private boolean permisionManagement=false;
+    private boolean userManagement=false;
+    private boolean bugManagement=false;
+    private boolean bugClose=false;
+    private boolean bugExportPDF=false;
+    private boolean userAdresant=false;
+
+
     @Inject
     private DatabaseEJB databaseEJB;
 
@@ -47,7 +60,32 @@ public class LoginBean implements Serializable {
 
                     remainingTries = 5;
 
-                    return NavigationBean.navigateTo("homePage");
+                    Map<String,Boolean> rig=databaseEJB.getUserRightsValue(username);
+                    for (Map.Entry<String,Boolean> entry : rig.entrySet()){
+                        if(entry.getKey().equals("permisionManagement")&& entry.getValue()){
+                            permisionManagement=true;
+                        }
+                        else if(entry.getKey().equals("userManagement")&& entry.getValue()){
+                            userManagement=true;
+                        }
+                        else if(entry.getKey().equals("bugManagement")&& entry.getValue()){
+                            bugManagement=true;
+                        }
+                        else if(entry.getKey().equals("bugClose")&& entry.getValue()){
+                            bugClose=true;
+                        }
+                        else if(entry.getKey().equals("bugExportPDF")&& entry.getValue()){
+                            bugExportPDF=true;
+                        }
+                        else if(entry.getKey().equals("userAdresant")&& entry.getValue()){
+                            userAdresant=true;
+                        }
+                    }
+
+
+
+
+                        return NavigationBean.navigateTo("homePage");
                 } else {
 
                     if (remainingTries == 1) {
