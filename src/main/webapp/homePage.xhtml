@@ -72,7 +72,7 @@
                         <p:dialog header="#{i18n['insertOptions']}" widgetVar="dlg1" minHeight="40" width="295"
                                   height="30"
                                   styleClass="customDialog">
-                            <p:commandButton value="#{i18n['user']}" class="button" styleClass="button"
+                            <p:commandButton value="#{i18n['user']}" class="button" styleClass="button" rendered="#{loginBean.userManagement}"
                                              onclick="PF('dlg_addUser').show(); PF('dlg1').close();"/><p:spacer></p:spacer>
                             <p:dialog id="userInsertDialog" header="#{i18n['createUser']}" widgetVar="dlg_addUser"
                                       minHeight="40"
@@ -124,7 +124,7 @@
                                     <br/><br/>
                                 </h:form>
                             </p:dialog>
-                            <p:commandButton value="#{i18n['bug']}" class="button" styleClass="button"
+                            <p:commandButton value="#{i18n['bug']}" class="button" styleClass="button" rendered="#{loginBean.bugManagement}"
                                              onclick="PF('dlg_addBug').show();PF('dlg1').close();"/>
                             <p:dialog id="bugInsertDialog" header="#{i18n['createBug']}" widgetVar="dlg_addBug"
                                       minHeight="40"
@@ -196,7 +196,7 @@
                                   height="30"
                                   styleClass="customDialog">
 
-                            <p:commandButton value="#{i18n['role']}" class="button" styleClass="button"
+                            <p:commandButton value="#{i18n['role']}" class="button" styleClass="button" rendered="#{loginBean.permisionManagement}"
                                              onclick="PF('dlg_EditRole').show();PF('dlg_edit').close();"/>
                             <p:dialog header="#{i18n['editRole']}" widgetVar="dlg_EditRole" minHeight="40" width="370"
                                       height="auto">
@@ -224,7 +224,7 @@
                                 </h:form>
                             </p:dialog>
 
-                            <p:commandButton value="#{i18n['user']}" class="button" styleClass="button"
+                            <p:commandButton value="#{i18n['user']}" class="button" styleClass="button" rendered="#{loginBean.userManagement}"
                                              onclick="PF('dlg_EditUser').show();PF('dlg_edit').close();"/>
                             <p:dialog header="#{i18n['updateUser']}" widgetVar="dlg_EditUser" minHeight="40" width="370"
                                       height="auto">

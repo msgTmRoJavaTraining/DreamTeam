@@ -62,23 +62,23 @@ public class LoginBean implements Serializable {
 
                     Map<String,Boolean> rig=databaseEJB.getUserRightsValue(username);
                     for (Map.Entry<String,Boolean> entry : rig.entrySet()){
-                        if(entry.getKey().equals("permisionManagement")&& entry.getValue()){
-                            permisionManagement=true;
+                        if(entry.getKey().equals("permisionManagement")){
+                            permisionManagement=entry.getValue();
                         }
-                        else if(entry.getKey().equals("userManagement")&& entry.getValue()){
-                            userManagement=true;
+                        else if(entry.getKey().equals("userManagement")){
+                            userManagement=entry.getValue();
                         }
-                        else if(entry.getKey().equals("bugManagement")&& entry.getValue()){
-                            bugManagement=true;
+                        else if(entry.getKey().equals("bugManagement")){
+                            bugManagement=entry.getValue();
                         }
-                        else if(entry.getKey().equals("bugClose")&& entry.getValue()){
-                            bugClose=true;
+                        else if(entry.getKey().equals("bugClose")){
+                            bugClose=entry.getValue();
                         }
-                        else if(entry.getKey().equals("bugExportPDF")&& entry.getValue()){
-                            bugExportPDF=true;
+                        else if(entry.getKey().equals("bugExportPDF")){
+                            bugExportPDF=entry.getValue();
                         }
-                        else if(entry.getKey().equals("userAdresant")&& entry.getValue()){
-                            userAdresant=true;
+                        else if(entry.getKey().equals("userAdresant")){
+                            userAdresant=entry.getValue();
                         }
                     }
 

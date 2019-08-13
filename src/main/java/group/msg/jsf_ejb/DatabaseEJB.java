@@ -161,6 +161,7 @@ public class DatabaseEJB implements Serializable {
 
         for (UserRole cRole:roles) {
             List<Rights>roleRights=cRole.getRights();
+
                 for(Rights cRight:roleRights){
                     if(cRight.getName().equals("PERMISSION-MANAGEMENT")){
                         rights.put("permisionManagement",true);
