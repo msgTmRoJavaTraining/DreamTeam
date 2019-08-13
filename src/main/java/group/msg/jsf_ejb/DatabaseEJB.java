@@ -185,4 +185,10 @@ public class DatabaseEJB implements Serializable {
             }
         return rights;
     }
+    public List<Bug> getAllBugs() {
+        List<Bug> result;
+        Query query = entityManager.createQuery("SELECT bug FROM Bug bug ");
+        result = (List<Bug>) query.getResultList();
+        return result;
+    }
 }

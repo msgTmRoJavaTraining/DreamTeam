@@ -324,3 +324,38 @@ customDialog {
     left:68%;
     display: inline-block;
 }
+.excelButton{
+    background: url("#{resource['pics/excel.png']}");
+    height: 24px;
+    width: 24px;
+    position: relative;
+    display: inline-block;
+}
+.pdfButton{
+    background: url("#{resource['pics/pdf.png']}");
+    height: 24px;
+    width: 24px;
+    position: relative;
+    display: inline-block;
+}
+.ui-datatable .ui-datatable-header {
+    text-align: right !important;
+}
+
+.ui-button-text-only .ui-button-text {
+    padding: 0.3em 0.4em;
+}
+
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+    visibility: hidden;
+}
+
+.ui-filter-column .ui-column-customfilter .custom-filter {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.year-spinner input {
+    width: 100%;
+    box-sizing: border-box;
+}
