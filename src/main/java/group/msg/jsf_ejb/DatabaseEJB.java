@@ -12,7 +12,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 public class DatabaseEJB implements Serializable {
@@ -145,5 +147,41 @@ public class DatabaseEJB implements Serializable {
         query.setParameter("rightName", rightName);
         result = (Rights) query.getSingleResult();
         return result;
+    }
+    public Map<String,Boolean> getUserRightsValue(String username){
+        Map<String,Boolean> rights=new HashMap<String,Boolean>();
+                            rights.put("permisionManagement",false);
+                            rights.put("userManagement",false);
+                            rights.put("bugManagement",false);
+                            rights.put("bugClose",false);
+                            rights.put("bugExportPDF",false);
+                            rights.put("userAdresant",false);
+        User loggedUser=getUserByUserName(username);
+            List<UserRole> roles=loggedUser.getRoles();
+
+        for (UserRole cRole:roles) {
+            List<Rights>roleRights=cRole.getRights();
+                for(Rights cRight:roleRights){
+                    if(cRight.getName().equals("PERMISSION-MANAGEMENT")){
+                        rights.put("permisionManagement",true);
+                    }
+                   else if(cRight.getName().equals("USER-MANAGEMENT")){
+                        rights.put("userManagement",true);
+                    }
+                   else if(cRight.getName().equals("BUG-MANAGEMENT")){
+                        rights.put("bugManagement",true);
+                    }
+                   else if(cRight.getName().equals("BUG-CLOSE")){
+                        rights.put("bugClose",true);
+                    }
+                   else if(cRight.getName().equals("BUG-EXPORT-PDF")){
+                        rights.put("bugExportPDF",true);
+                    }
+                   else if(cRight.getName().equals("USER-ADRESANT")){
+                        rights.put("userAdresant",true);
+                    }
+                }
+            }
+        return rights;
     }
 }
