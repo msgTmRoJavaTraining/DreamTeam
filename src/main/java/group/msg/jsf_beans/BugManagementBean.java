@@ -78,8 +78,8 @@ public class BugManagementBean implements Serializable {
             bug.setTitle(title);
             bug.setTargetDate(convertToLocalDateTimeViaSqlTimestamp(selectedDate));
 
-//            User UserAssignedToFixIt = databaseEJB.getUserByUserName(StringUserAssignedToFixIt);
-//            bug.setAssignedId(UserAssignedToFixIt);
+            User UserAssignedToFixIt = databaseEJB.getUserByUserName(StringUserAssignedToFixIt);
+            bug.setAssignedId(UserAssignedToFixIt);
 
             User createdByUser = databaseEJB.getUserByUserName(loginBean.getUsername());
             bug.setCreatedId(createdByUser);

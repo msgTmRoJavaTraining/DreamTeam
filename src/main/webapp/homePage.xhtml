@@ -37,14 +37,14 @@
 
         <div class="content" style=" background-color:lavenderblush; height: 100vh;">
             <h:form id="form1">
-                <p:dataTable id="bugsTable" var="bug" value="#{dataTableBean.bugList}" widgetVar="carsTable"
-                             selectionMode="single" rowKey="#{bug.title}"
+                <p:dataTable id="bugsTable" var="bug" value="#{dataTableBean.bugList}" widgetVar="bugTable"
+                              rowKey="#{bug.title}" ajax="true"
                              emptyMessage="No bugs found with given criteria" filteredValue="#{dataTableBean.filteredBugs}">
 
                     <f:facet name="header">
                         <p:outputPanel>
                             <h:outputText value="Search all fields:" />
-                            <p:inputText id="globalFilter" onkeyup="PF('carsTable').filter()" style="width:150px" placeholder="Enter keyword" />
+                            <p:inputText id="globalFilter" onkeyup="PF('bugTable').filter()" style="width:150px" placeholder="Enter keyword" />
 
                             <div style="float:right;padding-top: 5px;">
                                 <h:commandLink>
@@ -63,7 +63,9 @@
 
                     </f:facet>
 
-                    <p:column filterBy="#{bug.title}" headerText="Title"  filterMatchMode="contains" sortBy="#{bug.title}">
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                    <p:column sortBy="#{bug.title}" filterBy="#{bug.title}" headerText="Title"  filterMatchMode="contains" >
                         <h:outputText value="#{bug.title}" />
                     </p:column>
 
@@ -71,9 +73,9 @@
                         <h:outputText value="#{bug.description}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.version}" headerText="Version"  filterMatchMode="exact">
+                    <p:column filterBy="#{bug.version}" headerText="Version"  filterMatchMode="exact" sortBy="#{bug.version}">
                     <f:facet name="filter">
-                        <p:selectOneMenu onchange="PF('carsTable').filter()" styleClass="custom-filter">
+                        <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
                             <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
                             <f:selectItems value="#{dataTableBean.versions}" />
                         </p:selectOneMenu>
@@ -81,9 +83,9 @@
                     <h:outputText value="#{bug.version}" />
                 </p:column>
 
-                    <p:column filterBy="#{bug.targetDate.toLocalDate}" headerText="Target date" filterMatchMode="exact">
+                    <p:column filterBy="#{bug.targetDate}" headerText="Target date" filterMatchMode="contains" sortBy="#{bug.targetDate}">
                         <f:facet name="filter">
-                            <p:selectOneMenu onchange="PF('carsTable').filter()" styleClass="custom-filter">
+                            <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
                                 <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{dataTableBean.targetDates}" />
                             </p:selectOneMenu>
@@ -91,9 +93,9 @@
                         <h:outputText value="#{bug.targetDate}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.createdId.username}" headerText="Created by"  filterMatchMode="exact">
+                    <p:column filterBy="#{bug.createdId.username}" headerText="Created by"  filterMatchMode="exact" sortBy="#{bug.createdId.username}">
                         <f:facet name="filter">
-                            <p:selectOneMenu onchange="PF('carsTable').filter()" styleClass="custom-filter">
+                            <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
                                 <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{dataTableBean.createdByList}" />
                             </p:selectOneMenu>
@@ -101,9 +103,9 @@
                         <h:outputText value="#{bug.createdId.username}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.assignedId.username}" headerText="Assigned to"  filterMatchMode="exact">
+                    <p:column filterBy="#{bug.assignedId.username}" headerText="Assigned to"  filterMatchMode="exact" sortBy="#{bug.assignedId.username}">
                         <f:facet name="filter">
-                            <p:selectOneMenu onchange="PF('carsTable').filter()" styleClass="custom-filter">
+                            <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
                                 <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{dataTableBean.assignedToList}" />
                             </p:selectOneMenu>
@@ -111,25 +113,57 @@
                         <h:outputText value="#{bug.assignedId.username}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.severity}" headerText="Severity"  filterMatchMode="in">
+                    <p:column filterBy="#{bug.severity}" headerText="Severity"  filterMatchMode="in" sortBy="#{bug.severity}">
                         <f:facet name="filter">
-                            <p:selectCheckboxMenu label="Severity" onchange="PF('carsTable').filter()" scrollHeight="150" styleClass="custom-filter">
+                            <p:selectCheckboxMenu label="Severity" onchange="PF('bugTable').filter()" scrollHeight="150" styleClass="custom-filter">
                                 <f:selectItems value="#{constantsBean.severities}" />
                             </p:selectCheckboxMenu>
                         </f:facet>
                         <h:outputText value="#{bug.severity}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.status}" headerText="Status"  filterMatchMode="in">
+                    <p:column filterBy="#{bug.status}" headerText="Status"  filterMatchMode="in" sortBy="#{bug.status}">
                         <f:facet name="filter">
-                            <p:selectCheckboxMenu label="Status" onchange="PF('carsTable').filter()" scrollHeight="150" styleClass="custom-filter">
+                            <p:selectCheckboxMenu label="Status" onchange="PF('bugTable').filter()" scrollHeight="150" styleClass="custom-filter">
                                 <f:selectItems value="#{constantsBean.states}" />
                             </p:selectCheckboxMenu>
                         </f:facet>
                         <h:outputText value="#{bug.status}" />
                     </p:column>
 
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton update=":form1:bugDetail" oncomplete="PF('bugDialog').show()" icon="fa fa-search" title="View">
+                            <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
+                        </p:commandButton>
+                    </p:column>
+
                 </p:dataTable>
+
+                <p:dialog header="Bug Info" widgetVar="bugDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="bugDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty dataTableBean.selectedBug}" >
+                            <f:facet name="header">
+                                <h3>Title</h3>
+                                <p:inputText value="#{dataTableBean.selectedBug.title}"/>
+                            </f:facet>
+
+                            <h:outputText value="Description" />
+                            <h:inputTextarea value="#{dataTableBean.selectedBug.description}" />
+
+                            <h:outputText value="Version" />
+                            <h:inputText value="#{dataTableBean.selectedBug.version}" />
+
+                            <h:outputText value="Severity" />
+                            <p:selectCheckboxMenu label="Severity" scrollHeight="150" styleClass="custom-filter">
+                                <f:selectItem value="#{dataTableBean.selectedBug.severity}"/>
+                                <f:selectItems value="#{constantsBean.severities}"/>
+                            </p:selectCheckboxMenu>
+
+<!--                            <h:outputText value="Price" />-->
+<!--                            <h:outputText value="$#{dtSelectionView.selectedCar.price}" />-->
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
             </h:form>
         </div>
 
