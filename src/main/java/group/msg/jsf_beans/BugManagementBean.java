@@ -33,7 +33,7 @@ public class BugManagementBean implements Serializable {
     private String severity;
     private String status="NEW";
     private byte[] attachment;
-    private String StringUserAssignedToFixIt;
+    private String stringUserAssignedToFixIt;
 
     @Inject
     DatabaseEJB databaseEJB;
@@ -60,8 +60,9 @@ public class BugManagementBean implements Serializable {
         version = "";
         fixedInVersion = "";
         severity = "";
-        StringUserAssignedToFixIt = "";
+        stringUserAssignedToFixIt = "";
     }
+    
 
     public void createBug() throws IOException {
 
@@ -74,12 +75,14 @@ public class BugManagementBean implements Serializable {
             bug.setSeverity(severity);
             bug.setStatus(status);
             bug.setVersion(version);
-            bug.setFixedInVersion(fixedInVersion);
+        //    bug.setFixedInVersion(fixedInVersion);
             bug.setTitle(title);
             bug.setTargetDate(convertToLocalDateTimeViaSqlTimestamp(selectedDate));
 
-            User UserAssignedToFixIt = databaseEJB.getUserByUserName(StringUserAssignedToFixIt);
-            bug.setAssignedId(UserAssignedToFixIt);
+            if(!(stringUserAssignedToFixIt==null)) {
+                User UserAssignedToFixIt = databaseEJB.getUserByUserName(stringUserAssignedToFixIt);
+                bug.setAssignedId(UserAssignedToFixIt);
+            }
 
             User createdByUser = databaseEJB.getUserByUserName(loginBean.getUsername());
             bug.setCreatedId(createdByUser);
