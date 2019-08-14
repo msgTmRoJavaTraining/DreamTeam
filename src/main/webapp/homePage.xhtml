@@ -39,7 +39,7 @@
             <h:form id="form1">
                 <p:dataTable id="bugsTable" var="bug" value="#{dataTableBean.bugList}" widgetVar="bugTable"
                               rowKey="#{bug.title}" ajax="true"
-                             emptyMessage="No bugs found with given criteria" filteredValue="#{dataTableBean.filteredBugs}">
+                             emptyMessage="No bugs found with given criteria" >
 
                     <f:facet name="header">
                         <p:outputPanel>
@@ -132,14 +132,14 @@
                     </p:column>
 
                     <p:column style="width:32px;text-align: center">
-                        <p:commandButton update=":form1:bugDetail" oncomplete="PF('bugDialog').show()" icon="fa fa-search" title="View">
+                        <p:commandButton update=":form1:dlgBug" oncomplete="PF('bugDialog').show()" icon="fa fa-search" title="View">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
                         </p:commandButton>
                     </p:column>
 
                 </p:dataTable>
 
-                <p:dialog header="Bug Info" widgetVar="bugDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:dialog header="Bug Info" widgetVar="bugDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" id="dlgBug">
                     <p:outputPanel id="bugDetail" style="text-align:center;">
                         <p:panelGrid  columns="2" rendered="#{not empty dataTableBean.selectedBug}" >
                             <f:facet name="header">
@@ -154,14 +154,32 @@
                             <h:inputText value="#{dataTableBean.selectedBug.version}" />
 
                             <h:outputText value="Severity" />
-                            <p:selectCheckboxMenu label="Severity" scrollHeight="150" styleClass="custom-filter">
-                                <f:selectItem value="#{dataTableBean.selectedBug.severity}"/>
-                                <f:selectItems value="#{constantsBean.severities}"/>
-                            </p:selectCheckboxMenu>
+                            <h:selectOneMenu id="sev"  style="width:150px" ajax="true">
+                                <p:ajax update="sev"/>
+                                <f:selectItem  itemValue="#{dataTableBean.selectedBug.severity}" />
+                                <f:selectItems value="#{constantsBean.severities}" />
+                            </h:selectOneMenu>
 
-<!--                            <h:outputText value="Price" />-->
-<!--                            <h:outputText value="$#{dtSelectionView.selectedCar.price}" />-->
+                            <h:outputText value="Status" />
+                            <h:selectOneMenu id="status"  style="width:150px" ajax="true">
+                                <f:selectItem  itemValue="#{dataTableBean.selectedBug.status}" />
+                                <f:selectItems value="#{constantsBean.states}" />
+                            </h:selectOneMenu>
+
+                            <h:outputText value="Assigned  to" />
+                            <h:selectOneMenu id="user" style="width:150px">
+                                <f:selectItem  itemValue="#{dataTableBean.selectedBug.assignedId.username}" />
+                                <f:selectItems value="#{userManagementBean.activeUserNamesList()}" />
+                            </h:selectOneMenu>
+                            <h:outputText value="Attachment" />
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Delete"/>
+                                <p:commandButton value="Add" />
+                            </h:panelGrid>
+
                         </p:panelGrid>
+                        <br></br><br/>
+                        <p:commandButton value="Save"></p:commandButton>
                     </p:outputPanel>
                 </p:dialog>
             </h:form>
