@@ -43,6 +43,10 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "createdId")
     private List<Bug> createdBugs;
 
+    public String loggedInUserInfo()
+    {
+        return personalInformations.toString();
+    }
 
 
 }

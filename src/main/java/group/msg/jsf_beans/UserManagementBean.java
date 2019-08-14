@@ -1,6 +1,7 @@
 package group.msg.jsf_beans;
 
 import com.sun.jdo.spi.persistence.support.sqlstore.sco.ArrayList;
+import group.msg.entities.Notification;
 import group.msg.entities.PersonalInfo;
 import group.msg.entities.User;
 import group.msg.entities.UserRole;
@@ -16,6 +17,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -30,7 +32,7 @@ public class UserManagementBean implements Serializable {
     private String password;
     private String confirmPassword;
     private String hashedPass;
-
+    private LocalDateTime now=LocalDateTime.now();
     private String firstName;
     private String lastName;
     private String mobile;
@@ -99,6 +101,13 @@ public class UserManagementBean implements Serializable {
 
                 dataBaseEJB.createUser(newUser);
 
+                Notification notification=new Notification();
+                notification.setUserId(newUser);
+                notification.setDate(now);
+                notification.setMessage("Bun venit, "+newUser.loggedInUserInfo());
+                notification.setName(newUser.getUsername());
+
+                dataBaseEJB.createNotification(notification);
             }
         }
         clearUserFields();

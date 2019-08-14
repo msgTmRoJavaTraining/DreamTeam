@@ -157,4 +157,9 @@ public class LoginBean implements Serializable {
         return hashtext;
     }
 
+    public User currentLoggedInUser()
+    {
+        return this.loggedUser;
+    }
+
 }
