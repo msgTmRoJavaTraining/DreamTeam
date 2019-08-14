@@ -25,8 +25,14 @@ import java.util.List;
 @Named
 @ViewScoped
 public class UserManagementBean implements Serializable {
-    User userToUpdate;
-    PersonalInfo newPersonalInfo;
+
+
+    @Inject
+    LoginBean loginBean;
+
+
+    private User userToUpdate;
+    private PersonalInfo newPersonalInfo;
 
     private String username;
     private String password;
@@ -40,12 +46,10 @@ public class UserManagementBean implements Serializable {
     private boolean active;
     private List<String> userRoleList;
 
-
     private List<String> testUsers;
 
     @Inject
     DatabaseEJB dataBaseEJB;
-
 
     @PostConstruct
     public void init() {
@@ -105,7 +109,7 @@ public class UserManagementBean implements Serializable {
                 notification.setUserId(newUser);
                 notification.setDate(now);
                 notification.setMessage("Bun venit, "+newUser.loggedInUserInfo());
-                notification.setName(newUser.getUsername());
+                notification.setName("WELCOME_NEW_USER");
 
                 dataBaseEJB.createNotification(notification);
             }
@@ -167,6 +171,8 @@ public class UserManagementBean implements Serializable {
 
     public void userUpdate() {
         if (this.password.equals(this.confirmPassword) && isEmailValid(email) && isValidPhoneNumber(mobile)) {
+
+            String newInfoNotificationMessage=this.firstName+" "+this.lastName+" "+this.email+" "+this.mobile;
             newPersonalInfo.setFirstName(this.firstName);
             newPersonalInfo.setLastName(this.lastName);
             newPersonalInfo.setMobile(this.mobile);
@@ -180,8 +186,27 @@ public class UserManagementBean implements Serializable {
                 userToUpdate.setPassword(LoginBean.getMd5(this.password));
             }
 
+
+            User oldInfos = dataBaseEJB.getUserByUserName(username);
+
+            Notification notification=new Notification();
+            notification.setDate(now);
+            notification.setMessage("New infos: "+newInfoNotificationMessage+" Old value: "+
+                    oldInfos.getPersonalInformations().toString());
+
+            notification.setName("USER_UPDATED");
+            notification.setUserId(userToUpdate);
+            notification.setCreatedBy(dataBaseEJB.getUserByUserName(loginBean.getUsername()));
+
             userToUpdate.setRoles(dataBaseEJB.getRolesByName(userRoleList));
             dataBaseEJB.updateUser(userToUpdate);
+
+
+
+            dataBaseEJB.createNotification(notification);
+
+
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User updated successfully"));
         } else {
             if (invalidCredentials())
