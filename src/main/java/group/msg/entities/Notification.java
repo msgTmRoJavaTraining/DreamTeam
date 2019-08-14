@@ -33,6 +33,9 @@ public class Notification {
     private User userId;
 
     @ManyToOne
+    private User createdBy;
+
+    @ManyToOne
     private Bug bugId;
 
 }

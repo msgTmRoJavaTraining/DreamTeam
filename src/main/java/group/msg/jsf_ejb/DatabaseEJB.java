@@ -1,9 +1,6 @@
 package group.msg.jsf_ejb;
 
-import group.msg.entities.Bug;
-import group.msg.entities.Rights;
-import group.msg.entities.User;
-import group.msg.entities.UserRole;
+import group.msg.entities.*;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -101,6 +98,11 @@ public class DatabaseEJB implements Serializable {
 
     public void createBug(Bug newBug) {
         entityManager.persist(newBug);
+    }
+
+    public void createNotification(Notification newNotification)
+    {
+        entityManager.persist(newNotification);
     }
 
     public List<String> getRoles() {

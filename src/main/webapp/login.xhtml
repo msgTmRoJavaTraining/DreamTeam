@@ -14,7 +14,7 @@
         <p:growl id="growl" sticky="false" showDetail="true" life="5000"/>
         <div class="login">
 
-            <h1>Log into JBugger</h1>
+            <h1><span>Log into JBugger
             <h:form>
                 <p:inputText styleClass="inputData" value="#{loginBean.username}" name="username"
                              style="margin-bottom: 10px; outline: medium none;padding: 10px;font-weight: normal;"/>
@@ -29,6 +29,10 @@
                                  style="padding: 11px; text-anchor: middle"
                 />
             </h:form>
+
+                <div class="butonBug"><h:graphicImage value = "resources/images/bug.png"/> </div>
+
+            </span></h1>
         </div>
     </h:body>
 </f:view>

@@ -291,7 +291,7 @@ customDialog {
     width: 24px;
     position: relative;
     top: 7px;
-    left:75%;
+    left:73%;
     display: inline-block;
 }
 
@@ -299,7 +299,7 @@ customDialog {
     height: 24px;
     width: 40px;
     position: relative;
-    left: 76%;
+    left: 74%;
     display: inline;
 }
 

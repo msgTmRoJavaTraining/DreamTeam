@@ -24,4 +24,9 @@ public class PersonalInfo {
     private String lastName;
     private String mobile;
     private String email;
+
+    public String toString()
+    {
+        return firstName+" "+lastName+" "+mobile+" "+email;
+    }
 }
