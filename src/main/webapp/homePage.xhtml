@@ -36,13 +36,13 @@
         </h:form>
 
         <div class="content" style=" background-color:lavenderblush; height: 100vh;">
-            <h:form id="form1">
+            <h:form id="form1" style="width:auto;position: absolute">
                 <p:dataTable id="bugsTable" var="bug" value="#{dataTableBean.bugList}" widgetVar="bugTable"
                               rowKey="#{bug.title}" ajax="true"
-                             emptyMessage="No bugs found with given criteria" >
+                             emptyMessage="No bugs found with given criteria" style="width: auto" >
 
                     <f:facet name="header">
-                        <p:outputPanel>
+                        <p:outputPanel style="text-align: center;">
                             <h:outputText value="Search all fields:" />
                             <p:inputText id="globalFilter" onkeyup="PF('bugTable').filter()" style="width:150px" placeholder="Enter keyword" />
 
@@ -83,14 +83,14 @@
                     <h:outputText value="#{bug.version}" />
                 </p:column>
 
-                    <p:column filterBy="#{bug.targetDate}" headerText="Target date" filterMatchMode="contains" sortBy="#{bug.targetDate}">
+                    <p:column filterBy="#{bug.targetDate.toLocalDate()}" headerText="Target date" filterMatchMode="contains" sortBy="#{bug.targetDate.toLocalDate()}">
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
                                 <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{dataTableBean.targetDates}" />
                             </p:selectOneMenu>
                         </f:facet>
-                        <h:outputText value="#{bug.targetDate}" />
+                        <h:outputText value="#{bug.targetDate.toLocalDate()}" />
                     </p:column>
 
                     <p:column filterBy="#{bug.createdId.username}" headerText="Created by"  filterMatchMode="exact" sortBy="#{bug.createdId.username}">
@@ -130,12 +130,17 @@
                         </f:facet>
                         <h:outputText value="#{bug.status}" />
                     </p:column>
-
-                    <p:column style="width:32px;text-align: center">
-                        <p:commandButton update=":form1:dlgBug" oncomplete="PF('bugDialog').show()" icon="fa fa-search" title="View">
+                    <p:column  headerText="Download attachment" style="width: 8%;;text-align: center">
+                        <p:commandButton update=":form1:dlgBug"  icon="fa fa-download" title="View">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
                         </p:commandButton>
                     </p:column>
+                    <p:column headerText="Edit" style="width: 8%;;text-align: center">
+                        <p:commandButton update=":form1:dlgBug" oncomplete="PF('bugDialog').show()" icon="fa fa-edit" title="View">
+                            <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
+                        </p:commandButton>
+                    </p:column>
+
 
                 </p:dataTable>
 
