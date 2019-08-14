@@ -29,6 +29,10 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     DatabaseEJB databaseEJB;
     private List<Bug> bugList= new ArrayList<>();
 
+    private String asignedTo;
+    private String status;
+    private String severity;
+
     private List<LocalDate>targetDates= new ArrayList<>();
     private List<String>versions= new ArrayList<>();
     private List<String>createdByList= new ArrayList<>();
@@ -48,6 +52,22 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         getAllAssignedTo();
 //        filteredBugs.add(bugList.get(0));
     }
+
+    public void updateFields(){
+        this.severity=selectedBug.getSeverity();
+        this.status=selectedBug.getStatus();
+    }
+    public void updateBug(){
+        selectedBug.setSeverity(severity);
+        selectedBug.setStatus(status);
+        selectedBug.setAssignedId(databaseEJB.getUserByUserName(asignedTo));
+
+
+
+        databaseEJB.updateBug(selectedBug);
+
+    }
+
 
     private void getAllDates(){
         LocalDateTime targetDate;
