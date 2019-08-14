@@ -128,7 +128,7 @@ public class UserManagementBean implements Serializable {
     }
 
     public static boolean isEmailValid(String email) {
-        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@msggroup.com";
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@msggroup\\.com";
         return email.matches(regex);
     }
 
