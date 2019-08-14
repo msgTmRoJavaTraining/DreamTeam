@@ -1,18 +1,24 @@
 package group.msg.jsf_beans;
 
+import com.sun.enterprise.util.io.FileUtils;
 import group.msg.entities.Bug;
 import group.msg.entities.User;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -84,17 +90,14 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             }
         }
     }
-    public boolean filterByPrice(Object value, Object filter, Locale locale) {
-        String filterText = (filter == null) ? null : filter.toString().trim();
-        if(filterText == null||filterText.equals("")) {
-            return true;
-        }
 
-        if(value == null) {
-            return false;
-        }
-
-        return ((Comparable) value).compareTo(Integer.valueOf(filterText)) > 0;
+    public DefaultStreamedContent downloadAttachment()
+    {
+        //testez pe toate formatele si returnez doar cel bun
+        //very helpful https://www.programcreek.com/java-api-examples/?api=org.primefaces.model.DefaultStreamedContent
+        InputStream stream = new ByteArrayInputStream(selectedBug.getAttachment());
+        DefaultStreamedContent file = new DefaultStreamedContent(stream, "application/pdf", "downloaded_boromir.pdf");
+        return file;
     }
 
     @Override

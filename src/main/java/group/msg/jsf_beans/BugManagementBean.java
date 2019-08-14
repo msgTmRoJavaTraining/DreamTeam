@@ -31,9 +31,10 @@ public class BugManagementBean implements Serializable {
     private Date selectedDate = new Date();
     private LocalDateTime targetDate;
     private String severity;
-    private String status="NEW";
+    private String status = "NEW";
     private byte[] attachment;
     private String StringUserAssignedToFixIt;
+    private String mimeType;
 
     @Inject
     DatabaseEJB databaseEJB;
@@ -44,13 +45,12 @@ public class BugManagementBean implements Serializable {
     @Inject
     LoginBean loginBean;
 
-    public String getPresent()
-    {
-        LocalDateTime present=LocalDateTime.now();
-        int day=present.getDayOfMonth();
-        int month=present.getMonthValue();
-        int year=present.getYear()-2000;
-        return month+"/"+day+"/"+year;
+    public String getPresent() {
+        LocalDateTime present = LocalDateTime.now();
+        int day = present.getDayOfMonth();
+        int month = present.getMonthValue();
+        int year = present.getYear() - 2000;
+        return month + "/" + day + "/" + year;
     }
 
     public void clearBugFields() {
@@ -85,6 +85,21 @@ public class BugManagementBean implements Serializable {
             bug.setCreatedId(createdByUser);
 
             if (fileUploadView.getFile() != null) {
+                //image,pdf,doc, odf, xlsx, xls;
+                if (fileUploadView.getFile().getFileName().endsWith("png")) {
+                    mimeType = "image/png";
+                } else if (fileUploadView.getFile().getFileName().endsWith("jpg") || fileUploadView.getFile().getFileName().endsWith("jpeg")) {
+                    mimeType = "image/jpeg";
+                } else if (fileUploadView.getFile().getFileName().endsWith("pdf")) {
+                    mimeType = "application/pdf";
+                } else if (fileUploadView.getFile().getFileName().endsWith("doc")) {
+                    mimeType = "application/msword";
+                } else if (fileUploadView.getFile().getFileName().endsWith("odf")) {
+                    mimeType = "application/vnd.oasis.opendocument.formula";
+                } else if (fileUploadView.getFile().getFileName().endsWith("xls")|| fileUploadView.getFile().getFileName().endsWith("xlsx")) {
+                    mimeType = "application/excel";
+                }
+
                 InputStream fileInputStream = fileUploadView.getFile().getInputstream();
                 attachment = IOUtils.toByteArray(fileInputStream);
             }
