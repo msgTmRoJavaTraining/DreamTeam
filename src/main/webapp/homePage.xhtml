@@ -136,16 +136,16 @@
                         </p:commandButton>
                     </p:column>
                     <p:column headerText="Edit" style="width: 8%;;text-align: center">
-                        <p:commandButton update=":form1:bugDetail" oncomplete="PF('bugDialog').show()" icon="fa fa-edit" title="View">
-                            <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
+                        <p:commandButton action="#{dataTableBean.updateFields}" update=":form1:bugDetail" oncomplete="PF('bugDialog').show()"  icon="fa fa-edit" title="View">
+                            <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}"/>
                         </p:commandButton>
                     </p:column>
 
 
                 </p:dataTable>
 
-                <p:dialog header="Bug edit" widgetVar="bugDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" id="dlgBug">
-                    <p:outputPanel id="bugDetail" style="text-align:center;">
+                <p:dialog  header="Bug edit" widgetVar="bugDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" id="dlgBug">
+                    <p:outputPanel  id="bugDetail" style="text-align:center;">
                         <p:panelGrid  columns="2" rendered="#{not empty dataTableBean.selectedBug}" >
                             <f:facet name="header">
                                 <h3>Title</h3>
@@ -159,18 +159,18 @@
                             <h:inputText value="#{dataTableBean.selectedBug.version}" />
 
                             <h:outputText value="Severity" />
-                            <h:selectOneMenu id="sev"  style="width:150px" ajax="true">
+                            <h:selectOneMenu id="sev" value="#{dataTableBean.severity}" style="width:150px" ajax="true">
                                 <p:ajax update="sev"/>
                                 <f:selectItems value="#{constantsBean.severities}"  />
                             </h:selectOneMenu>
 
                             <h:outputText value="Status" />
-                            <h:selectOneMenu id="status"  style="width:150px" ajax="true">
-                                <f:selectItems value="#{constantsBean.states}" itemValue="#{dataTableBean.selectedBug.severity}"/>
+                            <h:selectOneMenu id="status" value="#{dataTableBean.status}" style="width:150px" ajax="true">
+                                <f:selectItems value="#{constantsBean.states}"/>
                             </h:selectOneMenu>
 
                             <h:outputText value="Assigned  to" />
-                            <h:selectOneMenu id="user" style="width:150px">
+                            <h:selectOneMenu id="user" value="#{dataTableBean.asignedTo}" style="width:150px">
                                 <f:selectItem  itemValue="#{dataTableBean.selectedBug.assignedId.username}" />
                                 <f:selectItems value="#{userManagementBean.activeUserNamesList()}" />
                             </h:selectOneMenu>
@@ -181,7 +181,7 @@
                             </h:panelGrid>
                         </p:panelGrid>
                         <br/>
-                        <p:commandButton value="Save"/>
+                        <p:commandButton value="Save" update=":form1:bugsTable" onclick="PF('dlgBug').close();" action="#{dataTableBean.updateBug}"/>
                     </p:outputPanel>
                 </p:dialog>
             </h:form>

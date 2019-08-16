@@ -193,4 +193,7 @@ public class DatabaseEJB implements Serializable {
         result = (List<Bug>) query.getResultList();
         return result;
     }
+    public void updateBug(Bug toUpdate){
+        entityManager.merge(toUpdate);
+    }
 }
