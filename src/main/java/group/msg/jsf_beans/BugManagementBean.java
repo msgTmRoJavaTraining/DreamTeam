@@ -31,7 +31,7 @@ public class BugManagementBean implements Serializable {
     private Date selectedDate = new Date();
     private LocalDateTime targetDate;
     private String severity;
-    private String status="NEW";
+    private String status = "NEW";
     private byte[] attachment;
     private String stringUserAssignedToFixIt;
 
@@ -44,13 +44,12 @@ public class BugManagementBean implements Serializable {
     @Inject
     LoginBean loginBean;
 
-    public String getPresent()
-    {
-        LocalDateTime present=LocalDateTime.now();
-        int day=present.getDayOfMonth();
-        int month=present.getMonthValue();
-        int year=present.getYear()-2000;
-        return month+"/"+day+"/"+year;
+    public String getPresent() {
+        LocalDateTime present = LocalDateTime.now();
+        int day = present.getDayOfMonth();
+        int month = present.getMonthValue();
+        int year = present.getYear() - 2000;
+        return month + "/" + day + "/" + year;
     }
 
     public void clearBugFields() {
@@ -62,11 +61,11 @@ public class BugManagementBean implements Serializable {
         severity = "";
         stringUserAssignedToFixIt = "";
     }
-    
+
 
     public void createBug() throws IOException {
 
-        if (invalidCredentials())
+        if (invalidCredentials(description, version))
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Bug not added"));
 
         if (isDescriptionValid(description) && isValidVersion(version)) {
@@ -75,11 +74,10 @@ public class BugManagementBean implements Serializable {
             bug.setSeverity(severity);
             bug.setStatus(status);
             bug.setVersion(version);
-        //    bug.setFixedInVersion(fixedInVersion);
             bug.setTitle(title);
             bug.setTargetDate(convertToLocalDateTimeViaSqlTimestamp(selectedDate));
 
-            if(!(stringUserAssignedToFixIt==null)) {
+            if (!(stringUserAssignedToFixIt == null)) {
                 User UserAssignedToFixIt = databaseEJB.getUserByUserName(stringUserAssignedToFixIt);
                 bug.setAssignedId(UserAssignedToFixIt);
             }
@@ -105,7 +103,7 @@ public class BugManagementBean implements Serializable {
                 dateToConvert.getTime()).toLocalDateTime();
     }
 
-    public static boolean isValidVersion(String version) {
+    public boolean isValidVersion(String version) {
         String regex = "^[a-zA-Z0-9.]*$";
         return version.matches(regex);
     }
@@ -114,7 +112,7 @@ public class BugManagementBean implements Serializable {
         return description.length() >= 10;
     }
 
-    public boolean invalidCredentials() {
+    public boolean invalidCredentials(String description, String version) {
         boolean ok = false;
         if (!isDescriptionValid(description)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Description must have", "at least 10 characters"));

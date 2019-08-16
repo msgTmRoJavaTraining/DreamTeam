@@ -1,15 +1,15 @@
 package group.msg.jsf_beans;
 
 import group.msg.entities.Bug;
-import group.msg.entities.User;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,21 +27,26 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
     @Inject
     DatabaseEJB databaseEJB;
-    private List<Bug> bugList= new ArrayList<>();
+    private List<Bug> bugList = new ArrayList<>();
+
+    @Inject
+    BugManagementBean bugManagementBean;
 
     private String asignedTo;
     private String status;
     private String severity;
+    private String version;
+    private String description;
 
-    private List<LocalDate>targetDates= new ArrayList<>();
-    private List<String>versions= new ArrayList<>();
-    private List<String>createdByList= new ArrayList<>();
-    private List<String>assignedToList= new ArrayList<>();
+    private List<LocalDate> targetDates = new ArrayList<>();
+    private List<String> versions = new ArrayList<>();
+    private List<String> createdByList = new ArrayList<>();
+    private List<String> assignedToList = new ArrayList<>();
 
     private Bug selectedBug;
 
 
-    private List<Bug> filteredBugs= new ArrayList<>();
+    private List<Bug> filteredBugs = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -53,64 +58,77 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 //        filteredBugs.add(bugList.get(0));
     }
 
-    public void updateFields(){
-        this.severity=selectedBug.getSeverity();
-        this.status=selectedBug.getStatus();
-    }
-    public void updateBug(){
-        selectedBug.setSeverity(severity);
-        selectedBug.setStatus(status);
-        selectedBug.setAssignedId(databaseEJB.getUserByUserName(asignedTo));
-
-
-
-        databaseEJB.updateBug(selectedBug);
-
+    public void updateFields() {
+        this.severity = selectedBug.getSeverity();
+        this.status = selectedBug.getStatus();
+        this.version = selectedBug.getVersion();
+        this.description=selectedBug.getDescription();
     }
 
+    public void updateBug() {
 
-    private void getAllDates(){
+
+        if(bugManagementBean.invalidCredentials(description,version))
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Bug not updated"));
+
+        if(bugManagementBean.isDescriptionValid(description) && bugManagementBean.isValidVersion(version)) {
+            selectedBug.setDescription(description);
+            selectedBug.setVersion(version);
+            selectedBug.setSeverity(severity);
+            selectedBug.setStatus(status);
+            selectedBug.setAssignedId(databaseEJB.getUserByUserName(asignedTo));
+
+            databaseEJB.updateBug(selectedBug);
+        }
+    }
+
+
+    private void getAllDates() {
         LocalDateTime targetDate;
-        for(Bug bug: bugList){
-            targetDate= bug.getTargetDate();
+        for (Bug bug : bugList) {
+            targetDate = bug.getTargetDate();
             targetDates.add(targetDate.toLocalDate());
         }
     }
-    private void getAllVersions(){
+
+    private void getAllVersions() {
         String crtVersion;
-        for(Bug bug: bugList){
-            crtVersion= bug.getVersion();
+        for (Bug bug : bugList) {
+            crtVersion = bug.getVersion();
             versions.add(crtVersion);
         }
     }
-    private void getAllCreatedBy(){
+
+    private void getAllCreatedBy() {
         String crtUsername;
-        for(Bug bug: bugList){
-            crtUsername= bug.getCreatedId().getUsername();
-            if(!createdByList.contains(crtUsername)){
+        for (Bug bug : bugList) {
+            crtUsername = bug.getCreatedId().getUsername();
+            if (!createdByList.contains(crtUsername)) {
                 createdByList.add(crtUsername);
             }
         }
     }
-    private void getAllAssignedTo(){
+
+    private void getAllAssignedTo() {
         String crtUsername;
-        for(Bug bug: bugList){
-            if(bug.getAssignedId()!=null){
-                crtUsername= bug.getAssignedId().getUsername();
-                    if(!assignedToList.contains(crtUsername)){
-                        assignedToList.add(crtUsername);
-                    }
+        for (Bug bug : bugList) {
+            if (bug.getAssignedId() != null) {
+                crtUsername = bug.getAssignedId().getUsername();
+                if (!assignedToList.contains(crtUsername)) {
+                    assignedToList.add(crtUsername);
+                }
 
             }
         }
     }
+
     public boolean filterByPrice(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim();
-        if(filterText == null||filterText.equals("")) {
+        if (filterText == null || filterText.equals("")) {
             return true;
         }
 
-        if(value == null) {
+        if (value == null) {
             return false;
         }
 
@@ -120,7 +138,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     @Override
     public Bug getRowData(String rowKey) {
         String name = rowKey;
-        return bugList.stream().filter(a -> a.getTitle().equals( name)).collect(Collectors.toList()).get(0);
+        return bugList.stream().filter(a -> a.getTitle().equals(name)).collect(Collectors.toList()).get(0);
     }
 
     @Override
@@ -129,39 +147,38 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     }
 
     @Override
-    public List<Bug> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,Object> filters) {
+    public List<Bug> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         //filter
-        for(Bug bug : bugList) {
+        for (Bug bug : bugList) {
             boolean match = true;
 
             if (filters != null) {
-                for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
+                for (Iterator<String> it = filters.keySet().iterator(); it.hasNext(); ) {
                     try {
                         String filterProperty = it.next();
                         Object filterValue = filters.get(filterProperty);
                         String fieldValue = String.valueOf(bug.getClass().getField(filterProperty).get(bug));
 
-                        if(filterValue == null || fieldValue.startsWith(filterValue.toString())) {
+                        if (filterValue == null || fieldValue.startsWith(filterValue.toString())) {
                             match = true;
-                        }
-                        else {
+                        } else {
                             match = false;
                             break;
                         }
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         match = false;
                     }
                 }
             }
 
-            if(match) {
+            if (match) {
                 filteredBugs.add(bug);
             }
         }
 
         //sort
-        if(sortField != null) {
-            Collections.sort(filteredBugs,new DataTableBean.BugSorter(sortField, sortOrder));
+        if (sortField != null) {
+            Collections.sort(filteredBugs, new DataTableBean.BugSorter(sortField, sortOrder));
         }
 
         //rowCount
@@ -169,15 +186,13 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         this.setRowCount(dataSize);
 
         //paginate
-        if(dataSize > pageSize) {
+        if (dataSize > pageSize) {
             try {
                 return filteredBugs.subList(first, first + pageSize);
-            }
-            catch(IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 return filteredBugs.subList(first, first + (dataSize % pageSize));
             }
-        }
-        else {
+        } else {
             return filteredBugs;
         }
     }
@@ -206,8 +221,4 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             }
         }
     }
-//    public void rowSelected(SelectEvent event) {
-//        outputMessage = selectedMovie.getName();
-//    }
-
 }
