@@ -3,6 +3,7 @@ package group.msg.jsf_beans;
 import com.sun.enterprise.util.io.FileUtils;
 import group.msg.entities.Bug;
 import group.msg.entities.User;
+import group.msg.entities.Notification;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,12 +43,13 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     @Inject
     LoginBean loginBean;
 
-    private List<Bug> bugList= new ArrayList<>();
+    private List<Bug> bugList = new ArrayList<>();
+    private static final String NEW_LINE= "\n";//System.getProperty("line.separator");
 
     @Inject
     BugManagementBean bugManagementBean;
 
-    private String asignedTo;
+
     private String assignedTo;
     private String status;
     private String severity;
@@ -61,7 +63,10 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
     private Bug selectedBug;
 
+    private LocalDateTime now=LocalDateTime.now();
+
     private List<Bug> filteredBugs = new ArrayList<>();
+    private String oldStatus;
 
     @PostConstruct
     public void init() {
@@ -70,7 +75,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         getAllVersions();
         getAllCreatedBy();
         getAllAssignedTo();
-//        filteredBugs.add(bugList.get(0));
     }
     public List<String> possibleStates(){
         //ConstantsBean.STATE  {"NEW", "REJECTED", "IN PROGRESS", "FIXED", "INFO NEEDED", "CLOSED"};
@@ -102,6 +106,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         this.status=selectedBug.getStatus();
         this.version = selectedBug.getVersion();
         this.description=selectedBug.getDescription();
+        oldStatus=selectedBug.getStatus();
         if(!(selectedBug.getAssignedId()==null)){
             this.assignedTo=selectedBug.getAssignedId().getUsername();
         }else{
@@ -125,6 +130,36 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             }
 
             databaseEJB.updateBug(selectedBug);
+
+
+            if(status.equals("CLOSED")) {
+                StringBuilder sb=new StringBuilder();
+                sb.append(" Title: "+selectedBug.getTitle()).append(NEW_LINE)
+                        .append("Description: "+selectedBug.getDescription()).append(NEW_LINE)
+                        .append("Version: "+selectedBug.getVersion()).append(NEW_LINE)
+                        .append("Target date:"+selectedBug.getTargetDate()).append(NEW_LINE)
+                        .append("Bug created by: "+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
+                        .append("Assigned to: "+selectedBug.getAssignedId().getUsername()).append(NEW_LINE)
+                        .append("Severity: "+selectedBug.getSeverity()).append(NEW_LINE)
+                        .append("Status: "+selectedBug.getStatus());
+
+                sendNotification(sb.toString(),"BUG_CLOSE",selectedBug);
+            }
+
+            if(!oldStatus.equals(status))
+            {
+                StringBuilder sb=new StringBuilder();
+                sb.append(" Title: "+selectedBug.getTitle()).append(NEW_LINE)
+                        .append("Description: "+selectedBug.getDescription()).append(NEW_LINE)
+                        .append("Version: "+selectedBug.getVersion()).append(NEW_LINE)
+                        .append("Target date:"+selectedBug.getTargetDate()).append(NEW_LINE)
+                        .append("Bug created by: "+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
+                        .append("Assigned to: "+selectedBug.getAssignedId().getUsername()).append(NEW_LINE)
+                        .append("Severity: "+selectedBug.getSeverity()).append(NEW_LINE)
+                        .append("Old status: "+oldStatus+" new Status: "+selectedBug.getStatus());
+
+                sendNotification(sb.toString(),"BUG_STATUS_UPDATED",selectedBug);
+            }
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug updated successfully"));
         }
@@ -295,4 +330,19 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
         return activeUsr;
     }
+
+    public void sendNotification(String message,String bugName, Bug selectedBug)
+    {
+        Notification notification = new Notification();
+        notification.setMessage(message);
+        notification.setCreatedBy(selectedBug.getCreatedId());
+        notification.setName(bugName);
+        notification.setDate(now);
+        notification.setBugId(selectedBug);
+        notification.setUserId(selectedBug.getAssignedId());
+
+        databaseEJB.createNotification(notification);
+    }
+
+
 }
