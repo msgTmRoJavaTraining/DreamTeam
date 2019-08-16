@@ -64,7 +64,7 @@ public class BugManagementBean implements Serializable {
     }
     
 
-    public void createBug() throws IOException {
+    public String createBug() throws IOException {
 
         if (invalidCredentials())
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Bug not added"));
@@ -98,6 +98,7 @@ public class BugManagementBean implements Serializable {
 
             databaseEJB.createBug(bug);
         }
+        return "homePage";
     }
 
     private LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {

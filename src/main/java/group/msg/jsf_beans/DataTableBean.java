@@ -1,11 +1,9 @@
 package group.msg.jsf_beans;
 
 import group.msg.entities.Bug;
-import group.msg.entities.User;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -27,9 +25,16 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
     @Inject
     DatabaseEJB databaseEJB;
+
+    @Inject
+    UserManagementBean userManagementBean;
+
+    @Inject
+    LoginBean loginBean;
+
     private List<Bug> bugList= new ArrayList<>();
 
-    private String asignedTo;
+    private String assignedTo;
     private String status;
     private String severity;
 
@@ -52,15 +57,51 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         getAllAssignedTo();
 //        filteredBugs.add(bugList.get(0));
     }
+    public List<String> possibleStates(){
+        //ConstantsBean.STATE  {"NEW", "REJECTED", "IN PROGRESS", "FIXED", "INFO NEEDED", "CLOSED"};
+        List <String> possState=new ArrayList<>();
+        switch(status){
+            case "NEW": possState.add(ConstantsBean.STATE[1]);
+                        possState.add(ConstantsBean.STATE[2]);
+                        break;
+            case "IN PROGRESS": possState.add(ConstantsBean.STATE[3]);
+                                possState.add(ConstantsBean.STATE[4]);
+                                possState.add(ConstantsBean.STATE[1]);
+                break;
+            case "FIXED": possState.add(ConstantsBean.STATE[5]);
+                break;
+            case "INFO NEEDED": possState.add(ConstantsBean.STATE[2]);
+                break;
+            case "REJECTED": possState.add(ConstantsBean.STATE[5]);
+                break;
+
+        }
+        if(!loginBean.isBugClose())
+            possState.remove(ConstantsBean.STATE[5]);
+
+        possState.add(status);
+        return possState;
+    }
 
     public void updateFields(){
         this.severity=selectedBug.getSeverity();
         this.status=selectedBug.getStatus();
+        if(!(selectedBug.getAssignedId()==null)){
+            this.assignedTo=selectedBug.getAssignedId().getUsername();
+        }else{
+            this.assignedTo="UNASSIGNED";
+        }
+
+
     }
     public void updateBug(){
         selectedBug.setSeverity(severity);
         selectedBug.setStatus(status);
-        selectedBug.setAssignedId(databaseEJB.getUserByUserName(asignedTo));
+        if((assignedTo.equals("UNASSIGNED"))){
+            selectedBug.setAssignedId(null);
+        }else {
+            selectedBug.setAssignedId(databaseEJB.getUserByUserName(assignedTo));
+        }
 
 
 
@@ -205,6 +246,13 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
                 return 1;
             }
         }
+    }
+    public List<String> activeUsers(){
+        List<String>activeUsr=new ArrayList<>();
+        activeUsr.add("UNASSIGNED");
+        activeUsr.addAll(userManagementBean.activeUserNamesList());
+
+        return activeUsr;
     }
 //    public void rowSelected(SelectEvent event) {
 //        outputMessage = selectedMovie.getName();

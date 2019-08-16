@@ -166,13 +166,12 @@
 
                             <h:outputText value="Status" />
                             <h:selectOneMenu id="status" value="#{dataTableBean.status}" style="width:150px" ajax="true">
-                                <f:selectItems value="#{constantsBean.states}"/>
+                                <f:selectItems value="#{dataTableBean.possibleStates()}"/>
                             </h:selectOneMenu>
 
                             <h:outputText value="Assigned  to" />
-                            <h:selectOneMenu id="user" value="#{dataTableBean.asignedTo}" style="width:150px">
-                                <f:selectItem  itemValue="#{dataTableBean.selectedBug.assignedId.username}" />
-                                <f:selectItems value="#{userManagementBean.activeUserNamesList()}" />
+                            <h:selectOneMenu id="user" value="#{dataTableBean.assignedTo}" style="width:150px">
+                                <f:selectItems value="#{dataTableBean.activeUsers()}" />
                             </h:selectOneMenu>
                             <h:outputText value="Attachment" />
                             <h:panelGrid columns="2">
@@ -308,7 +307,9 @@
                                     <br></br><br></br>
                                     <p:commandButton value="#{i18n['saveBug']}" class="button" styleClass="button"
                                                      action="#{bugManagementBean.createBug}"
-                                                     onclick="PF('dlg_addBug').close();"/>
+                                                     onclick="PF('dlg_addBug').close();">
+                                    </p:commandButton>
+
                                     <br/><br/>
                                 </h:form>
                             </p:dialog>
