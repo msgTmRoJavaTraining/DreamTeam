@@ -359,14 +359,37 @@ customDialog {
     width: 100%;
     box-sizing: border-box;
 }
-.dataTableBugs{
+#form1{
     border: 4px solid #8E769D;
     background-color: #D9D2FA;
     color:blanchedalmond;
     width: 100%;
     text-align: center;
 }
-.dataTableBugs.ui-column-customfilter {
-    border: 1px solid #948473;
-    padding: 4px 4px;
+.ui-datatable .webix_hcell{
+    background:#009966;
+    color:white;
+    font-weight:bold;
+
+}
+.ui-datatable .webix_column{
+    font-style:italic;
+    background:#ddFFdd;
+}
+.ui-datatable .webix_column > div{
+    border-color:#ddd;
+}
+.ui-datatable .ui-datatable-header {
+    border-bottom: 0 none;
+    background-color: aliceblue;
+}
+.ui-datatable thead th, .ui-datatable tfoot td {
+    text-align: center;
+    background-color: teal;
+}
+.ui-widget-content {
+    border: 1px solid #a8a8a8;
+    background: #fff;
+    color: #4f4f4f;
+    background-color: aliceblue;
 }
