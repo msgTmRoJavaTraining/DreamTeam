@@ -85,7 +85,6 @@ public class BugManagementBean implements Serializable {
             bug.setCreatedId(createdByUser);
 
             if (fileUploadView.getFile() != null) {
-                //image,pdf,doc, odf, xlsx, xls;
                 if (fileUploadView.getFile().getFileName().endsWith("png")) {
                     mimeType = "image/png";
                 } else if (fileUploadView.getFile().getFileName().endsWith("jpg") || fileUploadView.getFile().getFileName().endsWith("jpeg")) {
@@ -99,11 +98,10 @@ public class BugManagementBean implements Serializable {
                 } else if (fileUploadView.getFile().getFileName().endsWith("xls")|| fileUploadView.getFile().getFileName().endsWith("xlsx")) {
                     mimeType = "application/excel";
                 }
-
+                bug.setMimeType(mimeType);
                 InputStream fileInputStream = fileUploadView.getFile().getInputstream();
                 attachment = IOUtils.toByteArray(fileInputStream);
             }
-
             bug.setAttachment(attachment);
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug added successfully"));
