@@ -79,6 +79,8 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             selectedBug.setAssignedId(databaseEJB.getUserByUserName(asignedTo));
 
             databaseEJB.updateBug(selectedBug);
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug updated successfully"));
         }
     }
 
