@@ -34,6 +34,7 @@ public class BugManagementBean implements Serializable {
     private String status = "NEW";
     private byte[] attachment;
     private String stringUserAssignedToFixIt;
+    private String mimeType;
 
     @Inject
     DatabaseEJB databaseEJB;
@@ -86,10 +87,23 @@ public class BugManagementBean implements Serializable {
             bug.setCreatedId(createdByUser);
 
             if (fileUploadView.getFile() != null) {
+                if (fileUploadView.getFile().getFileName().endsWith("png")) {
+                    mimeType = "image/png";
+                } else if (fileUploadView.getFile().getFileName().endsWith("jpg") || fileUploadView.getFile().getFileName().endsWith("jpeg")) {
+                    mimeType = "image/jpeg";
+                } else if (fileUploadView.getFile().getFileName().endsWith("pdf")) {
+                    mimeType = "application/pdf";
+                } else if (fileUploadView.getFile().getFileName().endsWith("doc")) {
+                    mimeType = "application/msword";
+                } else if (fileUploadView.getFile().getFileName().endsWith("odf")) {
+                    mimeType = "application/vnd.oasis.opendocument.formula";
+                } else if (fileUploadView.getFile().getFileName().endsWith("xls")|| fileUploadView.getFile().getFileName().endsWith("xlsx")) {
+                    mimeType = "application/excel";
+                }
+                bug.setMimeType(mimeType);
                 InputStream fileInputStream = fileUploadView.getFile().getInputstream();
                 attachment = IOUtils.toByteArray(fileInputStream);
             }
-
             bug.setAttachment(attachment);
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug added successfully"));

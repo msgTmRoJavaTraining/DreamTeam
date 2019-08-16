@@ -137,8 +137,10 @@
                         <h:outputText value="#{bug.status}" />
                     </p:column>
                     <p:column  headerText="Download attachment" style="width: 8%;;text-align: center">
-                        <p:commandButton update=":form1:dlgBug"  icon="fa fa-download" title="View">
+                        <p:commandButton update=":form1:dlgBug" onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-download" title="View">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
+                            <p:fileDownload value="#{dataTableBean.downloadAttachment()}"/>
+
                         </p:commandButton>
                     </p:column>
                     <p:column headerText="Edit" style="width: 8%;;text-align: center">

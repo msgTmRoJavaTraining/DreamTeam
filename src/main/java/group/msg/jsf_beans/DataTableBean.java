@@ -1,18 +1,26 @@
 package group.msg.jsf_beans;
 
+import com.sun.enterprise.util.io.FileUtils;
 import group.msg.entities.Bug;
+import group.msg.entities.User;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -173,6 +181,28 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         return ((Comparable) value).compareTo(Integer.valueOf(filterText)) > 0;
     }
 
+    public DefaultStreamedContent downloadAttachment()
+    {
+        InputStream stream = new ByteArrayInputStream(selectedBug.getAttachment());
+        String mimeType=selectedBug.getMimeType();
+        String extension;
+        if (mimeType.contains("png")) {
+            extension = "png";
+        } else if (mimeType.contains("jpeg")) {
+            extension = "jpeg";
+        } else if (mimeType.contains("pdf")) {
+            extension = "pdf";
+        } else if (mimeType.contains("msword")) {
+            extension = "doc";
+        } else if (mimeType.contains("opendocument")) {
+            extension = "odf";
+        } else if (mimeType.contains("excel")) {
+            extension = "xls";
+        }
+        else return null;
+        return new DefaultStreamedContent(stream, mimeType, "attachment."+extension);
+    }
+
     @Override
     public Bug getRowData(String rowKey) {
         String name = rowKey;
@@ -234,7 +264,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             return filteredBugs;
         }
     }
-    
+
     public static class BugSorter implements Comparator<Bug> {
         private String sortField;
         private SortOrder sortOrder;

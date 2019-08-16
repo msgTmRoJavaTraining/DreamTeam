@@ -31,6 +31,7 @@ public class Bug {
     private String severity;
     private String status;
     private byte[] attachment;
+    private String mimeType;
 
     @ManyToOne
     private User createdId;
