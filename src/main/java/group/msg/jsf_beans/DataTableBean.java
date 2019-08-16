@@ -53,7 +53,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
     private Bug selectedBug;
 
-
     private List<Bug> filteredBugs = new ArrayList<>();
 
     @PostConstruct
@@ -82,7 +81,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
                 break;
             case "REJECTED": possState.add(ConstantsBean.STATE[5]);
                 break;
-
         }
         if(!loginBean.isBugClose())
             possState.remove(ConstantsBean.STATE[5]);
@@ -101,17 +99,15 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         }else{
             this.assignedTo="UNASSIGNED";
         }
-
-
     }
 
     public void updateBug() {
-
-
         if(bugManagementBean.invalidCredentials(description,version))
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Bug not updated"));
 
         if(bugManagementBean.isDescriptionValid(description) && bugManagementBean.isValidVersion(version)) {
+            selectedBug.setSeverity(severity);
+            selectedBug.setStatus(status);
             selectedBug.setDescription(description);
             selectedBug.setVersion(version);
             if((assignedTo.equals("UNASSIGNED"))){
@@ -125,7 +121,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug updated successfully"));
         }
     }
-
 
     private void getAllDates() {
         LocalDateTime targetDate;
@@ -161,7 +156,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
                 if (!assignedToList.contains(crtUsername)) {
                     assignedToList.add(crtUsername);
                 }
-
             }
         }
     }
@@ -240,8 +234,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             return filteredBugs;
         }
     }
-
-
+    
     public static class BugSorter implements Comparator<Bug> {
         private String sortField;
         private SortOrder sortOrder;
