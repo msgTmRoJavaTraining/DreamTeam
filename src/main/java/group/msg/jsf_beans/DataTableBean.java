@@ -135,6 +135,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             if (deleteAttachment) {
                 selectedBug.setAttachment(null);
                 deleteAttachment=false;
+                selectedBug.setMimeType(null);
             } else {
                 selectedBug.setMimeType(bugManagementBean.getMimeType(fileUploadView.getFile()));
                 InputStream fileInputStream = fileUploadView.getFile().getInputstream();
