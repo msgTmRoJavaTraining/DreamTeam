@@ -38,7 +38,6 @@ public class UserManagementBean implements Serializable {
     private String password;
     private String confirmPassword;
     private String hashedPass;
-    private LocalDateTime now=LocalDateTime.now();
     private String firstName;
     private String lastName;
     private String mobile;
@@ -107,7 +106,7 @@ public class UserManagementBean implements Serializable {
 
                 Notification notification=new Notification();
                 notification.setUserId(newUser);
-                notification.setDate(now);
+                notification.setDate(LocalDateTime.now());
                 notification.setMessage("Bun venit, "+newUser.loggedInUserInfo());
                 notification.setName("WELCOME_NEW_USER");
 
@@ -172,7 +171,8 @@ public class UserManagementBean implements Serializable {
     public void userUpdate() {
         if (this.password.equals(this.confirmPassword) && isEmailValid(email) && isValidPhoneNumber(mobile)) {
 
-            String newInfoNotificationMessage=this.firstName+" "+this.lastName+" "+this.email+" "+this.mobile;
+            String newInfoNotificationMessage="First-Name: "+this.firstName+"\n"+"Last-Name: "+this.lastName+"\n"+
+                    "Email: "+this.email+"\n"+"Mobile: "+this.mobile;
             newPersonalInfo.setFirstName(this.firstName);
             newPersonalInfo.setLastName(this.lastName);
             newPersonalInfo.setMobile(this.mobile);
@@ -190,8 +190,8 @@ public class UserManagementBean implements Serializable {
             User oldInfos = dataBaseEJB.getUserByUserName(username);
 
             Notification notification=new Notification();
-            notification.setDate(now);
-            notification.setMessage("New infos: "+newInfoNotificationMessage+" Old value: "+
+            notification.setDate(LocalDateTime.now());
+            notification.setMessage("New infos: "+newInfoNotificationMessage+"\n Old value: "+
                     oldInfos.getPersonalInformations().toString());
 
             notification.setName("USER_UPDATED");

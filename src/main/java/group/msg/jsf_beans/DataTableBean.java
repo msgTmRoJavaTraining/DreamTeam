@@ -63,8 +63,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
     private Bug selectedBug;
 
-    private LocalDateTime now=LocalDateTime.now();
-
     private List<Bug> filteredBugs = new ArrayList<>();
     private String oldStatus;
 
@@ -131,15 +129,19 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
             databaseEJB.updateBug(selectedBug);
 
-
+            String assignedName="UNASSIGNED";
+            if(!(selectedBug.getAssignedId()==null))
+                assignedName=selectedBug.getAssignedId().getUsername();
             if(status.equals("CLOSED")) {
                 StringBuilder sb=new StringBuilder();
-                sb.append(" Title: "+selectedBug.getTitle()).append(NEW_LINE)
+
+
+                sb.append("Title: "+selectedBug.getTitle()).append(NEW_LINE)
                         .append("Description: "+selectedBug.getDescription()).append(NEW_LINE)
                         .append("Version: "+selectedBug.getVersion()).append(NEW_LINE)
                         .append("Target date:"+selectedBug.getTargetDate()).append(NEW_LINE)
                         .append("Bug created by: "+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
-                        .append("Assigned to: "+selectedBug.getAssignedId().getUsername()).append(NEW_LINE)
+                        .append("Assigned to: "+assignedName).append(NEW_LINE)
                         .append("Severity: "+selectedBug.getSeverity()).append(NEW_LINE)
                         .append("Status: "+selectedBug.getStatus());
 
@@ -149,12 +151,12 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             if(!oldStatus.equals(status))
             {
                 StringBuilder sb=new StringBuilder();
-                sb.append(" Title: "+selectedBug.getTitle()).append(NEW_LINE)
+                sb.append("Title: "+selectedBug.getTitle()).append(NEW_LINE)
                         .append("Description: "+selectedBug.getDescription()).append(NEW_LINE)
                         .append("Version: "+selectedBug.getVersion()).append(NEW_LINE)
                         .append("Target date:"+selectedBug.getTargetDate()).append(NEW_LINE)
                         .append("Bug created by: "+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
-                        .append("Assigned to: "+selectedBug.getAssignedId().getUsername()).append(NEW_LINE)
+                        .append("Assigned to: "+assignedName).append(NEW_LINE)
                         .append("Severity: "+selectedBug.getSeverity()).append(NEW_LINE)
                         .append("Old status: "+oldStatus+" new Status: "+selectedBug.getStatus());
 
@@ -337,8 +339,10 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         notification.setMessage(message);
         notification.setCreatedBy(selectedBug.getCreatedId());
         notification.setName(bugName);
-        notification.setDate(now);
+        notification.setDate(LocalDateTime.now());
         notification.setBugId(selectedBug);
+
+        if(selectedBug.getAssignedId()!=null)
         notification.setUserId(selectedBug.getAssignedId());
 
         databaseEJB.createNotification(notification);
