@@ -12,7 +12,7 @@
         <title>#{i18n['homepage']}</title>
         <h:outputStylesheet library="css" name="styleHomePage.css"/>
     </h:head>
-    <h:body>
+    <h:body >
         <p:growl id="growl" sticky="false" showDetail="true" life="8000"/>
 
         <h:form>
@@ -36,10 +36,15 @@
         </h:form>
 
         <div class="content" style=" background-color:lavenderblush; height: 100vh;">
-            <h:form id="form1" style="width:auto;position: absolute">
+            <h:form id="form1" style="width:auto;position: absolute;height: auto">
                 <p:dataTable id="bugsTable" var="bug" value="#{dataTableBean.bugList}" widgetVar="bugTable"
                               rowKey="#{bug.title}" ajax="true"
-                             emptyMessage="No bugs found with given criteria" style="width: auto" styleClass="dataTableBugs" >
+                             emptyMessage="No bugs found with given criteria" style="width: auto" styleClass="dataTableBugs"
+                             paginator="true"
+                             rows="5"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,25"
+                >
 
                     <f:facet name="header">
                         <p:outputPanel style="text-align: center;">
