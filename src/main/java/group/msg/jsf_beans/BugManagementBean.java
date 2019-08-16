@@ -6,6 +6,7 @@ import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.poi.util.IOUtils;
+import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -86,24 +87,9 @@ public class BugManagementBean implements Serializable {
             User createdByUser = databaseEJB.getUserByUserName(loginBean.getUsername());
             bug.setCreatedId(createdByUser);
 
-            if (fileUploadView.getFile() != null) {
-                if (fileUploadView.getFile().getFileName().endsWith("png")) {
-                    mimeType = "image/png";
-                } else if (fileUploadView.getFile().getFileName().endsWith("jpg") || fileUploadView.getFile().getFileName().endsWith("jpeg")) {
-                    mimeType = "image/jpeg";
-                } else if (fileUploadView.getFile().getFileName().endsWith("pdf")) {
-                    mimeType = "application/pdf";
-                } else if (fileUploadView.getFile().getFileName().endsWith("doc")) {
-                    mimeType = "application/msword";
-                } else if (fileUploadView.getFile().getFileName().endsWith("odf")) {
-                    mimeType = "application/vnd.oasis.opendocument.formula";
-                } else if (fileUploadView.getFile().getFileName().endsWith("xls")|| fileUploadView.getFile().getFileName().endsWith("xlsx")) {
-                    mimeType = "application/excel";
-                }
-                bug.setMimeType(mimeType);
+                bug.setMimeType(getMimeType(fileUploadView.getFile()));
                 InputStream fileInputStream = fileUploadView.getFile().getInputstream();
                 attachment = IOUtils.toByteArray(fileInputStream);
-            }
             bug.setAttachment(attachment);
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug added successfully"));
@@ -111,6 +97,27 @@ public class BugManagementBean implements Serializable {
             databaseEJB.createBug(bug);
         }
         return "homePage";
+    }
+
+    public String getMimeType(UploadedFile file)
+    {
+        String mimeType=null;
+        if (file != null) {
+            if (file.getFileName().endsWith("png")) {
+                mimeType = "image/png";
+            } else if (file.getFileName().endsWith("jpg") || file.getFileName().endsWith("jpeg")) {
+                mimeType = "image/jpeg";
+            } else if (file.getFileName().endsWith("pdf")) {
+                mimeType = "application/pdf";
+            } else if (file.getFileName().endsWith("doc")) {
+                mimeType = "application/msword";
+            } else if (file.getFileName().endsWith("odf")) {
+                mimeType = "application/vnd.oasis.opendocument.formula";
+            } else if (file.getFileName().endsWith("xls") || file.getFileName().endsWith("xlsx")) {
+                mimeType = "application/excel";
+            }
+        }
+        return mimeType;
     }
 
     private LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {

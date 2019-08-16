@@ -1,12 +1,10 @@
 package group.msg.jsf_beans;
 
-import com.sun.enterprise.util.io.FileUtils;
 import group.msg.entities.Bug;
-import group.msg.entities.User;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.event.SelectEvent;
+import org.apache.poi.util.IOUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -14,12 +12,11 @@ import org.primefaces.model.SortOrder;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.ByteArrayInputStream;
-import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -42,10 +39,13 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     @Inject
     LoginBean loginBean;
 
-    private List<Bug> bugList= new ArrayList<>();
+    private List<Bug> bugList = new ArrayList<>();
 
     @Inject
     BugManagementBean bugManagementBean;
+
+    @Inject
+    FileUploadView fileUploadView;
 
     private String asignedTo;
     private String assignedTo;
@@ -53,6 +53,8 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     private String severity;
     private String version;
     private String description;
+    private byte[] attachment;
+    private boolean deleteAttachment =false;
 
     private List<LocalDate> targetDates = new ArrayList<>();
     private List<String> versions = new ArrayList<>();
@@ -72,55 +74,77 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         getAllAssignedTo();
 //        filteredBugs.add(bugList.get(0));
     }
-    public List<String> possibleStates(){
+
+    public void deleteAttachmentOperation()
+    {
+        deleteAttachment =true;
+    }
+
+    public List<String> possibleStates() {
         //ConstantsBean.STATE  {"NEW", "REJECTED", "IN PROGRESS", "FIXED", "INFO NEEDED", "CLOSED"};
-        List <String> possState=new ArrayList<>();
-        switch(status){
-            case "NEW": possState.add(ConstantsBean.STATE[1]);
-                        possState.add(ConstantsBean.STATE[2]);
-                        break;
-            case "IN PROGRESS": possState.add(ConstantsBean.STATE[3]);
-                                possState.add(ConstantsBean.STATE[4]);
-                                possState.add(ConstantsBean.STATE[1]);
+        List<String> possState = new ArrayList<>();
+        switch (status) {
+            case "NEW":
+                possState.add(ConstantsBean.STATE[1]);
+                possState.add(ConstantsBean.STATE[2]);
                 break;
-            case "FIXED": possState.add(ConstantsBean.STATE[5]);
+            case "IN PROGRESS":
+                possState.add(ConstantsBean.STATE[3]);
+                possState.add(ConstantsBean.STATE[4]);
+                possState.add(ConstantsBean.STATE[1]);
                 break;
-            case "INFO NEEDED": possState.add(ConstantsBean.STATE[2]);
+            case "FIXED":
+                possState.add(ConstantsBean.STATE[5]);
                 break;
-            case "REJECTED": possState.add(ConstantsBean.STATE[5]);
+            case "INFO NEEDED":
+                possState.add(ConstantsBean.STATE[2]);
+                break;
+            case "REJECTED":
+                possState.add(ConstantsBean.STATE[5]);
                 break;
         }
-        if(!loginBean.isBugClose())
+        if (!loginBean.isBugClose())
             possState.remove(ConstantsBean.STATE[5]);
 
         possState.add(status);
         return possState;
     }
 
-    public void updateFields(){
-        this.severity=selectedBug.getSeverity();
-        this.status=selectedBug.getStatus();
+    public void updateFields() {
+        this.severity = selectedBug.getSeverity();
+        this.status = selectedBug.getStatus();
         this.version = selectedBug.getVersion();
-        this.description=selectedBug.getDescription();
-        if(!(selectedBug.getAssignedId()==null)){
-            this.assignedTo=selectedBug.getAssignedId().getUsername();
-        }else{
-            this.assignedTo="UNASSIGNED";
+        this.description = selectedBug.getDescription();
+        if (!(selectedBug.getAssignedId() == null)) {
+            this.assignedTo = selectedBug.getAssignedId().getUsername();
+        } else {
+            this.assignedTo = "UNASSIGNED";
         }
     }
 
-    public void updateBug() {
-        if(bugManagementBean.invalidCredentials(description,version))
+    public void updateBug() throws IOException {
+        if (bugManagementBean.invalidCredentials(description, version))
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Bug not updated"));
 
-        if(bugManagementBean.isDescriptionValid(description) && bugManagementBean.isValidVersion(version)) {
+        if (bugManagementBean.isDescriptionValid(description) && bugManagementBean.isValidVersion(version)) {
             selectedBug.setSeverity(severity);
             selectedBug.setStatus(status);
             selectedBug.setDescription(description);
             selectedBug.setVersion(version);
-            if((assignedTo.equals("UNASSIGNED"))){
+
+            if (deleteAttachment) {
+                selectedBug.setAttachment(null);
+                deleteAttachment=false;
+            } else {
+                selectedBug.setMimeType(bugManagementBean.getMimeType(fileUploadView.getFile()));
+                InputStream fileInputStream = fileUploadView.getFile().getInputstream();
+                attachment = IOUtils.toByteArray(fileInputStream);
+                selectedBug.setAttachment(attachment);
+            }
+
+            if ((assignedTo.equals("UNASSIGNED"))) {
                 selectedBug.setAssignedId(null);
-            }else {
+            } else {
                 selectedBug.setAssignedId(databaseEJB.getUserByUserName(assignedTo));
             }
 
@@ -181,10 +205,9 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         return ((Comparable) value).compareTo(Integer.valueOf(filterText)) > 0;
     }
 
-    public DefaultStreamedContent downloadAttachment()
-    {
+    public DefaultStreamedContent downloadAttachment() {
         InputStream stream = new ByteArrayInputStream(selectedBug.getAttachment());
-        String mimeType=selectedBug.getMimeType();
+        String mimeType = selectedBug.getMimeType();
         String extension;
         if (mimeType.contains("png")) {
             extension = "png";
@@ -198,9 +221,8 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             extension = "odf";
         } else if (mimeType.contains("excel")) {
             extension = "xls";
-        }
-        else return null;
-        return new DefaultStreamedContent(stream, mimeType, "attachment."+extension);
+        } else return null;
+        return new DefaultStreamedContent(stream, mimeType, "attachment." + extension);
     }
 
     @Override
@@ -288,8 +310,9 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             }
         }
     }
-    public List<String> activeUsers(){
-        List<String>activeUsr=new ArrayList<>();
+
+    public List<String> activeUsers() {
+        List<String> activeUsr = new ArrayList<>();
         activeUsr.add("UNASSIGNED");
         activeUsr.addAll(userManagementBean.activeUserNamesList());
 

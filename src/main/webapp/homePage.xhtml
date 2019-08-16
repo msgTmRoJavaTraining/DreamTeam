@@ -71,7 +71,7 @@
 
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 
-                    <p:column sortBy="#{bug.title}" filterBy="#{bug.title}" headerText="Title"  filterMatchMode="contains" >
+                    <p:column sortBy="#{bug.title}" filterBy="#{bug.title}" headerText="#{i18n['title']}"  filterMatchMode="contains" >
                         <h:outputText value="#{bug.title}" />
                     </p:column>
 
@@ -183,8 +183,13 @@
                             </h:selectOneMenu>
                             <h:outputText value="Attachment" />
                             <h:panelGrid columns="2">
-                                <p:commandButton value="Delete"/>
-                                <p:commandButton value="Add" />
+                                <p:commandButton value="Delete" action="#{dataTableBean.deleteAttachmentOperation}"/>
+                                <p:commandButton value="Add" onclick="PF('addAttachment').show();"/>
+                                <p:dialog widgetVar="addAttachment"><p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}"
+                                                        allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|xls|xlsx|odf)$/"
+                                                        sizeLimit="25000001" invalidSizeMessage="#{i18n['invalidFileSize']}"
+                                                        fileLimit="1"
+                                                        mode="advanced" skinSimple="true"/></p:dialog>
                             </h:panelGrid>
                         </p:panelGrid>
                         <br/>
