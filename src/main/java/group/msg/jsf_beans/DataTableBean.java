@@ -93,24 +93,11 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
     public DefaultStreamedContent downloadAttachment()
     {
+        //testez pe toate formatele si returnez doar cel bun
+        //very helpful https://www.programcreek.com/java-api-examples/?api=org.primefaces.model.DefaultStreamedContent
         InputStream stream = new ByteArrayInputStream(selectedBug.getAttachment());
-        String mimeType=selectedBug.getMimeType();
-        String extension;
-        if (mimeType.contains("png")) {
-            extension = "png";
-        } else if (mimeType.contains("jpeg")) {
-            extension = "jpeg";
-        } else if (mimeType.contains("pdf")) {
-            extension = "pdf";
-        } else if (mimeType.contains("msword")) {
-            extension = "doc";
-        } else if (mimeType.contains("opendocument")) {
-            extension = "odf";
-        } else if (mimeType.contains("excel")) {
-            extension = "xls";
-        }
-        else return null;
-        return new DefaultStreamedContent(stream, mimeType, "attachment."+extension);
+        DefaultStreamedContent file = new DefaultStreamedContent(stream, "application/pdf", "downloaded_boromir.pdf");
+        return file;
     }
 
     @Override
