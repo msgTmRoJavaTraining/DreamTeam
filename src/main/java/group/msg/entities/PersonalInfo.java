@@ -27,6 +27,7 @@ public class PersonalInfo {
 
     public String toString()
     {
-        return firstName+" "+lastName+" "+mobile+" "+email;
+        return "First-Name: "+this.firstName+"\n"+"Last-Name: "+this.lastName+"\n"+
+                "Email: "+this.email+"\n"+"Mobile: "+this.mobile;
     }
 }

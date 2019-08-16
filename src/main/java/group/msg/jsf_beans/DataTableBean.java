@@ -2,6 +2,7 @@ package group.msg.jsf_beans;
 
 import com.sun.enterprise.util.io.FileUtils;
 import group.msg.entities.Bug;
+import group.msg.entities.Notification;
 import group.msg.entities.User;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
-
+    private static final String NEW_LINE= "\n";
     @Inject
     DatabaseEJB databaseEJB;
 
@@ -62,7 +63,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     private Bug selectedBug;
 
     private List<Bug> filteredBugs = new ArrayList<>();
-
+    private String oldStatus;
     @PostConstruct
     public void init() {
         bugList = databaseEJB.getAllBugs();
@@ -102,6 +103,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         this.status=selectedBug.getStatus();
         this.version = selectedBug.getVersion();
         this.description=selectedBug.getDescription();
+        oldStatus=selectedBug.getStatus();
         if(!(selectedBug.getAssignedId()==null)){
             this.assignedTo=selectedBug.getAssignedId().getUsername();
         }else{
@@ -125,8 +127,42 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             }
 
             databaseEJB.updateBug(selectedBug);
+            String assignedName="UNASSIGNED";
+            if(!(selectedBug.getAssignedId()==null))
+                assignedName=selectedBug.getAssignedId().getUsername();
+            if(status.equals("CLOSED")) {
+                StringBuilder sb=new StringBuilder();
+
+
+                sb.append("Title: "+selectedBug.getTitle()).append(NEW_LINE)
+                        .append("Description: "+selectedBug.getDescription()).append(NEW_LINE)
+                        .append("Version: "+selectedBug.getVersion()).append(NEW_LINE)
+                        .append("Target date:"+selectedBug.getTargetDate()).append(NEW_LINE)
+                        .append("Bug created by: "+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
+                        .append("Assigned to: "+assignedName).append(NEW_LINE)
+                        .append("Severity: "+selectedBug.getSeverity()).append(NEW_LINE)
+                        .append("Status: "+selectedBug.getStatus());
+
+                sendNotification(sb.toString(),"BUG_CLOSE",selectedBug);
+            }
+
+            if(!oldStatus.equals(status))
+            {
+                StringBuilder sb=new StringBuilder();
+                sb.append("Title: "+selectedBug.getTitle()).append(NEW_LINE)
+                        .append("Description: "+selectedBug.getDescription()).append(NEW_LINE)
+                        .append("Version: "+selectedBug.getVersion()).append(NEW_LINE)
+                        .append("Target date:"+selectedBug.getTargetDate()).append(NEW_LINE)
+                        .append("Bug created by: "+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
+                        .append("Assigned to: "+assignedName).append(NEW_LINE)
+                        .append("Severity: "+selectedBug.getSeverity()).append(NEW_LINE)
+                        .append("Old status: "+oldStatus+" new Status: "+selectedBug.getStatus());
+
+                sendNotification(sb.toString(),"BUG_STATUS_UPDATED",selectedBug);
+            }
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug updated successfully"));
+
         }
     }
 
@@ -168,18 +204,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         }
     }
 
-    public boolean filterByPrice(Object value, Object filter, Locale locale) {
-        String filterText = (filter == null) ? null : filter.toString().trim();
-        if (filterText == null || filterText.equals("")) {
-            return true;
-        }
-
-        if (value == null) {
-            return false;
-        }
-
-        return ((Comparable) value).compareTo(Integer.valueOf(filterText)) > 0;
-    }
 
     public DefaultStreamedContent downloadAttachment()
     {
@@ -294,5 +318,19 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         activeUsr.addAll(userManagementBean.activeUserNamesList());
 
         return activeUsr;
+    }
+    public void sendNotification(String message,String bugName, Bug selectedBug)
+    {
+        Notification notification = new Notification();
+        notification.setMessage(message);
+        notification.setCreatedBy(selectedBug.getCreatedId());
+        notification.setName(bugName);
+        notification.setDate(LocalDateTime.now());
+        notification.setBugId(selectedBug);
+
+        if(selectedBug.getAssignedId()!=null)
+            notification.setUserId(selectedBug.getAssignedId());
+
+        databaseEJB.createNotification(notification);
     }
 }
