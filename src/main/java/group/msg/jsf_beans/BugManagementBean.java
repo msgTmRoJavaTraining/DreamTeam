@@ -46,6 +46,9 @@ public class BugManagementBean implements Serializable {
     @Inject
     LoginBean loginBean;
 
+    @Inject
+    LanguageBean languageBean;
+
     public String getPresent() {
         LocalDateTime present = LocalDateTime.now();
         int day = present.getDayOfMonth();
@@ -68,7 +71,7 @@ public class BugManagementBean implements Serializable {
     public String createBug() throws IOException {
 
         if (invalidCredentials(description, version))
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Bug not added"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", languageBean.getText("bugNotAdded")));
 
         if (isDescriptionValid(description) && isValidVersion(version)) {
             Bug bug = new Bug();
@@ -92,7 +95,7 @@ public class BugManagementBean implements Serializable {
                 attachment = IOUtils.toByteArray(fileInputStream);
             bug.setAttachment(attachment);
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug added successfully"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", languageBean.getText("bugSuccessfullAdd")));
 
             databaseEJB.createBug(bug);
         }
@@ -137,11 +140,11 @@ public class BugManagementBean implements Serializable {
     public boolean invalidCredentials(String description, String version) {
         boolean ok = false;
         if (!isDescriptionValid(description)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Description must have", "at least 10 characters"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, languageBean.getText("mustDescription"), languageBean.getText("min10Chars")));
             ok = true;
         }
         if (!isValidVersion(version)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid version format", "Enter only alphanumeric characters separated by . "));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, languageBean.getText("invalidVersion"), languageBean.getText("onlyAlphanumericsSeparatedByDot")));
             ok = true;
         }
         return ok;

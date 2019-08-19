@@ -50,6 +50,9 @@ public class UserManagementBean implements Serializable {
     @Inject
     DatabaseEJB dataBaseEJB;
 
+    @Inject
+    private LanguageBean languageBean;
+
     @PostConstruct
     public void init() {
 
@@ -61,7 +64,7 @@ public class UserManagementBean implements Serializable {
         StringBuilder generatedUserName = new StringBuilder();
 
         if (invalidCredentials())
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User not added"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", languageBean.getText("userNotAdded")));
 
         if (this.password.equals(this.confirmPassword) && isEmailValid(email) && isValidPhoneNumber(mobile)) {
             if (lastName.length() < 5) {
@@ -100,14 +103,14 @@ public class UserManagementBean implements Serializable {
                 newUser.setPersonalInformations(userInfo);
 
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User added successfully"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", languageBean.getText("userSuccessfullAdd")));
 
                 dataBaseEJB.createUser(newUser);
 
                 Notification notification=new Notification();
                 notification.setUserId(newUser);
                 notification.setDate(LocalDateTime.now());
-                notification.setMessage("Bun venit, "+newUser.loggedInUserInfo());
+                notification.setMessage(languageBean.getText("welcomeMessage")+", "+newUser.loggedInUserInfo());
                 notification.setName("WELCOME_NEW_USER");
 
                 dataBaseEJB.createNotification(notification);
@@ -171,8 +174,8 @@ public class UserManagementBean implements Serializable {
     public void userUpdate() {
         if (this.password.equals(this.confirmPassword) && isEmailValid(email) && isValidPhoneNumber(mobile)) {
 
-            String newInfoNotificationMessage="First-Name: "+this.firstName+"\n"+"Last-Name: "+this.lastName+"\n"+
-                    "Email: "+this.email+"\n"+"Mobile: "+this.mobile;
+            String newInfoNotificationMessage=languageBean.getText("firstName")+this.firstName+"\n"+languageBean.getText("lastName")
+                    +this.lastName+"\n"+"Email: "+this.email+"\n"+languageBean.getText("phone")+this.mobile;
             newPersonalInfo.setFirstName(this.firstName);
             newPersonalInfo.setLastName(this.lastName);
             newPersonalInfo.setMobile(this.mobile);
@@ -191,7 +194,7 @@ public class UserManagementBean implements Serializable {
 
             Notification notification=new Notification();
             notification.setDate(LocalDateTime.now());
-            notification.setMessage("New infos: "+newInfoNotificationMessage+"\n Old value: "+
+            notification.setMessage(languageBean.getText("newInfos")+newInfoNotificationMessage+"\n "+languageBean.getText("oldValue")+
                     oldInfos.getPersonalInformations().toString());
 
             notification.setName("USER_UPDATED");
@@ -207,10 +210,10 @@ public class UserManagementBean implements Serializable {
 
 
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User updated successfully"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", languageBean.getText("userSuccessfullUpdate")));
         } else {
             if (invalidCredentials())
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "User not updated"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", languageBean.getText("userNotAdded")));
         }
     }
 
@@ -218,11 +221,11 @@ public class UserManagementBean implements Serializable {
         boolean ok = false;
 
         if (!isEmailValid(email)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Invalid email"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", languageBean.getText("invalidEmail")));
             ok = true;
         }
         if (!isValidPhoneNumber(mobile)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Invalid phone number"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", languageBean.getText("invalidPhone")));
             ok = true;
         }
         return ok;

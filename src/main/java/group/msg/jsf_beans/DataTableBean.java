@@ -171,14 +171,14 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
                 StringBuilder sb=new StringBuilder();
 
 
-                sb.append(selectedBug.getTitle()).append(NEW_LINE)
-                        .append("Description: "+selectedBug.getDescription()).append(NEW_LINE)
-                        .append("Version: "+selectedBug.getVersion()).append(NEW_LINE)
-                        .append("Target date:"+selectedBug.getTargetDate()).append(NEW_LINE)
-                        .append("Bug created by: "+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
-                        .append("Assigned to: "+assignedName).append(NEW_LINE)
-                        .append("Severity: "+selectedBug.getSeverity()).append(NEW_LINE)
-                        .append("Status: "+selectedBug.getStatus());
+                sb.append(languageBean.getText("title")+selectedBug.getTitle()).append(NEW_LINE)
+                        .append(languageBean.getText("description")+selectedBug.getDescription()).append(NEW_LINE)
+                        .append(languageBean.getText("version")+selectedBug.getVersion()).append(NEW_LINE)
+                        .append(languageBean.getText("targetDate")+selectedBug.getTargetDate()).append(NEW_LINE)
+                        .append(languageBean.getText("bugCreatedBy")+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
+                        .append(languageBean.getText("assignedTo")+assignedName).append(NEW_LINE)
+                        .append(languageBean.getText("severity")+selectedBug.getSeverity()).append(NEW_LINE)
+                        .append(languageBean.getText("status")+selectedBug.getStatus());
 
                 sendNotification(sb.toString(),"BUG_CLOSE",selectedBug);
             }
@@ -186,19 +186,19 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             if(!oldStatus.equals(status))
             {
                 StringBuilder sb=new StringBuilder();
-                sb.append("Title: "+selectedBug.getTitle()).append(NEW_LINE)
-                        .append("Description: "+selectedBug.getDescription()).append(NEW_LINE)
-                        .append("Version: "+selectedBug.getVersion()).append(NEW_LINE)
-                        .append("Target date:"+selectedBug.getTargetDate()).append(NEW_LINE)
-                        .append("Bug created by: "+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
-                        .append("Assigned to: "+assignedName).append(NEW_LINE)
-                        .append("Severity: "+selectedBug.getSeverity()).append(NEW_LINE)
-                        .append("Old status: "+oldStatus+" new Status: "+selectedBug.getStatus());
+                sb.append(languageBean.getText("title")+selectedBug.getTitle()).append(NEW_LINE)
+                        .append(languageBean.getText("description")+selectedBug.getDescription()).append(NEW_LINE)
+                        .append(languageBean.getText("version")+selectedBug.getVersion()).append(NEW_LINE)
+                        .append(languageBean.getText("targetDate")+selectedBug.getTargetDate()).append(NEW_LINE)
+                        .append(languageBean.getText("bugCreatedBy")+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
+                        .append(languageBean.getText("assignedTo")+assignedName).append(NEW_LINE)
+                        .append(languageBean.getText("severity")+selectedBug.getSeverity()).append(NEW_LINE)
+                        .append(languageBean.getText("oldStatus")+oldStatus+languageBean.getText("newStatus")+": "+selectedBug.getStatus());
 
                 sendNotification(sb.toString(),"BUG_STATUS_UPDATED",selectedBug);
             }
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug updated successfully"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", languageBean.getText("bugSuccessfullUpdate")));
         }
     }
 
