@@ -41,6 +41,9 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     @Inject
     LoginBean loginBean;
 
+    @Inject
+    private LanguageBean languageBean;
+
     private List<Bug> bugList = new ArrayList<>();
     private static final String NEW_LINE= "\n";//System.getProperty("line.separator");
 
@@ -133,7 +136,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
     public void updateBug() throws IOException {
         if (bugManagementBean.invalidCredentials(description, version))
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Bug not updated"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", languageBean.getText("bugNotUpdated")));
 
         if (bugManagementBean.isDescriptionValid(description) && bugManagementBean.isValidVersion(version)) {
             selectedBug.setSeverity(severity);
@@ -168,7 +171,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
                 StringBuilder sb=new StringBuilder();
 
 
-                sb.append("Title: "+selectedBug.getTitle()).append(NEW_LINE)
+                sb.append(selectedBug.getTitle()).append(NEW_LINE)
                         .append("Description: "+selectedBug.getDescription()).append(NEW_LINE)
                         .append("Version: "+selectedBug.getVersion()).append(NEW_LINE)
                         .append("Target date:"+selectedBug.getTargetDate()).append(NEW_LINE)
@@ -267,7 +270,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         } else if (mimeType.contains("excel")) {
             extension = "xls";
         } else return null;
-        return new DefaultStreamedContent(stream, mimeType, "attachment." + extension);
+        return new DefaultStreamedContent(stream, mimeType, languageBean.getText("attachment") +"."+ extension);
     }
 
     @Override

@@ -136,14 +136,14 @@
                         </f:facet>
                         <h:outputText value="#{bug.status}" />
                     </p:column>
-                    <p:column  headerText="#{i18n['downloadAttachment']}" style="width: 8%;;text-align: center">
+                    <p:column  headerText="#{i18n['attachment']}" style="width: 8%;;text-align: center">
                         <p:commandButton rendered="#{bug.attachment!=null}" update=":form1:dlgBug" onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-download" title="View">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
                             <p:fileDownload value="#{dataTableBean.downloadAttachment()}"/>
 
                         </p:commandButton>
                     </p:column>
-                    <p:column headerText="Edit" style="width: 8%;;text-align: center">
+                    <p:column headerText="#{i18n['edit']}" style="width: 8%;;text-align: center">
                         <p:commandButton action="#{dataTableBean.updateFields}" update=":form1:bugDetail" oncomplete="PF('bugDialog').show()"  icon="fa fa-edit" title="View">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}"/>
                         </p:commandButton>
@@ -387,7 +387,7 @@
                                                            disabled="#{userManagementBean.username==null}"
                                                            placeholder="#{userManagementBean.active}"
                                                            value="#{userManagementBean.active}" onLabel="Yes"
-                                                           offLabel="No" style="width:60px"/>
+                                                           offLabel="#{i18n['no']}" style="width:60px"/>
                                     <h:outputText styleClass="myFont" value="#{i18n['firstName']}"
                                                   style="display:block;"
                                                   escape="true"/>
