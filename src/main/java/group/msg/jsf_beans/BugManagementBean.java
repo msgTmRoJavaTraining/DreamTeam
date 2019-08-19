@@ -62,6 +62,7 @@ public class BugManagementBean implements Serializable {
         fixedInVersion = "";
         severity = "";
         stringUserAssignedToFixIt = "";
+        attachment=null;
     }
 
 
@@ -87,9 +88,12 @@ public class BugManagementBean implements Serializable {
             User createdByUser = databaseEJB.getUserByUserName(loginBean.getUsername());
             bug.setCreatedId(createdByUser);
 
+            if(fileUploadView.getFile()!=null){
                 bug.setMimeType(getMimeType(fileUploadView.getFile()));
                 InputStream fileInputStream = fileUploadView.getFile().getInputstream();
                 attachment = IOUtils.toByteArray(fileInputStream);
+            }
+
             bug.setAttachment(attachment);
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug added successfully"));
