@@ -205,7 +205,7 @@
                 <div class="buttons">
                     <div class="addData">
 
-                        <p:commandButton icon="fa fa-plus" type="button" onclick="PF('dlg1').show();" value="Insert data" style="width: 190px"/>
+                        <p:commandButton icon="fa fa-plus" type="button" onclick="PF('dlg1').show();" value="#{i18n['insertData']}" style="width: 190px"/>
                         <p:dialog header="#{i18n['insertOptions']}" widgetVar="dlg1" minHeight="40" width="295"
                                   height="30"
                                   styleClass="customDialog">
@@ -330,7 +330,7 @@
 
                     </div>
                     <div class="editData">
-                        <p:commandButton icon="fa fa-edit" type="button" onclick="PF('dlg_edit').show();" value="Edit data" style="width: 190px"/>
+                        <p:commandButton icon="fa fa-edit" type="button" onclick="PF('dlg_edit').show();" value="#{i18n['editData']}" style="width: 190px"/>
                         <p:dialog header="#{i18n['editOptions']}" widgetVar="dlg_edit" minHeight="40" width="295"
                                   height="30"
                                   styleClass="customDialog">
@@ -449,7 +449,7 @@
                         </p:dialog>
                     </div>
                     <div class="notifications">
-                        <p:commandButton icon="fa fa-exclamation" value="Notifications" style="width: 190px" onclick="PF('dlgNotifications').show();" />
+                        <p:commandButton icon="fa fa-exclamation" value="#{i18n['notifications']}" style="width: 190px" onclick="PF('dlgNotifications').show();" />
                         <p:dialog id="dlgNotifications" header="Notifications" widgetVar="dlgNotifications"
                                   minHeight="40"
                                   width="auto"
@@ -486,13 +486,13 @@
 
                      </div>
                     <div class="statistics" >
-                        <p:commandButton icon="fa fa-pie-chart" value="Pie chart" style="width: 190px"/>
+                        <p:commandButton icon="fa fa-pie-chart" value="#{i18n['statistics']}" style="width: 190px"/>
                     </div>
                     <br></br>
                     <br></br>
                     <div class="log-out">
                         <h:form><p:commandButton ajax="false" action="#{navigationBean.navigateTo('login')}"
-                                                 icon="fa fa-sign-out" value="Log out" style="width: 190px"/></h:form>
+                                                 icon="fa fa-sign-out" value="#{i18n['logout']}" style="width: 190px"/></h:form>
                     </div>
                 </div>
             </div>
