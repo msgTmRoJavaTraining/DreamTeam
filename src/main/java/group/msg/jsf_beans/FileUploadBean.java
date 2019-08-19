@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @Named
 @ViewScoped
-public class FileUploadView implements Serializable {
+public class FileUploadBean implements Serializable {
 
     private UploadedFile file;
 

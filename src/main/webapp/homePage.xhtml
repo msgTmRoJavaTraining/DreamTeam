@@ -137,14 +137,14 @@
                         <h:outputText value="#{bug.status}" />
                     </p:column>
                     <p:column  headerText="#{i18n['attachment']}" style="width: 8%;;text-align: center">
-                        <p:commandButton rendered="#{bug.attachment!=null}" update=":form1:dlgBug" onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-download" title="View">
+                        <p:commandButton rendered="#{bug.attachment!=null}" update=":form1:dlgBug" onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-download" title="#{i18n['view']}">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
                             <p:fileDownload value="#{dataTableBean.downloadAttachment()}"/>
 
                         </p:commandButton>
                     </p:column>
                     <p:column headerText="#{i18n['edit']}" style="width: 8%;;text-align: center">
-                        <p:commandButton action="#{dataTableBean.updateFields}" update=":form1:bugDetail" oncomplete="PF('bugDialog').show()"  icon="fa fa-edit" title="View">
+                        <p:commandButton action="#{dataTableBean.updateFields}" update=":form1:bugDetail" oncomplete="PF('bugDialog').show()"  icon="fa fa-edit" title="#{i18n['view']}">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}"/>
                         </p:commandButton>
                     </p:column>
@@ -152,7 +152,7 @@
 
                 </p:dataTable>
 
-                <p:dialog  header="Bug edit" widgetVar="bugDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" id="dlgBug">
+                <p:dialog  header="#{i18n['bugEdit']}" widgetVar="bugDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" id="dlgBug">
                     <p:outputPanel  id="bugDetail" style="text-align:center;">
                         <p:panelGrid  columns="2" rendered="#{not empty dataTableBean.selectedBug}" >
                             <f:facet name="header">
@@ -185,7 +185,7 @@
                             <h:panelGrid columns="2">
                                 <p:commandButton value="#{i18n['delete']}" action="#{dataTableBean.deleteAttachmentOperation}"/>
                                 <p:commandButton value="#{i18n['add']}" onclick="PF('addAttachment').show();" action="#{dataTableBean.editAttachmentOperation}"/>
-                                <p:dialog widgetVar="addAttachment"><p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}"
+                                <p:dialog widgetVar="addAttachment"><p:fileUpload fileUploadListener="#{fileUploadBean.handleFileUpload}"
                                                         allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|xls|xlsx|odf)$/"
                                                         sizeLimit="25000001" invalidSizeMessage="#{i18n['invalidFileSize']}"
                                                         fileLimit="1"
@@ -311,7 +311,7 @@
                                     <br/><br/>
                                     <h:outputText styleClass="myFont" value="#{i18n['attachment']}"
                                                   style="display:block;"/>
-                                    <p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}"
+                                    <p:fileUpload fileUploadListener="#{fileUploadBean.handleFileUpload}"
                                                   allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|xls|xlsx|odf)$/"
                                                   sizeLimit="25000001" invalidSizeMessage="#{i18n['invalidFileSize']}"
                                                   fileLimit="1"

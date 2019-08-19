@@ -51,7 +51,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     BugManagementBean bugManagementBean;
 
     @Inject
-    FileUploadView fileUploadView;
+    FileUploadBean fileUploadBean;
 
     private String assignedTo;
     private String status;
@@ -149,8 +149,8 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
                 deleteAttachment=false;
                 selectedBug.setMimeType(null);
             } else if(editAttachment){
-                selectedBug.setMimeType(bugManagementBean.getMimeType(fileUploadView.getFile()));
-                InputStream fileInputStream = fileUploadView.getFile().getInputstream();
+                selectedBug.setMimeType(bugManagementBean.getMimeType(fileUploadBean.getFile()));
+                InputStream fileInputStream = fileUploadBean.getFile().getInputstream();
                 attachment = IOUtils.toByteArray(fileInputStream);
                 selectedBug.setAttachment(attachment);
                 editAttachment=false;

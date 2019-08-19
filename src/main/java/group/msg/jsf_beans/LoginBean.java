@@ -1,6 +1,7 @@
 package group.msg.jsf_beans;
 
 
+import group.msg.WebHelper;
 import group.msg.entities.User;
 import group.msg.entities.UserRole;
 import group.msg.jsf_ejb.DatabaseEJB;
@@ -86,6 +87,7 @@ public class LoginBean implements Serializable {
                     loggedUser=databaseEJB.getUserByUserName(username);
 
 
+                        WebHelper.getSession().setAttribute("loggedIn",true);
                         return NavigationBean.navigateTo("homePage");
                 } else {
 
@@ -157,10 +159,4 @@ public class LoginBean implements Serializable {
         }
         return hashtext;
     }
-
-    public User currentLoggedInUser()
-    {
-        return this.loggedUser;
-    }
-
 }
