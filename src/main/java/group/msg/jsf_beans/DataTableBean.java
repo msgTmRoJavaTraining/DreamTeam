@@ -67,6 +67,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
     private List<Bug> filteredBugs = new ArrayList<>();
     private String oldStatus;
+    private boolean editAttachment=false;
 
     @PostConstruct
     public void init() {
@@ -80,6 +81,11 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     public void deleteAttachmentOperation()
     {
         deleteAttachment =true;
+    }
+
+    public void editAttachmentOperation()
+    {
+        editAttachment =true;
     }
 
     public List<String> possibleStates() {
@@ -139,11 +145,12 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
                 selectedBug.setAttachment(null);
                 deleteAttachment=false;
                 selectedBug.setMimeType(null);
-            } else {
+            } else if(editAttachment){
                 selectedBug.setMimeType(bugManagementBean.getMimeType(fileUploadView.getFile()));
                 InputStream fileInputStream = fileUploadView.getFile().getInputstream();
                 attachment = IOUtils.toByteArray(fileInputStream);
                 selectedBug.setAttachment(attachment);
+                editAttachment=false;
             }
 
             if ((assignedTo.equals("UNASSIGNED"))) {

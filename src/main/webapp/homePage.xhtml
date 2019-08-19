@@ -38,8 +38,8 @@
         <div class="content" style=" background-color:lavenderblush; height: 100vh;">
             <h:form id="form1" style="width:auto;position: absolute;height: auto">
                 <p:dataTable id="bugsTable" var="bug" value="#{dataTableBean.bugList}" widgetVar="bugTable"
-                              rowKey="#{bug.title}" ajax="true"
-                             emptyMessage="No bugs found with given criteria" style="width: auto" styleClass="dataTableBugs"
+                             rowKey="#{bug.title}" ajax="true"
+                             emptyMessage="#{i18n['noBugsInTable']}" style="width: auto" styleClass="dataTableBugs"
                              paginator="true"
                              rows="5"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -49,8 +49,8 @@
 
                     <f:facet name="header">
                         <p:outputPanel style="text-align: center;">
-                            <h:outputText value="Search all fields:" />
-                            <p:inputText id="globalFilter" onkeyup="PF('bugTable').filter()" style="width:150px" placeholder="Enter keyword" />
+                            <h:outputText value="#{i18n['searchAllFields']}" />
+                            <p:inputText id="globalFilter" onkeyup="PF('bugTable').filter()" style="width:150px" placeholder="#{i18n['enterKeyword']}" />
 
                             <div style="float:right;padding-top: 5px;">
                                 <h:commandLink>
@@ -75,11 +75,11 @@
                         <h:outputText value="#{bug.title}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.description}" headerText="Description"  filterMatchMode="contains" sortBy="#{bug.description}">
+                    <p:column filterBy="#{bug.description}" headerText="#{i18n['description']}"  filterMatchMode="contains" sortBy="#{bug.description}">
                         <h:outputText value="#{bug.description}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.version}" headerText="Version"  filterMatchMode="exact" sortBy="#{bug.version}">
+                    <p:column filterBy="#{bug.version}" headerText="#{i18n['version']}"  filterMatchMode="exact" sortBy="#{bug.version}">
                     <f:facet name="filter">
                         <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
                             <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
@@ -89,54 +89,54 @@
                     <h:outputText value="#{bug.version}" />
                 </p:column>
 
-                    <p:column filterBy="#{bug.targetDate.toLocalDate()}" headerText="Target date" filterMatchMode="contains" sortBy="#{bug.targetDate.toLocalDate()}">
+                    <p:column filterBy="#{bug.targetDate.toLocalDate()}" headerText="#{i18n['targetDate']}" filterMatchMode="contains" sortBy="#{bug.targetDate.toLocalDate()}">
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
-                                <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItem itemLabel="#{i18n['selectOne']}" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{dataTableBean.targetDates}" />
                             </p:selectOneMenu>
                         </f:facet>
                         <h:outputText value="#{bug.targetDate.toLocalDate()}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.createdId.username}" headerText="Created by"  filterMatchMode="exact" sortBy="#{bug.createdId.username}">
+                    <p:column filterBy="#{bug.createdId.username}" headerText="#{i18n['createdBy']}"  filterMatchMode="exact" sortBy="#{bug.createdId.username}">
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
-                                <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItem itemLabel="#{i18n['selectOne']}" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{dataTableBean.createdByList}" />
                             </p:selectOneMenu>
                         </f:facet>
                         <h:outputText value="#{bug.createdId.username}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.assignedId.username}" headerText="Assigned to"  filterMatchMode="exact" sortBy="#{bug.assignedId.username}">
+                    <p:column filterBy="#{bug.assignedId.username}" headerText="#{i18n['assignedTo']}"  filterMatchMode="exact" sortBy="#{bug.assignedId.username}">
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
-                                <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItem itemLabel="#{i18n['selectOne']}" itemValue="#{null}" noSelectionOption="true" />
                                 <f:selectItems value="#{dataTableBean.assignedToList}" />
                             </p:selectOneMenu>
                         </f:facet>
                         <h:outputText value="#{bug.assignedId.username}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.severity}" headerText="Severity"  filterMatchMode="in" sortBy="#{bug.severity}">
+                    <p:column filterBy="#{bug.severity}" headerText="#{i18n['severity']}"  filterMatchMode="in" sortBy="#{bug.severity}">
                         <f:facet name="filter">
-                            <p:selectCheckboxMenu label="Severity" onchange="PF('bugTable').filter()" scrollHeight="150" styleClass="custom-filter">
+                            <p:selectCheckboxMenu label="#{i18n['severity']}" onchange="PF('bugTable').filter()" scrollHeight="150" styleClass="custom-filter">
                                 <f:selectItems value="#{constantsBean.severities}" />
                             </p:selectCheckboxMenu>
                         </f:facet>
                         <h:outputText value="#{bug.severity}" />
                     </p:column>
 
-                    <p:column filterBy="#{bug.status}" headerText="Status"  filterMatchMode="in" sortBy="#{bug.status}">
+                    <p:column filterBy="#{bug.status}" headerText="#{i18n['status']}"  filterMatchMode="in" sortBy="#{bug.status}">
                         <f:facet name="filter">
-                            <p:selectCheckboxMenu label="Status" onchange="PF('bugTable').filter()" scrollHeight="150" styleClass="custom-filter">
+                            <p:selectCheckboxMenu label="#{i18n['status']}" onchange="PF('bugTable').filter()" scrollHeight="150" styleClass="custom-filter">
                                 <f:selectItems value="#{constantsBean.states}" />
                             </p:selectCheckboxMenu>
                         </f:facet>
                         <h:outputText value="#{bug.status}" />
                     </p:column>
-                    <p:column  headerText="Download attachment" style="width: 8%;;text-align: center">
+                    <p:column  headerText="#{i18n['downloadAttachment']}" style="width: 8%;;text-align: center">
                         <p:commandButton rendered="#{bug.attachment!=null}" update=":form1:dlgBug" onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-download" title="View">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
                             <p:fileDownload value="#{dataTableBean.downloadAttachment()}"/>
@@ -160,31 +160,31 @@
                                 <p:inputText value="#{dataTableBean.selectedBug.title}"/>
                             </f:facet>
 
-                            <h:outputText value="Description" />
+                            <h:outputText value="#{i18n['description']}" />
                             <h:inputTextarea value="#{dataTableBean.description}" />
 
-                            <h:outputText value="Version" />
+                            <h:outputText value="#{i18n['version']}" />
                             <h:inputText value="#{dataTableBean.version}" />
 
-                            <h:outputText value="Severity" />
+                            <h:outputText value="#{i18n['severity']}" />
                             <h:selectOneMenu id="sev" value="#{dataTableBean.severity}" style="width:150px" ajax="true">
                                 <p:ajax update="sev"/>
                                 <f:selectItems value="#{constantsBean.severities}"  />
                             </h:selectOneMenu>
 
-                            <h:outputText value="Status" />
+                            <h:outputText value="#{i18n['status']}" />
                             <h:selectOneMenu id="status" value="#{dataTableBean.status}" style="width:150px" ajax="true">
                                 <f:selectItems value="#{dataTableBean.possibleStates()}"/>
                             </h:selectOneMenu>
 
-                            <h:outputText value="Assigned  to" />
+                            <h:outputText value="#{i18n['assignedTo']}" />
                             <h:selectOneMenu id="user" value="#{dataTableBean.assignedTo}" style="width:150px">
                                 <f:selectItems value="#{dataTableBean.activeUsers()}" />
                             </h:selectOneMenu>
-                            <h:outputText value="Attachment" />
+                            <h:outputText value="#{i18n['attachment']}" />
                             <h:panelGrid columns="2">
                                 <p:commandButton value="Delete" action="#{dataTableBean.deleteAttachmentOperation}"/>
-                                <p:commandButton value="Add" onclick="PF('addAttachment').show();"/>
+                                <p:commandButton value="Add" onclick="PF('addAttachment').show();" action="#{dataTableBean.editAttachmentOperation}"/>
                                 <p:dialog widgetVar="addAttachment"><p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}"
                                                         allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|xls|xlsx|odf)$/"
                                                         sizeLimit="25000001" invalidSizeMessage="#{i18n['invalidFileSize']}"
@@ -193,7 +193,7 @@
                             </h:panelGrid>
                         </p:panelGrid>
                         <br/>
-                        <p:commandButton value="Save" update=":form1:bugsTable" onclick="PF('dlgBug').close();" action="#{dataTableBean.updateBug}"/>
+                        <p:commandButton value="#{i18n['save']}" update=":form1:bugsTable" onclick="PF('dlgBug').close();" action="#{dataTableBean.updateBug}"/>
                     </p:outputPanel>
                 </p:dialog>
             </h:form>
