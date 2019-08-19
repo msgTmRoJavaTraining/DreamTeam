@@ -82,7 +82,7 @@
                     <p:column filterBy="#{bug.version}" headerText="#{i18n['version']}"  filterMatchMode="exact" sortBy="#{bug.version}">
                     <f:facet name="filter">
                         <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
-                            <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItem itemLabel="#{i18n['selectOne']}" itemValue="#{null}" noSelectionOption="true" />
                             <f:selectItems value="#{dataTableBean.versions}" />
                         </p:selectOneMenu>
                     </f:facet>
