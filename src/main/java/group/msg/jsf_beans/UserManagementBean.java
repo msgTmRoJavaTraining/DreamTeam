@@ -170,7 +170,6 @@ public class UserManagementBean implements Serializable {
 
     public void userUpdate() {
         if (this.password.equals(this.confirmPassword) && isEmailValid(email) && isValidPhoneNumber(mobile)) {
-
             String newInfoNotificationMessage="First-Name: "+this.firstName+"\n"+"Last-Name: "+this.lastName+"\n"+
                     "Email: "+this.email+"\n"+"Mobile: "+this.mobile;
             newPersonalInfo.setFirstName(this.firstName);

@@ -160,7 +160,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             }
 
             databaseEJB.updateBug(selectedBug);
-
             String assignedName="UNASSIGNED";
             if(!(selectedBug.getAssignedId()==null))
                 assignedName=selectedBug.getAssignedId().getUsername();
@@ -196,6 +195,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
             }
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Bug updated successfully"));
+
         }
     }
 
@@ -237,18 +237,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         }
     }
 
-    public boolean filterByPrice(Object value, Object filter, Locale locale) {
-        String filterText = (filter == null) ? null : filter.toString().trim();
-        if (filterText == null || filterText.equals("")) {
-            return true;
-        }
-
-        if (value == null) {
-            return false;
-        }
-
-        return ((Comparable) value).compareTo(Integer.valueOf(filterText)) > 0;
-    }
 
     public DefaultStreamedContent downloadAttachment() {
         InputStream stream = new ByteArrayInputStream(selectedBug.getAttachment());
@@ -363,7 +351,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
         return activeUsr;
     }
-
     public void sendNotification(String message,String bugName, Bug selectedBug)
     {
         Notification notification = new Notification();
@@ -374,10 +361,8 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         notification.setBugId(selectedBug);
 
         if(selectedBug.getAssignedId()!=null)
-        notification.setUserId(selectedBug.getAssignedId());
+            notification.setUserId(selectedBug.getAssignedId());
 
         databaseEJB.createNotification(notification);
     }
-
-
 }

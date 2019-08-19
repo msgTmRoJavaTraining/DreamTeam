@@ -82,7 +82,7 @@ public class LoginBean implements Serializable {
                         }
                     }
 
-
+                    loggedUser=databaseEJB.getUserByUserName(username);
 
 
                         return NavigationBean.navigateTo("homePage");

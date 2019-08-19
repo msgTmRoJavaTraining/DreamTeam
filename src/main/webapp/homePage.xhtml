@@ -7,6 +7,7 @@
 >
 
 
+
 <f:view>
     <h:head>
         <title>#{i18n['homepage']}</title>
@@ -44,7 +45,6 @@
                              rows="5"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="5,10,25"
-                             resizableColumns="true"
                 >
 
                     <f:facet name="header">
@@ -199,13 +199,13 @@
             </h:form>
         </div>
 
-        <p:sidebar widgetVar="sidebar1" baseZIndex="10000" style="background:darkcyan; width:15em">
+        <p:sidebar widgetVar="sidebar1" baseZIndex="10000"  id="sidebarStyling"  >
             <div class="sideBar">
                 <h2 style="color: white">JBugger</h2>
                 <div class="buttons">
                     <div class="addData">
 
-                        <p:commandButton icon="fa fa-plus" type="button" onclick="PF('dlg1').show();"/>
+                        <p:commandButton icon="fa fa-plus" type="button" onclick="PF('dlg1').show();" value="Insert data" style="width: 190px"/>
                         <p:dialog header="#{i18n['insertOptions']}" widgetVar="dlg1" minHeight="40" width="295"
                                   height="30"
                                   styleClass="customDialog">
@@ -330,7 +330,7 @@
 
                     </div>
                     <div class="editData">
-                        <p:commandButton icon="fa fa-edit" type="button" onclick="PF('dlg_edit').show();"/>
+                        <p:commandButton icon="fa fa-edit" type="button" onclick="PF('dlg_edit').show();" value="Edit data" style="width: 190px"/>
                         <p:dialog header="#{i18n['editOptions']}" widgetVar="dlg_edit" minHeight="40" width="295"
                                   height="30"
                                   styleClass="customDialog">
@@ -448,14 +448,51 @@
                             </p:dialog>
                         </p:dialog>
                     </div>
-                    <div class="statistics">
-                        <p:commandButton icon="fa fa-pie-chart"/>
+                    <div class="notifications">
+                        <p:commandButton icon="fa fa-exclamation" value="Notifications" style="width: 190px" onclick="PF('dlgNotifications').show();" />
+                        <p:dialog id="dlgNotifications" header="Notifications" widgetVar="dlgNotifications"
+                                  minHeight="40"
+                                  width="auto"
+                                  height="auto" >
+                            <p:scrollPanel mode="native" style="width:500px;height:500px">
+                            <h:form>
+                                <p:dataScroller value="#{loginBean.loggedUser.notifications}" var="notif" chunkSize="10" scrollHeight="15">
+                                    <f:facet name="header">
+                                        Scroll Down to Load More Notifications
+                                    </f:facet>
+
+                                    <h:panelGrid  columns="3" style="width: 100%;height: 40%; margin: 1px;padding: 9px;; border: 1px solid cadetblue;" >
+                                        <p:graphicImage url="#{notificationsManagementBean.getIconForNotification(notif)}" style="width: 80px;height: 80px;margin-right: 15px;margin-left: 15px;" />
+                                        <p:outputPanel >
+                                            <h:panelGrid columns="2" cellpadding="5" cellspacing="20" columnClasses="logo,details"  >
+
+                                                <h:outputText value="Date:" />
+                                                <h:outputText value="#{notif.date.toLocalDate()}" style="font-weight: bold; margin-bottom: 5px"/>
+
+                                                <h:outputText value="Message:   " />
+                                                <h:inputTextarea value="#{notif.message}" style="font-weight: bold; box-sizing: content-box" disabled="true"/>
+
+                                                <h:outputText value="Type:" />
+                                                <h:outputText value="#{notif.name}" style="font-weight: bold; margin-bottom: 5px"/>
+                                            </h:panelGrid>
+                                        </p:outputPanel>
+                                    </h:panelGrid>
+                                </p:dataScroller>
+                            </h:form>
+                            </p:scrollPanel>
+                        </p:dialog>
+
+
+
+                     </div>
+                    <div class="statistics" >
+                        <p:commandButton icon="fa fa-pie-chart" value="Pie chart" style="width: 190px"/>
                     </div>
                     <br></br>
                     <br></br>
                     <div class="log-out">
                         <h:form><p:commandButton ajax="false" action="#{navigationBean.navigateTo('login')}"
-                                                 icon="fa fa-sign-out"/></h:form>
+                                                 icon="fa fa-sign-out" value="Log out" style="width: 190px"/></h:form>
                     </div>
                 </div>
             </div>
