@@ -60,7 +60,7 @@
 
                                 <h:commandLink>
                                     <p:graphicImage styleClass="pdfButton" width="24"/>
-                                    <p:dataExporter type="pdf" target="bugsTable" fileName="bugsPDF"/>
+                                    <p:fileDownload value="#{dataTableBean.exportToPDF()}"/>
                                 </h:commandLink>
                             </div>
 

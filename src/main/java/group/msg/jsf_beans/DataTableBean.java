@@ -1,5 +1,8 @@
 package group.msg.jsf_beans;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import group.msg.entities.Bug;
 import group.msg.entities.User;
 import group.msg.entities.Notification;
@@ -17,10 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -202,6 +202,43 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         }
     }
 
+    public DefaultStreamedContent exportToPDF() {
+        ByteArrayInputStream inputStream = null;
+        Document document = new Document();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            PdfWriter.getInstance(document, outputStream);
+            document.open();
+
+            String line = languageBean.getText("title")+selectedBug.getTitle();
+            document.add(new Paragraph(line));
+
+            line= languageBean.getText("description")+selectedBug.getDescription();
+            document.add(new Paragraph(line));
+
+            line= languageBean.getText("version")+selectedBug.getVersion();
+            document.add(new Paragraph(line));
+
+            line= languageBean.getText("targetDate")+selectedBug.getTargetDate();
+            document.add(new Paragraph(line));
+
+            line= languageBean.getText("createdBy")+selectedBug.getCreatedId().getUsername();
+            document.add(new Paragraph(line));
+
+            line= languageBean.getText("assignedTo")+selectedBug.getAssignedId().getUsername();
+            document.add(new Paragraph(line));
+
+            line= languageBean.getText("severity")+selectedBug.getSeverity();
+            document.add(new Paragraph(line));
+
+            document.close();
+            inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new DefaultStreamedContent(inputStream, "application/pdf", "bug.pdf");
+    }
+
     private void getAllDates() {
         LocalDateTime targetDate;
         for (Bug bug : bugList) {
@@ -240,7 +277,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         }
     }
 
-
     public DefaultStreamedContent downloadAttachment() {
         InputStream stream = new ByteArrayInputStream(selectedBug.getAttachment());
         String mimeType = selectedBug.getMimeType();
@@ -260,6 +296,8 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         } else return null;
         return new DefaultStreamedContent(stream, mimeType, languageBean.getText("attachment") +"."+ extension);
     }
+
+
 
     @Override
     public Bug getRowData(String rowKey) {
