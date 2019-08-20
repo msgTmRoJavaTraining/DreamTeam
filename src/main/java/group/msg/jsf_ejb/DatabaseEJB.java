@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.io.Serializable;
 import java.net.UnknownServiceException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -221,5 +222,20 @@ public class DatabaseEJB implements Serializable {
         query.setParameter("state",state);
         result= (long) query.getSingleResult();
         return result;
+    }
+    public void removeNotificationOlder(LocalDateTime today) {
+
+        Query query=entityManager.createQuery("Select notif From Notification notif");
+
+        List<Notification>notifications=query.getResultList();
+
+        for(int i=notifications.size()-1;i>=0;i--)
+        {
+            if(notifications.get(i).getDate().isBefore(today))
+            {
+                entityManager.remove(notifications.get(i));
+            }
+        }
+
     }
 }

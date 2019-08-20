@@ -174,6 +174,8 @@ div {
 
 customDialog {
     background: green;
+    width: 193px;
+    height: 110px;
 }
 
 .ui-dialog.customDialog .ui-dialog-content {
