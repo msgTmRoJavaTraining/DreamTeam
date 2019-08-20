@@ -1,5 +1,8 @@
 package group.msg.jsf_beans;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import group.msg.entities.Bug;
@@ -45,7 +48,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     private LanguageBean languageBean;
 
     private List<Bug> bugList = new ArrayList<>();
-    private static final String NEW_LINE= "\n";//System.getProperty("line.separator");
+    private static final String NEW_LINE = "\n";//System.getProperty("line.separator");
 
     @Inject
     BugManagementBean bugManagementBean;
@@ -59,7 +62,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     private String version;
     private String description;
     private byte[] attachment;
-    private boolean deleteAttachment =false;
+    private boolean deleteAttachment = false;
 
     private List<LocalDate> targetDates = new ArrayList<>();
     private List<String> versions = new ArrayList<>();
@@ -70,11 +73,11 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
 
     private Bug selectedBug;
-    private List<Bug>selectedBugs=new ArrayList<>();
+    private List<Bug> selectedBugs = new ArrayList<>();
 
     private List<Bug> filteredBugs = new ArrayList<>();
     private String oldStatus;
-    private boolean editAttachment=false;
+    private boolean editAttachment = false;
 
     @PostConstruct
     public void init() {
@@ -86,16 +89,12 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     }
 
 
-
-
-    public void deleteAttachmentOperation()
-    {
-        deleteAttachment =true;
+    public void deleteAttachmentOperation() {
+        deleteAttachment = true;
     }
 
-    public void editAttachmentOperation()
-    {
-        editAttachment =true;
+    public void editAttachmentOperation() {
+        editAttachment = true;
     }
 
     public List<String> possibleStates() {
@@ -132,12 +131,12 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         this.severity = selectedBug.getSeverity();
         this.status = selectedBug.getStatus();
         this.version = selectedBug.getVersion();
-        this.description=selectedBug.getDescription();
-        oldStatus=selectedBug.getStatus();
-        if(!(selectedBug.getAssignedId()==null)){
-            this.assignedTo=selectedBug.getAssignedId().getUsername();
-        }else{
-            this.assignedTo="UNASSIGNED";
+        this.description = selectedBug.getDescription();
+        oldStatus = selectedBug.getStatus();
+        if (!(selectedBug.getAssignedId() == null)) {
+            this.assignedTo = selectedBug.getAssignedId().getUsername();
+        } else {
+            this.assignedTo = "UNASSIGNED";
         }
     }
 
@@ -153,14 +152,14 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
             if (deleteAttachment) {
                 selectedBug.setAttachment(null);
-                deleteAttachment=false;
+                deleteAttachment = false;
                 selectedBug.setMimeType(null);
-            } else if(editAttachment){
+            } else if (editAttachment) {
                 selectedBug.setMimeType(bugManagementBean.getMimeType(fileUploadBean.getFile()));
                 InputStream fileInputStream = fileUploadBean.getFile().getInputstream();
                 attachment = IOUtils.toByteArray(fileInputStream);
                 selectedBug.setAttachment(attachment);
-                editAttachment=false;
+                editAttachment = false;
             }
 
             if ((assignedTo.equals("UNASSIGNED"))) {
@@ -171,42 +170,82 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
 
             databaseEJB.updateBug(selectedBug);
 
-            String assignedName="UNASSIGNED";
-            if(!(selectedBug.getAssignedId()==null))
-                assignedName=selectedBug.getAssignedId().getUsername();
-            if(status.equals("CLOSED")) {
-                StringBuilder sb=new StringBuilder();
+            String assignedName = "UNASSIGNED";
+            if (!(selectedBug.getAssignedId() == null))
+                assignedName = selectedBug.getAssignedId().getUsername();
+            if (status.equals("CLOSED")) {
+                StringBuilder sb = new StringBuilder();
 
 
-                sb.append(languageBean.getText("title")+selectedBug.getTitle()).append(NEW_LINE)
-                        .append(languageBean.getText("description")+selectedBug.getDescription()).append(NEW_LINE)
-                        .append(languageBean.getText("version")+selectedBug.getVersion()).append(NEW_LINE)
-                        .append(languageBean.getText("targetDate")+selectedBug.getTargetDate()).append(NEW_LINE)
-                        .append(languageBean.getText("bugCreatedBy")+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
-                        .append(languageBean.getText("assignedTo")+assignedName).append(NEW_LINE)
-                        .append(languageBean.getText("severity")+selectedBug.getSeverity()).append(NEW_LINE)
-                        .append(languageBean.getText("status")+selectedBug.getStatus());
+                sb.append(languageBean.getText("title") + selectedBug.getTitle()).append(NEW_LINE)
+                        .append(languageBean.getText("description") + selectedBug.getDescription()).append(NEW_LINE)
+                        .append(languageBean.getText("version") + selectedBug.getVersion()).append(NEW_LINE)
+                        .append(languageBean.getText("targetDate") + selectedBug.getTargetDate()).append(NEW_LINE)
+                        .append(languageBean.getText("bugCreatedBy") + selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
+                        .append(languageBean.getText("assignedTo") + assignedName).append(NEW_LINE)
+                        .append(languageBean.getText("severity") + selectedBug.getSeverity()).append(NEW_LINE)
+                        .append(languageBean.getText("status") + selectedBug.getStatus());
 
-                sendNotification(sb.toString(),"BUG_CLOSE",selectedBug);
+                sendNotification(sb.toString(), "BUG_CLOSE", selectedBug);
             }
 
-            if(!oldStatus.equals(status))
-            {
-                StringBuilder sb=new StringBuilder();
-                sb.append(languageBean.getText("title")+selectedBug.getTitle()).append(NEW_LINE)
-                        .append(languageBean.getText("description")+selectedBug.getDescription()).append(NEW_LINE)
-                        .append(languageBean.getText("version")+selectedBug.getVersion()).append(NEW_LINE)
-                        .append(languageBean.getText("targetDate")+selectedBug.getTargetDate()).append(NEW_LINE)
-                        .append(languageBean.getText("bugCreatedBy")+selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
-                        .append(languageBean.getText("assignedTo")+assignedName).append(NEW_LINE)
-                        .append(languageBean.getText("severity")+selectedBug.getSeverity()).append(NEW_LINE)
-                        .append(languageBean.getText("oldStatus")+oldStatus+languageBean.getText("newStatus")+": "+selectedBug.getStatus());
+            if (!oldStatus.equals(status)) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(languageBean.getText("title") + selectedBug.getTitle()).append(NEW_LINE)
+                        .append(languageBean.getText("description") + selectedBug.getDescription()).append(NEW_LINE)
+                        .append(languageBean.getText("version") + selectedBug.getVersion()).append(NEW_LINE)
+                        .append(languageBean.getText("targetDate") + selectedBug.getTargetDate()).append(NEW_LINE)
+                        .append(languageBean.getText("bugCreatedBy") + selectedBug.getCreatedId().getUsername()).append(NEW_LINE)
+                        .append(languageBean.getText("assignedTo") + assignedName).append(NEW_LINE)
+                        .append(languageBean.getText("severity") + selectedBug.getSeverity()).append(NEW_LINE)
+                        .append(languageBean.getText("oldStatus") + oldStatus + languageBean.getText("newStatus") + ": " + selectedBug.getStatus());
 
-                sendNotification(sb.toString(),"BUG_STATUS_UPDATED",selectedBug);
+                sendNotification(sb.toString(), "BUG_STATUS_UPDATED", selectedBug);
             }
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", languageBean.getText("bugSuccessfullUpdate")));
         }
+    }
+
+    public DefaultStreamedContent exportToPDF() {
+        selectedBug = selectedBugs.get(0);
+
+        ByteArrayInputStream inputStream = null;
+        Document document = new Document();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            PdfWriter.getInstance(document, outputStream);
+            document.open();
+
+            String line = languageBean.getText("title") + ": " + selectedBug.getTitle();
+            document.add(new Paragraph(line));
+
+            line = languageBean.getText("description") + ": " + selectedBug.getDescription();
+            document.add(new Paragraph(line));
+
+            line = languageBean.getText("version") + ": " + selectedBug.getVersion();
+            document.add(new Paragraph(line));
+
+            line = languageBean.getText("targetDate") + ": " + selectedBug.getTargetDate().toLocalDate();
+            document.add(new Paragraph(line));
+
+            line = languageBean.getText("createdBy") + ": " + selectedBug.getCreatedId().getUsername();
+            document.add(new Paragraph(line));
+
+            if (selectedBug.getAssignedId() != null)
+                line = languageBean.getText("assignedTo") + ": " + selectedBug.getAssignedId().getUsername();
+            else line = languageBean.getText("assignedTo") + ": " + "UNASSIGNED";
+            document.add(new Paragraph(line));
+
+            line = languageBean.getText("severity") + ": " + selectedBug.getSeverity();
+            document.add(new Paragraph(line));
+
+            document.close();
+            inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new DefaultStreamedContent(inputStream, "application/pdf", "bug.pdf");
     }
 
     private void getAllDates() {
@@ -247,7 +286,6 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         }
     }
 
-
     public DefaultStreamedContent downloadAttachment() {
         InputStream stream = new ByteArrayInputStream(selectedBug.getAttachment());
         String mimeType = selectedBug.getMimeType();
@@ -265,8 +303,9 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         } else if (mimeType.contains("excel")) {
             extension = "xls";
         } else return null;
-        return new DefaultStreamedContent(stream, mimeType, languageBean.getText("attachment") +"."+ extension);
+        return new DefaultStreamedContent(stream, mimeType, languageBean.getText("attachment") + "." + extension);
     }
+
 
     @Override
     public Bug getRowData(String rowKey) {
@@ -362,8 +401,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         return activeUsr;
     }
 
-    public void sendNotification(String message,String bugName, Bug selectedBug)
-    {
+    public void sendNotification(String message, String bugName, Bug selectedBug) {
         Notification notification = new Notification();
         notification.setMessage(message);
         notification.setCreatedBy(selectedBug.getCreatedId());
@@ -371,7 +409,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         notification.setDate(LocalDateTime.now());
         notification.setBugId(selectedBug);
 
-        if(selectedBug.getAssignedId()!=null)
+        if (selectedBug.getAssignedId() != null)
             notification.setUserId(selectedBug.getAssignedId());
 
         databaseEJB.createNotification(notification);

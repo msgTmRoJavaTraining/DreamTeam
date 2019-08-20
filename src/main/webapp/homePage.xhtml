@@ -63,8 +63,9 @@
                                     <p:dataExporter type="xls" target="bugsTable" selectionOnly="true" fileName="bugs"/>
                                 </h:commandLink>
 
-                                <h:commandLink onclick="PrimeFaces.monitorDownload(start, stop);">
+                                <h:commandLink>
                                     <p:graphicImage rendered="#{dataTableBean.selectedBugs.size() eq 1}" styleClass="pdfButton" width="24"/>
+                                    <p:fileDownload value="#{dataTableBean.exportToPDF()}"/>
                                 </h:commandLink>
                             </div>
 
@@ -86,7 +87,7 @@
                     <p:column filterBy="#{bug.version}" headerText="#{i18n['version']}"  filterMatchMode="exact" sortBy="#{bug.version}">
                     <f:facet name="filter">
                         <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
-                            <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItem itemLabel="#{i18n['selectOne']}" itemValue="#{null}" noSelectionOption="true" />
                             <f:selectItems value="#{dataTableBean.versions}" />
                         </p:selectOneMenu>
                     </f:facet>
@@ -504,10 +505,6 @@
         <script type="text/javascript">
             if (window.history.replaceState) {
                 window.history.replaceState(null, null, window.location.href);
-            }
-            function updateTable() {
-                document.getElementById("exportDiv")
-
             }
         </script>
     </h:body>
