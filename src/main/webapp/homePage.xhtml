@@ -39,28 +39,32 @@
         <div class="content" style=" background-color:lavenderblush; height: 100vh;">
             <h:form id="form1" style="width:auto;position: absolute;height: auto">
                 <p:dataTable id="bugsTable" var="bug" value="#{dataTableBean.bugList}" widgetVar="bugTable"
+                             selection="#{dataTableBean.selectedBugs}"
                              rowKey="#{bug.title}" ajax="true"
                              emptyMessage="#{i18n['noBugsInTable']}" style="width: auto" styleClass="dataTableBugs"
                              paginator="true"
-                             rows="5"
+                             rows="25"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="5,10,25"
                 >
+                    <p:ajax event="rowSelectCheckbox" update=":form1:bugsTable" />
+                    <p:ajax event="rowUnselectCheckbox" update=":form1:bugsTable"/>
+
+
 
                     <f:facet name="header">
                         <p:outputPanel style="text-align: center;">
                             <h:outputText value="#{i18n['searchAllFields']}" />
                             <p:inputText id="globalFilter" onkeyup="PF('bugTable').filter()" style="width:150px" placeholder="#{i18n['enterKeyword']}" />
 
-                            <div style="float:right;padding-top: 5px;">
+                            <div id="exportDiv" style="float:right;padding-top: 5px;">
                                 <h:commandLink>
-                                    <p:graphicImage styleClass="excelButton" width="24"/>
-                                    <p:dataExporter type="xls" target="bugsTable" fileName="bugs"/>
+                                    <p:graphicImage rendered="#{dataTableBean.selectedBugs.size() gt 1}" styleClass="excelButton" width="24"/>
+                                    <p:dataExporter type="xls" target="bugsTable" selectionOnly="true" fileName="bugs"/>
                                 </h:commandLink>
 
-                                <h:commandLink>
-                                    <p:graphicImage styleClass="pdfButton" width="24"/>
-                                    <p:dataExporter type="pdf" target="bugsTable" fileName="bugsPDF"/>
+                                <h:commandLink onclick="PrimeFaces.monitorDownload(start, stop);">
+                                    <p:graphicImage rendered="#{dataTableBean.selectedBugs.size() eq 1}" styleClass="pdfButton" width="24"/>
                                 </h:commandLink>
                             </div>
 
@@ -69,7 +73,7 @@
 
                     </f:facet>
 
-                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                    <p:column  selectionMode="multiple" style="width:16px;text-align:center"/>
 
                     <p:column sortBy="#{bug.title}" filterBy="#{bug.title}" headerText="#{i18n['title']}"  filterMatchMode="contains" >
                         <h:outputText value="#{bug.title}" />
@@ -136,15 +140,15 @@
                         </f:facet>
                         <h:outputText value="#{bug.status}" />
                     </p:column>
-                    <p:column  headerText="#{i18n['attachment']}" style="width: 8%;;text-align: center">
-                        <p:commandButton rendered="#{bug.attachment!=null}" update=":form1:dlgBug" onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-download" title="#{i18n['view']}">
+                    <p:column  headerText="#{i18n['attachment']}" exportable="false" style="width: 8%;;text-align: center">
+                        <p:commandButton rendered="#{bug.attachment!=null}" update=":form1:dlgBug" onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-download" title="View">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
                             <p:fileDownload value="#{dataTableBean.downloadAttachment()}"/>
 
                         </p:commandButton>
                     </p:column>
-                    <p:column headerText="#{i18n['edit']}" style="width: 8%;;text-align: center">
-                        <p:commandButton action="#{dataTableBean.updateFields}" update=":form1:bugDetail" oncomplete="PF('bugDialog').show()"  icon="fa fa-edit" title="#{i18n['view']}">
+                    <p:column headerText="#{i18n['edit']}" exportable="false" style="width: 8%;;text-align: center">
+                        <p:commandButton action="#{dataTableBean.updateFields}" update=":form1:bugDetail" oncomplete="PF('bugDialog').show()"  icon="fa fa-edit" title="View">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}"/>
                         </p:commandButton>
                     </p:column>
@@ -500,6 +504,10 @@
         <script type="text/javascript">
             if (window.history.replaceState) {
                 window.history.replaceState(null, null, window.location.href);
+            }
+            function updateTable() {
+                document.getElementById("exportDiv")
+
             }
         </script>
     </h:body>
