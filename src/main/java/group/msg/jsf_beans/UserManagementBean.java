@@ -184,7 +184,7 @@ public class UserManagementBean implements Serializable {
 
             String newInfoNotificationMessage=languageBean.getText("firstName")+this.firstName+"\n"+languageBean.getText("lastName")
                     +this.lastName+"\n"+"Email: "+this.email+"\n"+languageBean.getText("phone")+this.mobile;
-            newPersonalInfo.setFirstName(this.firstName);
+
             newPersonalInfo.setLastName(this.lastName);
             newPersonalInfo.setMobile(this.mobile);
             newPersonalInfo.setEmail(this.email);

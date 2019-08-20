@@ -1,6 +1,7 @@
 package group.msg.jsf_beans;
 
 import group.msg.entities.Bug;
+import group.msg.entities.Notification;
 import group.msg.entities.User;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
@@ -25,6 +26,7 @@ import java.util.Date;
 @SessionScoped
 public class BugManagementBean implements Serializable {
 
+    private static final String NEW_LINE = "\n";
     private String title;
     private String description;
     private String version;
@@ -103,6 +105,35 @@ public class BugManagementBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", languageBean.getText("bugSuccessfullAdd")));
 
             databaseEJB.createBug(bug);
+
+//            String assignedName="UNASSIGNED";
+            String assignedName=languageBean.getText("unassigned");
+
+            if(!(bug.getAssignedId()==null))
+                assignedName=bug.getAssignedId().getUsername();
+
+            StringBuilder sb=new StringBuilder();
+
+            sb.append(languageBean.getText("title")+": "+bug.getTitle()).append(NEW_LINE)
+                    .append(languageBean.getText("description")+": "+bug.getDescription()).append(NEW_LINE)
+                    .append(languageBean.getText("version")+": "+bug.getVersion()).append(NEW_LINE)
+                    .append(languageBean.getText("targetDate")+": "+bug.getTargetDate()).append(NEW_LINE)
+                    .append(languageBean.getText("bugCreatedBy")+": "+bug.getCreatedId().getUsername()).append(NEW_LINE)
+                    .append(languageBean.getText("assignedTo")+": "+assignedName).append(NEW_LINE)
+                    .append(languageBean.getText("severity")+": "+bug.getSeverity()).append(NEW_LINE)
+                    .append(languageBean.getText("status")+": "+bug.getStatus()).append(NEW_LINE)
+                    .append(languageBean.getText("newBug"));
+
+            Notification notification = new Notification();
+            notification.setMessage(sb.toString());
+            notification.setCreatedBy(bug.getCreatedId());
+            notification.setName("BUG_UPDATED");
+            notification.setDate(LocalDateTime.now());
+            notification.setBugId(bug);
+
+            if(bug.getAssignedId()==null)
+                notification.setUserId(bug.getAssignedId());
+            databaseEJB.createNotification(notification);
         }
         return "homePage";
     }

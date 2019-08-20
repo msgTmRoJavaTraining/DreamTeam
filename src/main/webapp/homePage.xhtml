@@ -162,7 +162,7 @@
                         <p:panelGrid  columns="2" rendered="#{not empty dataTableBean.selectedBug}" >
                             <f:facet name="header">
                                 <h3>#{i18n['title']}</h3>
-                                <p:inputText value="#{dataTableBean.selectedBug.title}"/>
+                                <p:inputText value="#{dataTableBean.title}"/>
                             </f:facet>
 
                             <h:outputText value="#{i18n['description']}" />
