@@ -1,7 +1,8 @@
 package group.msg.jsf_beans;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfWriter;
 import group.msg.entities.Bug;
-import group.msg.entities.User;
 import group.msg.entities.Notification;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.apache.poi.util.IOUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.StreamedContent;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -17,13 +19,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Named
@@ -63,7 +63,11 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     private List<String> createdByList = new ArrayList<>();
     private List<String> assignedToList = new ArrayList<>();
 
+    private StreamedContent exportEmployeeStreamContent;
+
+
     private Bug selectedBug;
+    private List<Bug>selectedBugs=new ArrayList<>();
 
     private List<Bug> filteredBugs = new ArrayList<>();
     private String oldStatus;
@@ -77,6 +81,9 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
         getAllCreatedBy();
         getAllAssignedTo();
     }
+
+
+
 
     public void deleteAttachmentOperation()
     {
