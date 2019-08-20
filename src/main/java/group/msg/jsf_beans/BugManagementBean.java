@@ -42,7 +42,7 @@ public class BugManagementBean implements Serializable {
     DatabaseEJB databaseEJB;
 
     @Inject
-    FileUploadView fileUploadView;
+    FileUploadBean fileUploadBean;
 
     @Inject
     LoginBean loginBean;
@@ -59,7 +59,7 @@ public class BugManagementBean implements Serializable {
     }
 
     public void clearBugFields() {
-        fileUploadView.clearFile();
+        fileUploadBean.clearFile();
         title = "";
         description = "";
         version = "";
@@ -92,9 +92,9 @@ public class BugManagementBean implements Serializable {
             User createdByUser = databaseEJB.getUserByUserName(loginBean.getUsername());
             bug.setCreatedId(createdByUser);
 
-            if(fileUploadView.getFile()!=null){
-                bug.setMimeType(getMimeType(fileUploadView.getFile()));
-                InputStream fileInputStream = fileUploadView.getFile().getInputstream();
+            if(fileUploadBean.getFile()!=null){
+                bug.setMimeType(getMimeType(fileUploadBean.getFile()));
+                InputStream fileInputStream = fileUploadBean.getFile().getInputstream();
                 attachment = IOUtils.toByteArray(fileInputStream);
             }
 

@@ -39,28 +39,33 @@
         <div class="content" style=" background-color:lavenderblush; height: 100vh;">
             <h:form id="form1" style="width:auto;position: absolute;height: auto">
                 <p:dataTable id="bugsTable" var="bug" value="#{dataTableBean.bugList}" widgetVar="bugTable"
+                             selection="#{dataTableBean.selectedBugs}"
                              rowKey="#{bug.title}" ajax="true"
                              emptyMessage="#{i18n['noBugsInTable']}" style="width: auto" styleClass="dataTableBugs"
                              paginator="true"
-                             rows="5"
+                             rows="25"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="5,10,25"
                 >
+                    <p:ajax event="rowSelectCheckbox" update=":form1:bugsTable" />
+                    <p:ajax event="rowUnselectCheckbox" update=":form1:bugsTable"/>
+
+
 
                     <f:facet name="header">
                         <p:outputPanel style="text-align: center;">
                             <h:outputText value="#{i18n['searchAllFields']}" />
                             <p:inputText id="globalFilter" onkeyup="PF('bugTable').filter()" style="width:150px" placeholder="#{i18n['enterKeyword']}" />
 
-                            <div style="float:right;padding-top: 5px;">
+                            <div id="exportDiv" style="float:right;padding-top: 5px;">
                                 <h:commandLink>
-                                    <p:graphicImage styleClass="excelButton" width="24"/>
-                                    <p:dataExporter type="xls" target="bugsTable" fileName="bugs"/>
+                                    <p:graphicImage rendered="#{dataTableBean.selectedBugs.size() gt 1}" styleClass="excelButton" width="24"/>
+                                    <p:dataExporter type="xls" target="bugsTable" selectionOnly="true" fileName="bugs"/>
                                 </h:commandLink>
 
                                 <h:commandLink>
-                                    <p:graphicImage styleClass="pdfButton" width="24"/>
-                                    <p:dataExporter type="pdf" target="bugsTable" fileName="bugsPDF"/>
+                                    <p:graphicImage rendered="#{dataTableBean.selectedBugs.size() eq 1}" styleClass="pdfButton" width="24"/>
+                                    <p:fileDownload value="#{dataTableBean.exportToPDF()}"/>
                                 </h:commandLink>
                             </div>
 
@@ -69,7 +74,7 @@
 
                     </f:facet>
 
-                    <p:column selectionMode="multiple"   style="width:16px;text-align:center"/>
+                    <p:column  selectionMode="multiple" style="width:16px;text-align:center"/>
 
                     <p:column sortBy="#{bug.title}" filterBy="#{bug.title}" headerText="#{i18n['title']}"  filterMatchMode="contains" >
                         <h:outputText value="#{bug.title}" />
@@ -82,7 +87,7 @@
                     <p:column filterBy="#{bug.version}" headerText="#{i18n['version']}"  filterMatchMode="exact" sortBy="#{bug.version}">
                     <f:facet name="filter">
                         <p:selectOneMenu onchange="PF('bugTable').filter()" styleClass="custom-filter">
-                            <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItem itemLabel="#{i18n['selectOne']}" itemValue="#{null}" noSelectionOption="true" />
                             <f:selectItems value="#{dataTableBean.versions}" />
                         </p:selectOneMenu>
                     </f:facet>
@@ -136,14 +141,14 @@
                         </f:facet>
                         <h:outputText value="#{bug.status}" />
                     </p:column>
-                    <p:column  headerText="#{i18n['attachment']}" style="width: 8%;;text-align: center">
+                    <p:column  headerText="#{i18n['attachment']}" exportable="false" style="width: 8%;;text-align: center">
                         <p:commandButton rendered="#{bug.attachment!=null}" update=":form1:dlgBug" onclick="PrimeFaces.monitorDownload(start, stop);" icon="fa fa-download" title="View">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}" />
                             <p:fileDownload value="#{dataTableBean.downloadAttachment()}"/>
 
                         </p:commandButton>
                     </p:column>
-                    <p:column headerText="#{i18n['edit']}" style="width: 8%;;text-align: center">
+                    <p:column headerText="#{i18n['edit']}" exportable="false" style="width: 8%;;text-align: center">
                         <p:commandButton action="#{dataTableBean.updateFields}" update=":form1:bugDetail" oncomplete="PF('bugDialog').show()"  icon="fa fa-edit" title="View">
                             <f:setPropertyActionListener value="#{bug}" target="#{dataTableBean.selectedBug}"/>
                         </p:commandButton>
@@ -152,11 +157,11 @@
 
                 </p:dataTable>
 
-                <p:dialog  header="Bug edit" widgetVar="bugDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" id="dlgBug">
+                <p:dialog  header="#{i18n['bugEdit']}" widgetVar="bugDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" id="dlgBug">
                     <p:outputPanel  id="bugDetail" style="text-align:center;">
                         <p:panelGrid  columns="2" rendered="#{not empty dataTableBean.selectedBug}" >
                             <f:facet name="header">
-                                <h3>Title</h3>
+                                <h3>#{i18n['title']}</h3>
                                 <p:inputText value="#{dataTableBean.selectedBug.title}"/>
                             </f:facet>
 
@@ -183,9 +188,9 @@
                             </h:selectOneMenu>
                             <h:outputText value="#{i18n['attachment']}" />
                             <h:panelGrid columns="2">
-                                <p:commandButton value="Delete" action="#{dataTableBean.deleteAttachmentOperation}"/>
-                                <p:commandButton value="Add" onclick="PF('addAttachment').show();" action="#{dataTableBean.editAttachmentOperation}"/>
-                                <p:dialog widgetVar="addAttachment"><p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}"
+                                <p:commandButton value="#{i18n['delete']}" action="#{dataTableBean.deleteAttachmentOperation}"/>
+                                <p:commandButton value="#{i18n['add']}" onclick="PF('addAttachment').show();" action="#{dataTableBean.editAttachmentOperation}"/>
+                                <p:dialog widgetVar="addAttachment"><p:fileUpload fileUploadListener="#{fileUploadBean.handleFileUpload}"
                                                         allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|xls|xlsx|odf)$/"
                                                         sizeLimit="25000001" invalidSizeMessage="#{i18n['invalidFileSize']}"
                                                         fileLimit="1"
@@ -205,7 +210,7 @@
                 <div class="buttons">
                     <div class="addData">
 
-                        <p:commandButton icon="fa fa-plus" type="button" onclick="PF('dlg1').show();" value="Insert data" style="width: 190px"/>
+                        <p:commandButton icon="fa fa-plus" type="button" onclick="PF('dlg1').show();" value="#{i18n['insertData']}" style="width: 190px"/>
                         <p:dialog header="#{i18n['insertOptions']}" widgetVar="dlg1" minHeight="40" width="295"
                                   height="30"
                                   styleClass="customDialog">
@@ -311,7 +316,7 @@
                                     <br/><br/>
                                     <h:outputText styleClass="myFont" value="#{i18n['attachment']}"
                                                   style="display:block;"/>
-                                    <p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}"
+                                    <p:fileUpload fileUploadListener="#{fileUploadBean.handleFileUpload}"
                                                   allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|xls|xlsx|odf)$/"
                                                   sizeLimit="25000001" invalidSizeMessage="#{i18n['invalidFileSize']}"
                                                   fileLimit="1"
@@ -330,7 +335,7 @@
 
                     </div>
                     <div class="editData">
-                        <p:commandButton icon="fa fa-edit" type="button" onclick="PF('dlg_edit').show();" value="Edit data" style="width: 190px"/>
+                        <p:commandButton icon="fa fa-edit" type="button" onclick="PF('dlg_edit').show();" value="#{i18n['editData']}" style="width: 190px"/>
                         <p:dialog header="#{i18n['editOptions']}" widgetVar="dlg_edit" minHeight="40" width="295"
                                   height="30"
                                   styleClass="customDialog">
@@ -441,9 +446,7 @@
 
                                     <p:commandButton value="#{i18n['updateUser']}" class="button" ajax="true"
                                                      styleClass="button" update="growl"
-                                                     action="#{userManagementBean.userUpdate()}"
-
-
+                                                     action="#{userManagementBean.userUpdate}"
                                     />
                                     <br/><br/>
                                 </h:form>
@@ -451,7 +454,7 @@
                         </p:dialog>
                     </div>
                     <div class="statistics" >
-                        <p:commandButton icon="fa fa-pie-chart" value="Pie chart" style="width: 190px" onclick="PF('dlgPie').show();">
+                        <p:commandButton icon="fa fa-pie-chart" value="#{i18n['statistics']}" style="width: 190px" onclick="PF('dlgPie').show();">
                             <p:dialog id="pieChartDiagram" header="Bug status analyse" widgetVar="dlgPie"
                                       minHeight="40"
                                       width="auto"
@@ -463,9 +466,9 @@
                     </div>
 
                     <div class="notifications">
-                        <p:commandButton ajax="true" icon="fa fa-exclamation" value="Notifications"  style="width: 190px" onclick="PF('dlgNotifications').show();" rendered="#{!loginBean.loggedUser.notifications.isEmpty()}" />
+                        <p:commandButton ajax="true" icon="fa fa-exclamation" value="#{i18n['notifications']}"  style="width: 190px" onclick="PF('dlgNotifications').show();" rendered="#{!loginBean.loggedUser.notifications.isEmpty()}" />
 
-                        <p:dialog onShow="updateDialog" id="dlgNotifications"  header="Notifications" widgetVar="dlgNotifications"
+                        <p:dialog onShow="updateDialog" id="dlgNotifications" header="#{i18n['notifications']}" widgetVar="dlgNotifications"
                                   minHeight="40"
                                   width="auto"
                                   height="auto"
@@ -476,7 +479,7 @@
                                         <h:form style="width: auto;height: auto;">
                                             <p:dataScroller  value="#{notificationsManagementBean.allUserNotifications()}" var="notif" chunkSize="10" scrollHeight="15">
                                                 <f:facet name="header" style="font-size: 0.8em;">
-                                                    Scroll Down to Load More Notifications
+                                                    #{i18n['scrollDownForNotifications']}
                                                 </f:facet>
                                                 <h:panelGrid  columns="3" style="width: 100%;height: 40%; margin: 1px;padding: 9px;; border: 1px solid cadetblue;" >
                                                     <h:commandLink rendered="#{notif.name.contains('BUG')}" onclick="PF('bugDialog').show()">
@@ -487,13 +490,13 @@
                                                     <p:outputPanel >
                                                         <h:panelGrid columns="2" cellpadding="5" cellspacing="20" columnClasses="logo,details"  >
 
-                                                            <h:outputText value="Date:" />
+                                                            <h:outputText value="#{i18n['date']}" />
                                                             <h:outputText value="#{notif.date.toLocalDate()}" style="font-weight: bold; margin-bottom: 5px"/>
 
-                                                            <h:outputText value="Message:   " />
+                                                            <h:outputText value="#{i18n['message']}"/>
                                                             <h:inputTextarea value="#{notif.message}" style="font-weight: bold; box-sizing: content-box;height: 80px;" disabled="true"/>
 
-                                                            <h:outputText value="Type:" />
+                                                            <h:outputText value="#{i18n['type']}" />
                                                             <h:outputText value="#{notif.name}" style="font-weight: bold; margin-bottom: 5px"/>
                                                         </h:panelGrid>
                                                     </p:outputPanel>
@@ -559,7 +562,7 @@
                     <br></br>
                     <div class="log-out">
                         <h:form><p:commandButton ajax="false" action="#{navigationBean.navigateTo('login')}"
-                                                 icon="fa fa-sign-out" value="Log out" style="width: 190px"/></h:form>
+                                                 icon="fa fa-sign-out" value="#{i18n['logout']}" style="width: 190px"/></h:form>
                     </div>
                 </div>
             </div>
