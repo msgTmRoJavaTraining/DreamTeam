@@ -23,6 +23,9 @@ public class PieChartManagedBean implements Serializable {
     @Inject
     private DatabaseEJB databaseEJB;
 
+    @Inject
+    private LanguageBean languageBean;
+
     public static final String[] STATES= {"NEW", "REJECTED", "IN PROGRESS", "FIXED", "INFO NEEDED", "CLOSED"};
 
     private PieChartModel pieModel2;
@@ -60,7 +63,7 @@ public class PieChartManagedBean implements Serializable {
         pieModel2.set(STATES[4],  databaseEJB.getNoOfBugsAfterState(STATES[4]));
         pieModel2.set(STATES[5],  databaseEJB.getNoOfBugsAfterState(STATES[5]));
 
-        pieModel2.setTitle("Bugs view");
+        pieModel2.setTitle(languageBean.getText("bugs"));
         pieModel2.setLegendPosition("e");
         pieModel2.setFill(false);
         pieModel2.setShowDataLabels(true);
