@@ -37,6 +37,7 @@ public class BugManagementBean implements Serializable {
     private String stringUserAssignedToFixIt;
     private String mimeType;
 
+
     @Inject
     DatabaseEJB databaseEJB;
 

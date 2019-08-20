@@ -9,8 +9,10 @@ import group.msg.exceptions.UserCreatorException;
 import group.msg.jsf_ejb.DatabaseEJB;
 import lombok.Getter;
 import lombok.Setter;
+import sun.nio.cs.US_ASCII;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -23,12 +25,15 @@ import java.util.List;
 @Getter
 @Setter
 @Named
-@ViewScoped
+@SessionScoped
 public class UserManagementBean implements Serializable {
 
 
     @Inject
     LoginBean loginBean;
+
+    @Inject
+    private DatabaseEJB databaseEJB;
 
 
     private User userToUpdate;
@@ -57,7 +62,9 @@ public class UserManagementBean implements Serializable {
     public void init() {
 
     }
-
+    public List<User> inactiveUsers(){
+        return dataBaseEJB.getAllDeactivatedUsers();
+    }
     public void createUser() {
         int firstNameChars = 1;
         int lastNameChars = 5;
@@ -109,6 +116,7 @@ public class UserManagementBean implements Serializable {
 
                 Notification notification=new Notification();
                 notification.setUserId(newUser);
+                notification.setCreatedBy(loginBean.getLoggedUser());
                 notification.setDate(LocalDateTime.now());
                 notification.setMessage(languageBean.getText("welcomeMessage")+", "+newUser.loggedInUserInfo());
                 notification.setName("WELCOME_NEW_USER");
@@ -215,6 +223,7 @@ public class UserManagementBean implements Serializable {
             if (invalidCredentials())
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", languageBean.getText("userNotAdded")));
         }
+        NavigationBean.navigateTo("homePage.xhtml");
     }
 
     public boolean invalidCredentials() {

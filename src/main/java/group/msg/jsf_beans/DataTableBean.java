@@ -60,6 +60,7 @@ public class DataTableBean extends LazyDataModel<Bug> implements Serializable {
     private String description;
     private byte[] attachment;
     private boolean deleteAttachment =false;
+    private Bug bugToSelect;
 
     private List<LocalDate> targetDates = new ArrayList<>();
     private List<String> versions = new ArrayList<>();

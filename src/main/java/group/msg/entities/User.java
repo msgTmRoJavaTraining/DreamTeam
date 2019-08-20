@@ -35,7 +35,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "userId")
     private List<Notification> notifications;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userId")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "createdBy")
     private List<Notification> generatedNotifications;
 
     private boolean isActive;

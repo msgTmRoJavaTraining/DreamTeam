@@ -69,7 +69,7 @@
 
                     </f:facet>
 
-                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                    <p:column selectionMode="multiple"   style="width:16px;text-align:center"/>
 
                     <p:column sortBy="#{bug.title}" filterBy="#{bug.title}" headerText="#{i18n['title']}"  filterMatchMode="contains" >
                         <h:outputText value="#{bug.title}" />
@@ -243,7 +243,7 @@
 
                                     <h:outputText styleClass="myFont" value="#{i18n['confirmPassword']}"
                                                   style="display:block;"/>
-                                    <p:password value="#{userManagementBean.confirmPassword}"/><br></br>
+                                    <p:password id="password" value="#{userManagementBean.confirmPassword}" required="true"/><br></br>
 
                                     <br></br>
                                     <p:selectCheckboxMenu id="rolesUser" value="#{userManagementBean.userRoleList}"
@@ -257,7 +257,7 @@
                                     <br></br><br></br>
                                     <p:commandButton value="#{i18n['createUser']}" class="button"
                                                      styleClass="button" ajax="true" update="growl"
-                                                     action="#{userManagementBean.createUser}"/>
+                                                     action="#{userManagementBean.createUser}" onclick="PF('dlg1').close();"/>
                                     <br/><br/>
                                 </h:form>
                             </p:dialog>
@@ -387,7 +387,7 @@
                                                            disabled="#{userManagementBean.username==null}"
                                                            placeholder="#{userManagementBean.active}"
                                                            value="#{userManagementBean.active}" onLabel="Yes"
-                                                           offLabel="#{i18n['no']}" style="width:60px"/>
+                                                           offLabel="#{i18n['no']}" style="width:60px" update=":formInactive:deactUsers"/>
                                     <h:outputText styleClass="myFont" value="#{i18n['firstName']}"
                                                   style="display:block;"
                                                   escape="true"/>
@@ -441,53 +441,120 @@
 
                                     <p:commandButton value="#{i18n['updateUser']}" class="button" ajax="true"
                                                      styleClass="button" update="growl"
-                                                     action="#{userManagementBean.userUpdate}"
+                                                     action="#{userManagementBean.userUpdate()}"
+
+
                                     />
                                     <br/><br/>
                                 </h:form>
                             </p:dialog>
                         </p:dialog>
                     </div>
+                    <div class="statistics" >
+                        <p:commandButton icon="fa fa-pie-chart" value="Pie chart" style="width: 190px" onclick="PF('dlgPie').show();">
+                            <p:dialog id="pieChartDiagram" header="Bug status analyse" widgetVar="dlgPie"
+                                      minHeight="40"
+                                      width="auto"
+                                      height="auto"
+                                      ajax="true" >
+                                <p:chart type="pie" model="#{pieChartManagedBean.pieModel2}" style="width:400px;height:300px" />
+                            </p:dialog>
+                        </p:commandButton>
+                    </div>
+
                     <div class="notifications">
-                        <p:commandButton icon="fa fa-exclamation" value="Notifications" style="width: 190px" onclick="PF('dlgNotifications').show();" />
-                        <p:dialog id="dlgNotifications" header="Notifications" widgetVar="dlgNotifications"
+                        <p:commandButton ajax="true" icon="fa fa-exclamation" value="Notifications"  style="width: 190px" onclick="PF('dlgNotifications').show();" rendered="#{!loginBean.loggedUser.notifications.isEmpty()}" />
+
+                        <p:dialog onShow="updateDialog" id="dlgNotifications"  header="Notifications" widgetVar="dlgNotifications"
                                   minHeight="40"
                                   width="auto"
-                                  height="auto" >
-                            <p:scrollPanel mode="native" style="width:500px;height:500px">
-                            <h:form>
-                                <p:dataScroller value="#{loginBean.loggedUser.notifications}" var="notif" chunkSize="10" scrollHeight="15">
-                                    <f:facet name="header">
-                                        Scroll Down to Load More Notifications
-                                    </f:facet>
+                                  height="auto"
+                                    ajax="true">
+                            <div class="grid-container-notifications">
+                                <div class="userNotif">
+                                    <p:scrollPanel  mode="native" style="width: 100%; height:400px;resize: none;">
+                                        <h:form style="width: auto;height: auto;">
+                                            <p:dataScroller  value="#{notificationsManagementBean.allUserNotifications()}" var="notif" chunkSize="10" scrollHeight="15">
+                                                <f:facet name="header" style="font-size: 0.8em;">
+                                                    Scroll Down to Load More Notifications
+                                                </f:facet>
+                                                <h:panelGrid  columns="3" style="width: 100%;height: 40%; margin: 1px;padding: 9px;; border: 1px solid cadetblue;" >
+                                                    <h:commandLink rendered="#{notif.name.contains('BUG')}" onclick="PF('bugDialog').show()">
+                                                        <p:graphicImage  url="#{notificationsManagementBean.getIconForNotification(notif)}"  style="width: 80px;height: 80px;margin-right: 15px;margin-left: 15px;"/>
+                                                    </h:commandLink>
 
-                                    <h:panelGrid  columns="3" style="width: 100%;height: 40%; margin: 1px;padding: 9px;; border: 1px solid cadetblue;" >
-                                        <p:graphicImage url="#{notificationsManagementBean.getIconForNotification(notif)}" style="width: 80px;height: 80px;margin-right: 15px;margin-left: 15px;" />
-                                        <p:outputPanel >
-                                            <h:panelGrid columns="2" cellpadding="5" cellspacing="20" columnClasses="logo,details"  >
+                                                    <p:graphicImage rendered="#{!notif.name.contains('BUG')}"  url="#{notificationsManagementBean.getIconForNotification(notif)}" style="width: 80px;height: 80px;margin-right: 15px;margin-left: 15px;" />
+                                                    <p:outputPanel >
+                                                        <h:panelGrid columns="2" cellpadding="5" cellspacing="20" columnClasses="logo,details"  >
 
-                                                <h:outputText value="Date:" />
-                                                <h:outputText value="#{notif.date.toLocalDate()}" style="font-weight: bold; margin-bottom: 5px"/>
+                                                            <h:outputText value="Date:" />
+                                                            <h:outputText value="#{notif.date.toLocalDate()}" style="font-weight: bold; margin-bottom: 5px"/>
 
-                                                <h:outputText value="Message:   " />
-                                                <h:inputTextarea value="#{notif.message}" style="font-weight: bold; box-sizing: content-box" disabled="true"/>
+                                                            <h:outputText value="Message:   " />
+                                                            <h:inputTextarea value="#{notif.message}" style="font-weight: bold; box-sizing: content-box;height: 80px;" disabled="true"/>
 
-                                                <h:outputText value="Type:" />
-                                                <h:outputText value="#{notif.name}" style="font-weight: bold; margin-bottom: 5px"/>
-                                            </h:panelGrid>
-                                        </p:outputPanel>
-                                    </h:panelGrid>
-                                </p:dataScroller>
-                            </h:form>
-                            </p:scrollPanel>
+                                                            <h:outputText value="Type:" />
+                                                            <h:outputText value="#{notif.name}" style="font-weight: bold; margin-bottom: 5px"/>
+                                                        </h:panelGrid>
+                                                    </p:outputPanel>
+                                                </h:panelGrid>
+                                            </p:dataScroller>
+                                        </h:form>
+                                    </p:scrollPanel>
+                                </div>
+                                <div class="deactivatedUsers">
+
+                                        <h:form id="formInactive" style="width: 100%;" ajax="true">
+                                            <p:carousel id="deactUsers"
+                                                        rendered="#{loginBean.userManagement}"
+                                                        value="#{userManagementBean.inactiveUsers()}"
+                                                        headerText="Inactive users"
+                                                        var="deactived"
+                                                        itemStyle="height:200px;text-align:center;font-size: 0.8em;"
+                                                        numVisible="1"
+                                                        style="width:100%"
+                                                        circular="true"
+                                                        ajax="true"
+                                            >
+
+                                                <h:panelGrid columns="2" style="width:100%" columnClasses="label,value">
+                                                    <f:facet name="header">
+                                                        <p:graphicImage  url="resources/images/USER_DEACTIVATED.png" style="width: 70px;height: 70px;margin-right: 30%;margin-left: 50%;"/>
+                                                    </f:facet>
+
+                                                        <h:outputText value="First name:" />
+                                                        <h:outputText value="#{deactived.personalInformations.firstName}" />
+
+                                                        <h:outputText value="Last name:" />
+                                                        <h:outputText value="#{deactived.personalInformations.lastName}" />
+
+                                                        <h:outputText value="Username:" />
+                                                        <h:outputText value="#{deactived.username}"/>
+
+                                                        <h:outputText value="Email:" />
+                                                        <h:outputText value="#{deactived.personalInformations.email}" />
+
+                                                        <h:outputText value="Phone:" />
+                                                        <h:outputText value="#{deactived.personalInformations.mobile}" />
+                                                </h:panelGrid>
+                                            </p:carousel>
+                                        </h:form>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
                         </p:dialog>
 
 
 
                      </div>
-                    <div class="statistics" >
-                        <p:commandButton icon="fa fa-pie-chart" value="Pie chart" style="width: 190px"/>
-                    </div>
+
                     <br></br>
                     <br></br>
                     <div class="log-out">

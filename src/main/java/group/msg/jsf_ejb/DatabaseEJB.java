@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.io.Serializable;
+import java.net.UnknownServiceException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +76,13 @@ public class DatabaseEJB implements Serializable {
         Query query = entityManager.createQuery("SELECT users.username From User users where users.isActive=true");
         allUserNames = query.getResultList();
         return allUserNames;
+    }
+
+    public List<User> getAllDeactivatedUsers() {
+        List<User> allUsers;
+        Query query = entityManager.createQuery("SELECT users From User users where users.isActive=false");
+        allUsers =query.getResultList();
+        return allUsers;
     }
 
     public User getUserById(int seachedId) {
@@ -195,5 +203,23 @@ public class DatabaseEJB implements Serializable {
     }
     public void updateBug(Bug toUpdate){
         entityManager.merge(toUpdate);
+    }
+
+    public List<Notification> getAllUserNotifications(String username){
+        List<Notification> notifications;
+         Query query = entityManager.createQuery("SELECT notif FROM Notification notif where notif.userId.username=:username");
+         query.setParameter("username",username);
+         notifications=query.getResultList();
+         query=entityManager.createQuery("SELECT notif FROM Notification notif where notif.createdBy.username=:username");
+         query.setParameter("username",username);
+        notifications.addAll(query.getResultList());
+        return notifications;
+    }
+    public long getNoOfBugsAfterState(String state){
+        long result;
+        Query query = entityManager.createQuery("SELECT COUNT (bug) FROM Bug BUG where bug.status=:state");
+        query.setParameter("state",state);
+        result= (long) query.getSingleResult();
+        return result;
     }
 }
